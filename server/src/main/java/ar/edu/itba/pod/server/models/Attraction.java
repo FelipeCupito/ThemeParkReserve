@@ -9,6 +9,5 @@ public class Attraction {
     private LocalDate openingDate;
     private LocalDate closingDate;
     private int slotDuration;
-
     private final Map<LocalDate, AttractionSlot> slots = new HashMap<>();
 }

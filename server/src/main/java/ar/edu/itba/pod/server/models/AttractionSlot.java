@@ -5,5 +5,7 @@ import java.util.List;
 public class AttractionSlot {
 
     private int capacity;
-    private List<Pass> passes;
+
+    //ordenada por fecha de reserva
+    private List<Reservation> reservations;
 }
