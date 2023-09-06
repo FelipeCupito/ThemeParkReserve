@@ -7,4 +7,5 @@ public class Pass {
     private UUID id;
     private PassType type;
     private LocalDate date;
+    private Integer reservationNumber = 0;
 }
