@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="fix">
+    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="gitignore">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/proto/service.proto" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/proto/service.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +23,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -170,7 +177,7 @@
       <workItem from="1693671962721" duration="196000" />
       <workItem from="1693672199811" duration="2517000" />
       <workItem from="1693769373038" duration="3052000" />
-      <workItem from="1694027743580" duration="1286000" />
+      <workItem from="1694027743580" duration="10069000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -220,7 +227,23 @@
       <option name="project" value="LOCAL" />
       <updated>1694028305167</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix">
+      <option name="closed" value="true" />
+      <created>1694034609669</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1694034609669</updated>
+    </task>
+    <task id="LOCAL-00008" summary="gitignore">
+      <option name="closed" value="true" />
+      <created>1694034625597</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1694034625597</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,6 +255,7 @@
     <MESSAGE value="service models" />
     <MESSAGE value="add more models" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
   </component>
 </project>
