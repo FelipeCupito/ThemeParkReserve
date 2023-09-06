@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="service models">
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Status.java" afterDir="false" />
+    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attractions.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/proto/service.proto" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/proto/service.proto" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +16,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -176,7 +170,7 @@
       <workItem from="1693671962721" duration="196000" />
       <workItem from="1693672199811" duration="2517000" />
       <workItem from="1693769373038" duration="3052000" />
-      <workItem from="1694027743580" duration="322000" />
+      <workItem from="1694027743580" duration="1286000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -210,7 +204,23 @@
       <option name="project" value="LOCAL" />
       <updated>1693679874147</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add more models">
+      <option name="closed" value="true" />
+      <created>1694028083486</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1694028083486</updated>
+    </task>
+    <task id="LOCAL-00006" summary="fix">
+      <option name="closed" value="true" />
+      <created>1694028305167</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1694028305167</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,6 +230,8 @@
     <MESSAGE value="add .gitignore" />
     <MESSAGE value="init" />
     <MESSAGE value="service models" />
-    <option name="LAST_COMMIT_MESSAGE" value="service models" />
+    <MESSAGE value="add more models" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
 </project>
