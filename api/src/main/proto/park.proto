@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+package services;
+
+service ParkAdminService {
+  rpc AddAttraction(Attraction) returns (google.protobuf.Empty);
+  rpc AddPass(Pass) returns (google.protobuf.Empty);
+  rpc AddSlotCapacity(SlotCapacity) returns (google.protobuf.Empty);
+}
+
+service ReservationService {
+  rpc GetAttractions(google.protobuf.Empty) returns (stream Attraction);
+}
+
+message Attraction {
+  string name = 1;
+  int32 openTime = 2;
+  int32 closeTime = 3;
+  int32 minutesPerSlot = 4;
+}
+
+enum PassType {
+  UNKNOWN = 0;
+  UNLIMITED = 1;
+  THREE = 2;
+  HALF_DAY = 3;
+}
+
+message UUID {
+   string value = 1;
+}
+
+message Pass {
+  UUID id = 1;
+  PassType type = 2;
+  int32 day = 3;
+}
+
+message SlotCapacity {
+  string attractionName = 1;
+  int32 day = 2;
+  int32 capacity = 3;
+}
+
+message Slot {
+  string attractionName = 1;
+  int32 day = 2;
+  int32 minutes = 3;
+}
