@@ -8,7 +8,7 @@ package services;
 service ParkAdminService {
   rpc AddAttraction(Attraction) returns (google.protobuf.Empty);
   rpc AddPass(Pass) returns (google.protobuf.Empty);
-  rpc AddSlotCapacity(SlotCapacity) returns (google.protobuf.Empty);
+  rpc AddSlotCapacity(SlotCapacity) returns (SlotCapacityResponse);
 }
 
 service ReservationService {
@@ -17,8 +17,8 @@ service ReservationService {
 
 message Attraction {
   string name = 1;
-  int32 openTime = 2;
-  int32 closeTime = 3;
+  int32 openTime = 2; // minutes since midnight
+  int32 closeTime = 3; // minutes since midnight
   int32 minutesPerSlot = 4;
 }
 
@@ -43,6 +43,12 @@ message SlotCapacity {
   string attractionName = 1;
   int32 day = 2;
   int32 capacity = 3;
+}
+
+message SlotCapacityResponse {
+  int32 confirmed = 1;
+  int32 cancelled = 2;
+  int32 pending = 3;
 }
 
 message Slot {
