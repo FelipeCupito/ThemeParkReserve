@@ -4,16 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="gitignore">
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" afterDir="false" />
+    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="fix">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/servant/AdminService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AdminServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/proto/park.proto" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/proto/park.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Park.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/ParkRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/PassType.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/PassType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Status.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +32,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -43,25 +51,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/felucupito/WorkSpace/POD/ThemeParkReserve&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.24023438&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.26292628&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "add-server-admin-service",
+    "last_opened_file_path": "/Users/felucupito/WorkSpace/POD/ThemeParkReserve",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.24023438",
+    "project.structure.side.proportion": "0.26292628",
+    "settings.editor.selected.configurable": "com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ar.edu.itba.pod.server.models" />
@@ -70,7 +78,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.AdminServiceTest">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="theme-park-reserve-server" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -90,6 +98,37 @@
       <option name="USE_OPTIONS" value="false" />
       <option name="OPTIONS" value="" />
       <method v="2" />
+    </configuration>
+    <configuration name="AdminServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ThemeParkReserve-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.itba.pod.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.itba.pod" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.AdminServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AdminServiceTest.testAddValidAttraction" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ThemeParkReserve-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.itba.pod.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.itba.pod" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.AdminServiceTest" />
+      <option name="METHOD_NAME" value="testAddValidAttraction" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="theme-park-reserve-server" />
@@ -164,6 +203,12 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.AdminServiceTest" />
+        <item itemvalue="JUnit.AdminServiceTest.testAddValidAttraction" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -177,7 +222,9 @@
       <workItem from="1693671962721" duration="196000" />
       <workItem from="1693672199811" duration="2517000" />
       <workItem from="1693769373038" duration="3052000" />
-      <workItem from="1694027743580" duration="10069000" />
+      <workItem from="1694027743580" duration="10494000" />
+      <workItem from="1694052337947" duration="598000" />
+      <workItem from="1694094395004" duration="14071000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -243,19 +290,49 @@
       <option name="project" value="LOCAL" />
       <updated>1694034625597</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix">
+      <option name="closed" value="true" />
+      <created>1694043906907</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1694043906907</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add .gitignore" />
     <MESSAGE value="init" />
     <MESSAGE value="service models" />
     <MESSAGE value="add more models" />
-    <MESSAGE value="fix" />
     <MESSAGE value="gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

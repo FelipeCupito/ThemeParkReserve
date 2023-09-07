@@ -4,5 +4,6 @@ package ar.edu.itba.pod.server.models;
 public enum Status {
     PENDING,
     CONFIRMED,
-    CANCELLED
+    CANCELLED,
+    REASSIGNED,
 }
