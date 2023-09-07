@@ -7,12 +7,12 @@ import java.time.LocalDate;
 @Getter
 public class Reservation implements Comparable<Reservation> {
     private final Pass pass;
-    private final LocalDate date;
-    private final Status status;
+    private final Integer day;
+    private Status status;
 
-    public Reservation(Pass pass, Status status) {
+    public Reservation(Pass pass, Status status, int day) {
         this.pass = pass;
-        this.date = LocalDate.now();
+        this.day = day;
         this.status = status;
     }
 
@@ -21,7 +21,7 @@ public class Reservation implements Comparable<Reservation> {
         if (this.equals(o)) {
             return 0;
         }
-        return this.date.compareTo(o.date);
+        return this.day.compareTo(o.day);
     }
 
     @Override
@@ -37,5 +37,21 @@ public class Reservation implements Comparable<Reservation> {
     @Override
     public int hashCode() {
         return pass.hashCode();
+    }
+
+    public void confirm() {
+        this.status = Status.CONFIRMED;
+    }
+
+   public void cancel() {
+        this.status = Status.CANCELLED;
+    }
+
+    public void pending() {
+        this.status = Status.PENDING;
+    }
+
+    public void reassign() {
+        this.status = Status.REASSIGNED;
     }
 }
