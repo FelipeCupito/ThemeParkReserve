@@ -12,7 +12,12 @@ service ParkAdminService {
 }
 
 service ReservationService {
-  rpc GetAttractions(google.protobuf.Empty) returns (stream Attraction);
+  rpc GetAttractions(google.protobuf.Empty) returns (AttractionList);
+  rpc GetSingleSlotAvailability(Slot) returns (SlotCapacityResponse);
+  rpc GetAttractionSlotsAvailabilityByRange(SlotRange) returns (SlotCapacityResponseList);
+  rpc AddReservation(ReservationRequest) returns (ReservationResponse);
+  rpc ConfirmReservation(ReservationRequest) returns (google.protobuf.Empty);
+  rpc CancelReservation(ReservationRequest) returns (google.protobuf.Empty);
 }
 
 message Attraction {
@@ -22,11 +27,21 @@ message Attraction {
   int32 minutesPerSlot = 4;
 }
 
+message AttractionList {
+  repeated Attraction attractions = 1;
+}
+
 enum PassType {
   UNKNOWN = 0;
   UNLIMITED = 1;
   THREE = 2;
   HALF_DAY = 3;
+}
+
+enum ReservationType {
+  RESERVATION_UNKNOWN = 0;
+  RESERVATION_PENDING = 1;
+  RESERVATION_CONFIRMED = 2;
 }
 
 message UUID {
@@ -51,8 +66,30 @@ message SlotCapacityResponse {
   int32 pending = 3;
 }
 
+message SlotCapacityResponseList {
+  repeated SlotCapacityResponse slotCapacityResponses = 1;
+}
+
 message Slot {
   string attractionName = 1;
   int32 day = 2;
   int32 minutes = 3;
+}
+
+message SlotRange {
+  optional string attractionName = 1;
+  int32 day = 2;
+  int32 startMinutes = 3;
+  int32 endMinutes = 4;
+}
+
+message ReservationRequest {
+  UUID passId = 1;
+  Slot slot = 2;
+}
+
+message ReservationResponse {
+  UUID passId = 1;
+  Slot slot = 2;
+  ReservationType reservationType = 3;
 }
