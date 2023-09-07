@@ -20,6 +20,18 @@ service ReservationService {
   rpc CancelReservation(ReservationRequest) returns (google.protobuf.Empty);
 }
 
+service RegistrationService {
+  rpc RegisterUser(NotificationRegistryRequest) returns (google.protobuf.Empty);
+  rpc UnregisterUser(NotificationRegistryRequest) returns (google.protobuf.Empty);
+}
+
+service QueryService {
+  rpc GetSuggestedCapacity(DayRequest) returns (SuggestedCapacityResponseList);
+  rpc GetConfirmedReservationsByDay(DayRequest) returns (ConfirmedReservationResponseList);
+}
+
+// -----------------------------------------------------------------------------------------//
+
 message Attraction {
   string name = 1;
   int32 openTime = 2; // minutes since midnight
@@ -92,4 +104,34 @@ message ReservationResponse {
   UUID passId = 1;
   Slot slot = 2;
   ReservationType reservationType = 3;
+}
+
+message NotificationRegistryRequest {
+  UUID passId = 1;
+  string attractionName = 2;
+  int32 day = 3;
+}
+
+message DayRequest {
+  int32 day = 1;
+}
+
+message SuggestedCapacityResponse {
+  string attractionName = 1;
+  int32 suggestedCapacity = 2;
+  int32 minutes = 3;
+}
+
+message SuggestedCapacityResponseList {
+  repeated SuggestedCapacityResponse suggestedCapacityResponses = 1;
+}
+
+message ConfirmedReservationResponse {
+  string attractionName = 1;
+  repeated UUID confirmedUsers = 2;
+  int32 minutes = 3;
+}
+
+message ConfirmedReservationResponseList {
+  repeated ConfirmedReservationResponse confirmedReservationResponses = 1;
 }
