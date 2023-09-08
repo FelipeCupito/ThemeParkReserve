@@ -27,7 +27,7 @@ public class Utils {
     }
 
     public static void checkMinutes(int minutes) {
-        if (minutes < 0 || minutes >= MINUTES_OF_DAY) {
+        if (minutes <= 0 || minutes >= MINUTES_OF_DAY) {
             throw new IllegalArgumentException("Minutes must be between 0 and " + MINUTES_OF_DAY);
         }
     }

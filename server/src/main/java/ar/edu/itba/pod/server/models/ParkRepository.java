@@ -54,10 +54,8 @@ public class ParkRepository {
      * Sets the capacity of an attraction
      */
     public void setAttractionCapacity(String attractionName, Integer capacity, Integer day) {
-        Attraction attraction = attractions.get(attractionName);
-        if (attraction == null) {
-            throw new IllegalArgumentException("Attraction does not exist");
-        }
+        //get attraction
+        Attraction attraction = getAttractionIfExist(attractionName);
 
         attraction.setDayCapacity(day, capacity);
     }

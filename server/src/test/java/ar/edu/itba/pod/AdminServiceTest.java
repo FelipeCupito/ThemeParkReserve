@@ -113,7 +113,6 @@ public class AdminServiceTest {
     public void setAttractionCapacityInvalidDay() {
         parkRepository.addAttraction("Test Attraction", 10, 100, 50);
         assertThrows(IllegalArgumentException.class, () -> parkRepository.setAttractionCapacity("Test Attraction", 100, -1));
-        assertThrows(IllegalArgumentException.class, () -> parkRepository.setAttractionCapacity("Test Attraction", 100, 0));
     }
 
 

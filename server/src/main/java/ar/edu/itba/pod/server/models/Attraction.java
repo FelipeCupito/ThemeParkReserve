@@ -19,7 +19,7 @@ public class Attraction {
         Utils.checkMinutes(openTime);
         Utils.checkMinutes(closeTime);
         Utils.checkMinutes(minutesPerSlot);
-        if (closeTime > openTime || minutesPerSlot > (closeTime - openTime)) {
+        if (openTime >= closeTime || minutesPerSlot > (closeTime - openTime)) {
             throw new IllegalArgumentException("Invalid times");
         }
 
