@@ -6,11 +6,15 @@ import org.slf4j.LoggerFactory;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.properties.parsers.AttractionLineParser;
+import ar.edu.itba.pod.client.properties.parsers.CSVParser;
+import ar.edu.itba.pod.client.properties.parsers.PassLineParser;
 import services.Park.Attraction;
 import services.Park.Pass;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 abstract class Action {
@@ -21,20 +25,8 @@ class RidesAction extends Action {
 	private Stream<Attraction> attractions;
 
 	public RidesAction(PropertyManager properties) throws PropertyException, IOException {
-		attractions = Files
-				.lines(properties.getPathProperty("inPath"))
-				.skip(1)
-				.map(RidesAction::parseLine);
-	}
-
-	private static Attraction parseLine(String line) {
-		// TODO: Implement line parser
-		var parts = line.split(",");
-
-
-
-		return Attraction.newBuilder()
-				.build();
+		attractions = new CSVParser<>(properties.getPathProperty("inPath"), new AttractionLineParser(), true)
+				.toStream();
 	}
 
 	public Stream<Attraction> getAttractions() {
@@ -46,20 +38,8 @@ class TicketsAction extends Action {
 	private Stream<Pass> passes;
 
 	public TicketsAction(PropertyManager properties) throws PropertyException, IOException {
-		passes = Files
-				.lines(properties.getPathProperty("inPath"))
-				.skip(1)
-				.map(TicketsAction::parseLine);
-	}
-
-	private static Pass parseLine(String line) {
-		// TODO: Implement line parser
-		var parts = line.split(",");
-
-		throw new UnsupportedOperationException("Not yet implemented");
-
-		// return Pass.newBuilder()
-		// .build();
+		passes = new CSVParser<>(properties.getPathProperty("inPath"), new PassLineParser(), true)
+				.toStream();
 	}
 
 	public Stream<Pass> getPasses() {
@@ -162,5 +142,9 @@ public class AdminClient implements Client<AdminProperties> {
 	@Override
 	public void run(AdminProperties properties) {
 		System.out.printf("properties: %s", properties.toString());
+		var action = properties.getAction();
+		if (action instanceof RidesAction) {
+			System.out.println(((RidesAction) action).getAttractions().collect(Collectors.toList()));
+		}
 	}
 }
