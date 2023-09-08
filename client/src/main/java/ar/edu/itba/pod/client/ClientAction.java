@@ -1,5 +1,5 @@
 package ar.edu.itba.pod.client;
 
-public interface Action {
+public interface ClientAction {
 	void run();
 }

@@ -23,10 +23,10 @@ abstract public class BaseClientProperties {
         return serverAddress;
     }
 
-    abstract public Action getAction();
+    abstract public ClientAction getAction();
 
     public void runAction() {
-        Action action = getAction();
+        ClientAction action = getAction();
         logger.info("Running action: {}", action);
 
         action.run();
