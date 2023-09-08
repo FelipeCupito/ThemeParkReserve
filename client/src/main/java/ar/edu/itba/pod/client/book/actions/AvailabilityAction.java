@@ -4,8 +4,13 @@ import ar.edu.itba.pod.client.ClientAction;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
+import ar.edu.itba.pod.client.serializers.table.specific.AvailabilityTableWriter;
+import ar.edu.itba.pod.client.serializers.table.specific.CapacityQueryTableWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public class AvailabilityAction implements ClientAction {
     private static final Logger logger = LoggerFactory.getLogger(AvailabilityAction.class);
@@ -34,8 +39,13 @@ public class AvailabilityAction implements ClientAction {
     }
 
     @Override
-    public void run() {
+    public void run() throws IOException {
         // TODO: Implement
+        var tableWriter = new AvailabilityTableWriter(new OutputStreamWriter(System.out));
+        // Placeholder data
+        tableWriter.addRow(600, 30, 5, 10, "Test Attraction 1");
+        tableWriter.addRow(660, null, 25, 0, "Test Attraction 2");
+        tableWriter.close();
     }
 
     @Override

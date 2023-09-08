@@ -1,5 +1,7 @@
 package ar.edu.itba.pod.client;
 
+import java.io.IOException;
+
 public interface ClientAction {
-	void run();
+	void run() throws IOException;
 }

@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 
+import java.io.IOException;
+
 abstract public class BaseClientProperties {
     private static Logger logger = LoggerFactory.getLogger(BaseClientProperties.class);
 
@@ -25,7 +27,7 @@ abstract public class BaseClientProperties {
 
     abstract public ClientAction getAction();
 
-    public void runAction() {
+    public void runAction() throws IOException {
         ClientAction action = getAction();
         logger.info("Running action: {}", action);
 

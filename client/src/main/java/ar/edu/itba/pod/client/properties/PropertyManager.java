@@ -63,6 +63,6 @@ public class PropertyManager {
     }
 
     public UUID getUUIDProperty(String name) throws PropertyException {
-        return UUID.newBuilder().setValue(getParsedProperty(name, new UUIDParser())).build();
+        return getParsedProperty(name, new UUIDParser());
     }
 }
