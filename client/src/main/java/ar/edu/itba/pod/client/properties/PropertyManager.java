@@ -3,10 +3,8 @@ package ar.edu.itba.pod.client.properties;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
-import java.util.function.Function;
 
 import ar.edu.itba.pod.client.properties.exceptions.*;
-import ar.edu.itba.pod.client.properties.exceptions.parser.IntegerNotInRangeException;
 import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
 import ar.edu.itba.pod.client.properties.parsers.DayOfYearParser;
 import ar.edu.itba.pod.client.properties.parsers.IntegerInRangeParser;
