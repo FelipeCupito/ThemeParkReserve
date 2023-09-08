@@ -1,11 +1,11 @@
 package ar.edu.itba.pod.client.properties.parsers;
 
+import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
 
 public class CSVParser<T, P extends CSVLineParser<T>> {
 	Path path;

@@ -1,12 +1,11 @@
 package ar.edu.itba.pod.client;
 
-import java.io.IOException;
-
+import ar.edu.itba.pod.client.properties.PropertyManager;
+import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ar.edu.itba.pod.client.properties.PropertyManager;
-import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import java.io.IOException;
 
 public class QueryClient implements Client<QueryClientProperties> {
 	private static Logger logger = LoggerFactory.getLogger(QueryClient.class);

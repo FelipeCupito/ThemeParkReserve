@@ -1,13 +1,12 @@
 package ar.edu.itba.pod.client;
 
-import java.io.IOException;
-import java.util.stream.Collectors;
-
+import ar.edu.itba.pod.client.properties.PropertyManager;
+import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ar.edu.itba.pod.client.properties.PropertyManager;
-import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class AdminClient implements Client<AdminClientProperties> {
 	private static Logger logger = LoggerFactory.getLogger(AdminClient.class);

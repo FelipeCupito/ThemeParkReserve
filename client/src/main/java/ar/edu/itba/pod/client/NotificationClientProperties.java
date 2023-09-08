@@ -2,7 +2,6 @@ package ar.edu.itba.pod.client;
 
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
-import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
 import services.Park.UUID;
 

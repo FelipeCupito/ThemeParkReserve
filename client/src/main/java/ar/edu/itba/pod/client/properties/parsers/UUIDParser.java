@@ -1,9 +1,9 @@
 package ar.edu.itba.pod.client.properties.parsers;
 
-import java.util.regex.Pattern;
-
 import ar.edu.itba.pod.client.properties.Parser;
 import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+
+import java.util.regex.Pattern;
 
 public class UUIDParser implements Parser<String> {
 	@Override
