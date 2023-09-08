@@ -3,7 +3,7 @@ package ar.edu.itba.pod.client;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 
-public class BaseClientProperties {
+abstract public class BaseClientProperties {
     private String serverAddress;
 
     public BaseClientProperties(String serverAddress) {
@@ -17,4 +17,6 @@ public class BaseClientProperties {
     public String getServerAddress() {
         return serverAddress;
     }
+
+	abstract public Action getAction();
 }

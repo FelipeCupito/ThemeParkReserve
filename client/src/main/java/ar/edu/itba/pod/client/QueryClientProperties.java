@@ -6,7 +6,10 @@ import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
 
 import java.io.IOException;
 
-abstract class QueryClientAction {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+abstract class QueryClientAction implements Action {
     int day;
 
     public QueryClientAction(PropertyManager properties) throws PropertyException {
@@ -16,19 +19,43 @@ abstract class QueryClientAction {
 
     @Override
     public String toString() {
-        return String.format("{day: %d}", day);
+        return String.format("{ day: %d }", day);
     }
 }
 
 class CapacityAction extends QueryClientAction {
+    private static Logger logger = LoggerFactory.getLogger(CapacityAction.class);
+
     public CapacityAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("CapacityAction %s", super.toString());
     }
 }
 
 class ConfirmedAction extends QueryClientAction {
+    private static Logger logger = LoggerFactory.getLogger(ConfirmedAction.class);
+
     public ConfirmedAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ConfirmedAction %s", super.toString());
     }
 }
 

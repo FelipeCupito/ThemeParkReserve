@@ -6,26 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
-public class AdminClient implements Client<AdminClientProperties> {
+public class AdminClient {
     private static Logger logger = LoggerFactory.getLogger(AdminClient.class);
 
     public static void main(String[] args) throws InterruptedException, IOException, PropertyException {
         var properties = new AdminClientProperties(new PropertyManager(System.getProperties()));
-        var manager = new ClientManager<>(new AdminClient(), properties);
+        var manager = new ClientRunner<>(properties);
         manager.run();
-    }
-
-    @Override
-    public void run(AdminClientProperties properties) {
-        // TODO: Implement client instead of logging
-        logger.info("properties: {}", properties.toString());
-        var action = properties.getAction();
-        if (action instanceof RidesAction) {
-            logger.info(((RidesAction) action).getAttractions().collect(Collectors.toList()).toString());
-        } else if (action instanceof TicketsAction) {
-            logger.info(((TicketsAction) action).getPasses().collect(Collectors.toList()).toString());
-        }
     }
 }

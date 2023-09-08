@@ -12,11 +12,16 @@ import services.Park.Pass;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-abstract class AdminAction {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+abstract class AdminAction implements Action {
 
 }
 
 class RidesAction extends AdminAction {
+    private static Logger logger = LoggerFactory.getLogger(RidesAction.class);
+
     private Stream<Attraction> attractions;
 
     public RidesAction(PropertyManager properties) throws PropertyException, IOException {
@@ -27,9 +32,27 @@ class RidesAction extends AdminAction {
     public Stream<Attraction> getAttractions() {
         return attractions;
     }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+
+        logger.info("Attractions:");
+
+        attractions.forEach((attraction) -> {
+            logger.info("{\n{}}", attraction.toString());
+        });
+    }
+
+    @Override
+    public String toString() {
+        return "RidesAction {}";
+    }
 }
 
 class TicketsAction extends AdminAction {
+    private static Logger logger = LoggerFactory.getLogger(TicketsAction.class);
+
     private Stream<Pass> passes;
 
     public TicketsAction(PropertyManager properties) throws PropertyException, IOException {
@@ -37,12 +60,30 @@ class TicketsAction extends AdminAction {
                 .toStream();
     }
 
+    @Override
+    public void run() {
+        // TODO: Implement
+
+        logger.info("Tickets:");
+
+        passes.forEach((pass) -> {
+            logger.info("{\n{}}", pass.toString());
+        });
+    }
+
     public Stream<Pass> getPasses() {
         return passes;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketsAction {}";
     }
 }
 
 class SlotsAction extends AdminAction {
+    private static Logger logger = LoggerFactory.getLogger(SlotsAction.class);
+
     String rideName;
     int dayOfYear;
     int amount;
@@ -61,6 +102,13 @@ class SlotsAction extends AdminAction {
         amount = properties.getPositiveIntProperty("amount");
     }
 
+    @Override
+    public void run() {
+        // TODO: Implement
+
+        logger.info(toString());
+    }
+
     public String getRideName() {
         return rideName;
     }
@@ -75,7 +123,8 @@ class SlotsAction extends AdminAction {
 
     @Override
     public String toString() {
-        return String.format("{rideName: \"%s\", dayOfYear: %d, amount: %d}", rideName, dayOfYear, amount);
+        return String.format("SlotsAction { rideName: \"%s\", dayOfYear: %d, amount: %d }", rideName, dayOfYear,
+                amount);
     }
 }
 

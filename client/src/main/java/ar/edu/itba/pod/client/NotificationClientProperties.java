@@ -7,7 +7,10 @@ import services.Park.UUID;
 
 import java.io.IOException;
 
-abstract class NotificationClientAction {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+abstract class NotificationClientAction implements Action {
     UUID visitor;
     int day;
     String attraction;
@@ -21,19 +24,43 @@ abstract class NotificationClientAction {
 
     @Override
     public String toString() {
-        return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\"}", visitor, day, attraction);
+        return String.format("{ visitor: \"%s\", day: %d, attraction: \"%s\" }", visitor, day, attraction);
     }
 }
 
 class FollowAction extends NotificationClientAction {
+    private static Logger logger = LoggerFactory.getLogger(FollowAction.class);
+
     public FollowAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("FollowAction %s", super.toString());
     }
 }
 
 class UnfollowAction extends NotificationClientAction {
+    private static Logger logger = LoggerFactory.getLogger(UnfollowAction.class);
+
     public UnfollowAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("UnfollowAction %s", super.toString());
     }
 }
 

@@ -8,14 +8,30 @@ import services.Park.UUID;
 
 import java.io.IOException;
 
-abstract class BookClientAction {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+abstract class BookClientAction implements Action {
 
 }
 
 class AttractionsAction extends BookClientAction {
+    private static Logger logger = LoggerFactory.getLogger(AttractionsAction.class);
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return "AttractionsAction {}";
+    }
 }
 
 class AvailabilityAction extends BookClientAction {
+    private static Logger logger = LoggerFactory.getLogger(AvailabilityAction.class);
+
     int day;
     String attraction;
     int slot;
@@ -40,12 +56,18 @@ class AvailabilityAction extends BookClientAction {
     }
 
     @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
     public String toString() {
-        return String.format("{day: %d, attraction: \"%s\", slot: %d, slotTo: %d}", day, attraction, slot, slotTo);
+        return String.format("AvailabilityAction { day: %d, attraction: \"%s\", slot: %d, slotTo: %d }", day,
+                attraction, slot, slotTo);
     }
 }
 
-class ReservationAction extends BookClientAction {
+abstract class ReservationAction extends BookClientAction {
     UUID visitor;
     int day;
     String attraction;
@@ -61,26 +83,62 @@ class ReservationAction extends BookClientAction {
 
     @Override
     public String toString() {
-        return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d}", visitor, day, attraction,
+        return String.format("{ visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d }", visitor, day, attraction,
                 slot);
     }
 }
 
 class BookAction extends ReservationAction {
+    private static Logger logger = LoggerFactory.getLogger(BookAction.class);
+
     public BookAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BookAction %s", super.toString());
     }
 }
 
 class ConfirmAction extends ReservationAction {
+    private static Logger logger = LoggerFactory.getLogger(ConfirmAction.class);
+
     public ConfirmAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ConfirmAction %s", super.toString());
     }
 }
 
 class CancelAction extends ReservationAction {
+    private static Logger logger = LoggerFactory.getLogger(CancelAction.class);
+
     public CancelAction(PropertyManager properties) throws PropertyException {
         super(properties);
+    }
+
+    @Override
+    public void run() {
+        // TODO: Implement
+    }
+
+    @Override
+    public String toString() {
+        return String.format("CancelAction %s", super.toString());
     }
 }
 
