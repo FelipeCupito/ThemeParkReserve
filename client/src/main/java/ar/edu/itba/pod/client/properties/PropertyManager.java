@@ -11,6 +11,8 @@ import ar.edu.itba.pod.client.properties.parsers.IntegerInRangeParser;
 import ar.edu.itba.pod.client.properties.parsers.IntegerParser;
 import ar.edu.itba.pod.client.properties.parsers.PositiveIntegerParser;
 import ar.edu.itba.pod.client.properties.parsers.TimeParser;
+import ar.edu.itba.pod.client.properties.parsers.UUIDParser;
+import services.Park.UUID;
 
 public class PropertyManager {
 	Properties properties;
@@ -60,5 +62,9 @@ public class PropertyManager {
 		if (!Files.exists(path))
 			throw new FileDoesNotExistException(name);
 		return path;
+	}
+
+	public UUID getUUIDProperty(String name) throws PropertyException {
+		return UUID.newBuilder().setValue(getParsedProperty(name, new UUIDParser())).build();
 	}
 }

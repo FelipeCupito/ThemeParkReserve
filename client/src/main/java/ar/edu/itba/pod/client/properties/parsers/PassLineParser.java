@@ -25,7 +25,7 @@ public class PassLineParser extends CSVLineParser<Pass> {
 
 	@Override
 	Pass parseFields(String[] parts) throws ParseException {
-		UUID id = UUID.newBuilder().setValue(parts[0]).build();
+		UUID id = UUID.newBuilder().setValue(new UUIDParser().parse(parts[0])).build();
 		PassType passType = parsePassType(parts[1]);
 		int day = new PositiveIntegerParser().parse(parts[2]);
 
