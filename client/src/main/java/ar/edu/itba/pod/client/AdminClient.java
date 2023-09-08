@@ -79,9 +79,9 @@ class SlotsAction extends Action {
 	}
 
 	public SlotsAction(PropertyManager properties) throws PropertyException {
-		this.rideName = properties.getProperty("rideName");
-		this.dayOfYear = properties.getDayOfYearProperty("rideName");
-		this.amount = properties.getPositiveIntProperty("amount");
+		rideName = properties.getProperty("rideName");
+		dayOfYear = properties.getDayOfYearProperty("rideName");
+		amount = properties.getPositiveIntProperty("amount");
 	}
 
 	public String getRideName() {
@@ -94,6 +94,11 @@ class SlotsAction extends Action {
 
 	public int getAmount() {
 		return amount;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("{rideName: \"%s\", dayOfYear: %d, amount: %d}", rideName, dayOfYear, amount);
 	}
 }
 
@@ -118,6 +123,11 @@ class AdminProperties extends BaseClientProperties {
 	public Action getAction() {
 		return action;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("{action: %s}", action.toString());
+	}
 }
 
 public class AdminClient implements Client<AdminProperties> {
@@ -131,6 +141,6 @@ public class AdminClient implements Client<AdminProperties> {
 
 	@Override
 	public void run(AdminProperties properties) {
-		System.out.printf("Address: %s", properties.getServerAddress());
+		System.out.printf("properties: %s", properties.toString());
 	}
 }
