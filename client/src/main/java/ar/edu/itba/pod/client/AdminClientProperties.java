@@ -12,11 +12,11 @@ import services.Park.Pass;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-abstract class Action {
+abstract class AdminAction {
 
 }
 
-class RidesAction extends Action {
+class RidesAction extends AdminAction {
 	private Stream<Attraction> attractions;
 
 	public RidesAction(PropertyManager properties) throws PropertyException, IOException {
@@ -29,7 +29,7 @@ class RidesAction extends Action {
 	}
 }
 
-class TicketsAction extends Action {
+class TicketsAction extends AdminAction {
 	private Stream<Pass> passes;
 
 	public TicketsAction(PropertyManager properties) throws PropertyException, IOException {
@@ -42,7 +42,7 @@ class TicketsAction extends Action {
 	}
 }
 
-class SlotsAction extends Action {
+class SlotsAction extends AdminAction {
 	String rideName;
 	int dayOfYear;
 	int amount;
@@ -86,7 +86,7 @@ public class AdminClientProperties extends BaseClientProperties {
 		Slots
 	}
 
-	private Action action;
+	private AdminAction action;
 
 	public AdminClientProperties(PropertyManager properties) throws PropertyException, IOException {
 		super(properties);
@@ -115,7 +115,7 @@ public class AdminClientProperties extends BaseClientProperties {
 		}
 	}
 
-	public Action getAction() {
+	public AdminAction getAction() {
 		return action;
 	}
 
