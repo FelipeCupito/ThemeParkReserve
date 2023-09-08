@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
 import services.Park.Attraction;
 import services.Park.Pass;
 
@@ -30,10 +31,10 @@ class RidesAction extends Action {
 		// TODO: Implement line parser
 		var parts = line.split(",");
 
-		throw new UnsupportedOperationException("Not yet implemented");
 
-		//return Attraction.newBuilder()
-				//.build();
+
+		return Attraction.newBuilder()
+				.build();
 	}
 
 	public Stream<Attraction> getAttractions() {
@@ -57,8 +58,8 @@ class TicketsAction extends Action {
 
 		throw new UnsupportedOperationException("Not yet implemented");
 
-		//return Pass.newBuilder()
-				//.build();
+		// return Pass.newBuilder()
+		// .build();
 	}
 
 	public Stream<Pass> getPasses() {
@@ -123,7 +124,7 @@ class AdminProperties extends BaseClientProperties {
 				case "slots":
 					return ActionType.Slots;
 				default:
-					return null;
+					throw new ParseException();
 			}
 		});
 		switch (actionType) {

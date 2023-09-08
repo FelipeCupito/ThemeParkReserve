@@ -6,6 +6,13 @@ import java.util.Properties;
 import java.util.function.Function;
 
 import ar.edu.itba.pod.client.properties.exceptions.*;
+import ar.edu.itba.pod.client.properties.exceptions.parser.IntegerNotInRangeException;
+import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.properties.parsers.DayOfYearParser;
+import ar.edu.itba.pod.client.properties.parsers.IntegerInRangeParser;
+import ar.edu.itba.pod.client.properties.parsers.IntegerParser;
+import ar.edu.itba.pod.client.properties.parsers.PositiveIntegerParser;
+import ar.edu.itba.pod.client.properties.parsers.TimeParser;
 
 public class PropertyManager {
 	Properties properties;
@@ -22,65 +29,32 @@ public class PropertyManager {
 		return value;
 	}
 
-	/**
-	 * @param parser should return null on parsing error
-	 */
-	public <T> T getParsedProperty(String name, Function<String, T> parser) throws PropertyException {
-		var value = parser.apply(getProperty(name));
-		if (value == null)
-			throw new PropertyParseException(name);
-
-		return value;
+	public <T> T getParsedProperty(String name, Parser<T> parser) throws PropertyException {
+		try {
+			return parser.parse(getProperty(name));
+		} catch (ParseException parseException) {
+			throw new PropertyParseException(name, parseException);
+		}
 	}
 
 	public int getIntProperty(String name) throws PropertyException {
-		try {
-			return Integer.parseInt(getProperty(name));
-		} catch (NumberFormatException e) {
-			throw new ParseIntegerException(name);
-		} catch (PropertyException e) {
-			throw e;
-		}
+		return getParsedProperty(name, new IntegerParser());
 	}
 
 	public int getPositiveIntProperty(String name) throws PropertyException {
-		int value = getIntProperty(name);
-		if (value <= 0)
-			throw new IntegerNotPositiveException(name);
-		return value;
+		return getParsedProperty(name, new PositiveIntegerParser());
 	}
 
 	public int getIntInRangeProperty(String name, Integer minBound, Integer maxBound) throws PropertyException {
-		int value = getIntProperty(name);
-		if ((minBound != null && value < minBound) || (maxBound != null && value >= maxBound))
-			throw new IntegerNotInRangeException(name, value, minBound, maxBound);
-
-		return value;
+		return getParsedProperty(name, new IntegerInRangeParser(minBound, maxBound));
 	}
 
-	/**
-	 * @return day of the year starting at 0
-	 */
 	public int getDayOfYearProperty(String name) throws PropertyException {
-		return getIntInRangeProperty(name, 1, 365 + 1) - 1;
+		return getParsedProperty(name, new DayOfYearParser());
 	}
 
 	public int getTimeProperty(String name) throws PropertyException {
-		var time = getProperty(name);
-		var parts = time.split(":");
-		if (parts.length != 2 || parts[0].length() != 2 || parts[1].length() != 2)
-			throw new TimeFormatException(name);
-		try {
-			int hours = Integer.parseInt(parts[0]);
-			int minutes = Integer.parseInt(parts[1]);
-
-			if (hours < 0 || hours >= 24 || minutes < 0 || minutes >= 60)
-				throw new TimeFormatException(name);
-
-			return hours * 60 + minutes;
-		} catch (NumberFormatException e) {
-			throw new TimeFormatException(name);
-		}
+		return getParsedProperty(name, new TimeParser());
 	}
 
 	public Path getPathProperty(String name) throws PropertyException {
