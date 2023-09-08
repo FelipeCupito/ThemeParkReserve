@@ -41,7 +41,7 @@ public class AttractionDay {
 
         //si todavía tengo reservas por reasignar, las cancelo
         while(!to_reassign.isEmpty()){
-            to_reassign.poll().cancel();
+            to_reassign.poll().cancelReservation();
         }
     }
 
