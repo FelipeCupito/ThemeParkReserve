@@ -45,13 +45,13 @@ class AvailabilityAction extends BookClientAction {
 	}
 }
 
-class BookAction extends BookClientAction {
+class ReservationAction extends BookClientAction {
 	UUID visitor;
 	int day;
 	String attraction;
 	int slot;
 
-	public BookAction(PropertyManager properties) throws PropertyException {
+	public ReservationAction(PropertyManager properties) throws PropertyException {
 		// TODO: Check argument naming
 		visitor = properties.getUUIDProperty("visitor");
 		day = properties.getDayOfYearProperty("day");
@@ -61,7 +61,26 @@ class BookAction extends BookClientAction {
 
 	@Override
 	public String toString() {
-		return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d}", visitor, day, attraction, slot);
+		return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d}", visitor, day, attraction,
+				slot);
+	}
+}
+
+class BookAction extends ReservationAction {
+	public BookAction(PropertyManager properties) throws PropertyException {
+		super(properties);
+	}
+}
+
+class ConfirmAction extends ReservationAction {
+	public ConfirmAction(PropertyManager properties) throws PropertyException {
+		super(properties);
+	}
+}
+
+class CancelAction extends ReservationAction {
+	public CancelAction(PropertyManager properties) throws PropertyException {
+		super(properties);
 	}
 }
 
@@ -103,6 +122,12 @@ public class BookClientProperties extends BaseClientProperties {
 				break;
 			case Book:
 				action = new BookAction(properties);
+				break;
+			case Confirm:
+				action = new ConfirmAction(properties);
+				break;
+			case Cancel:
+				action = new CancelAction(properties);
 				break;
 		}
 	}
