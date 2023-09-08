@@ -20,5 +20,5 @@ public abstract class CSVLineParser<T> implements Parser<T> {
 		return parseFields(fields);
 	}
 
-	abstract T parseFields(String[] parts);
+	abstract T parseFields(String[] parts) throws ParseException;
 }

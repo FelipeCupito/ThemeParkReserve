@@ -141,10 +141,13 @@ public class AdminClient implements Client<AdminProperties> {
 
 	@Override
 	public void run(AdminProperties properties) {
-		System.out.printf("properties: %s", properties.toString());
+		// TODO: Implement client instead of logging
+		logger.info("properties: %s", properties.toString());
 		var action = properties.getAction();
 		if (action instanceof RidesAction) {
-			System.out.println(((RidesAction) action).getAttractions().collect(Collectors.toList()));
+			logger.info(((RidesAction) action).getAttractions().collect(Collectors.toList()).toString());
+		} else if (action instanceof TicketsAction) {
+			logger.info(((TicketsAction) action).getPasses().collect(Collectors.toList()).toString());
 		}
 	}
 }
