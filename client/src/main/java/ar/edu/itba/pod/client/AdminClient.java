@@ -9,23 +9,23 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 public class AdminClient implements Client<AdminClientProperties> {
-	private static Logger logger = LoggerFactory.getLogger(AdminClient.class);
+    private static Logger logger = LoggerFactory.getLogger(AdminClient.class);
 
-	public static void main(String[] args) throws InterruptedException, IOException, PropertyException {
-		var properties = new AdminClientProperties(new PropertyManager(System.getProperties()));
-		var manager = new ClientManager<>(new AdminClient(), properties);
-		manager.run();
-	}
+    public static void main(String[] args) throws InterruptedException, IOException, PropertyException {
+        var properties = new AdminClientProperties(new PropertyManager(System.getProperties()));
+        var manager = new ClientManager<>(new AdminClient(), properties);
+        manager.run();
+    }
 
-	@Override
-	public void run(AdminClientProperties properties) {
-		// TODO: Implement client instead of logging
-		logger.info("properties: {}", properties.toString());
-		var action = properties.getAction();
-		if (action instanceof RidesAction) {
-			logger.info(((RidesAction) action).getAttractions().collect(Collectors.toList()).toString());
-		} else if (action instanceof TicketsAction) {
-			logger.info(((TicketsAction) action).getPasses().collect(Collectors.toList()).toString());
-		}
-	}
+    @Override
+    public void run(AdminClientProperties properties) {
+        // TODO: Implement client instead of logging
+        logger.info("properties: {}", properties.toString());
+        var action = properties.getAction();
+        if (action instanceof RidesAction) {
+            logger.info(((RidesAction) action).getAttractions().collect(Collectors.toList()).toString());
+        } else if (action instanceof TicketsAction) {
+            logger.info(((TicketsAction) action).getPasses().collect(Collectors.toList()).toString());
+        }
+    }
 }

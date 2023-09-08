@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class NotificationClient implements Client<NotificationClientProperties> {
-	private static Logger logger = LoggerFactory.getLogger(NotificationClient.class);
+    private static Logger logger = LoggerFactory.getLogger(NotificationClient.class);
 
-	public static void main(String[] args) throws InterruptedException, IOException, PropertyException {
-		var properties = new NotificationClientProperties(new PropertyManager(System.getProperties()));
-		var manager = new ClientManager<>(new NotificationClient(), properties);
-		manager.run();
-	}
+    public static void main(String[] args) throws InterruptedException, IOException, PropertyException {
+        var properties = new NotificationClientProperties(new PropertyManager(System.getProperties()));
+        var manager = new ClientManager<>(new NotificationClient(), properties);
+        manager.run();
+    }
 
-	@Override
-	public void run(NotificationClientProperties properties) {
-		// TODO: Implement client instead of logging
-		logger.info("properties: {}", properties.toString());
-	}
+    @Override
+    public void run(NotificationClientProperties properties) {
+        // TODO: Implement client instead of logging
+        logger.info("properties: {}", properties.toString());
+    }
 }

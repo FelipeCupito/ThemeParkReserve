@@ -4,17 +4,17 @@ import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 
 public class BaseClientProperties {
-	private String serverAddress;
+    private String serverAddress;
 
-	public BaseClientProperties(String serverAddress) {
-		this.serverAddress = serverAddress;
-	}
+    public BaseClientProperties(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
 
-	public BaseClientProperties(PropertyManager properties) throws PropertyNotFoundException {
-		this(properties.getProperty("serverAddress"));
-	}
+    public BaseClientProperties(PropertyManager properties) throws PropertyNotFoundException {
+        this(properties.getProperty("serverAddress"));
+    }
 
-	public String getServerAddress() {
-		return serverAddress;
-	}
+    public String getServerAddress() {
+        return serverAddress;
+    }
 }

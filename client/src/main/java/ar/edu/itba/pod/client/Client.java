@@ -1,5 +1,5 @@
 package ar.edu.itba.pod.client;
 
 public interface Client<P> {
-	void run(P properties);
+    void run(P properties);
 }

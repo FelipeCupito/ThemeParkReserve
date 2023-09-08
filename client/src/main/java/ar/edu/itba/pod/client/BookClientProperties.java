@@ -16,128 +16,128 @@ class AttractionsAction extends BookClientAction {
 }
 
 class AvailabilityAction extends BookClientAction {
-	int day;
-	String attraction;
-	int slot;
-	Integer slotTo;
+    int day;
+    String attraction;
+    int slot;
+    Integer slotTo;
 
-	public AvailabilityAction(PropertyManager properties) throws PropertyException {
-		// TODO: Check argument naming
-		day = properties.getDayOfYearProperty("day");
-		slot = properties.getTimeProperty("slot");
-		try {
-			attraction = properties.getProperty("attraction");
-		} catch (PropertyNotFoundException e) {
-			// Optional property
-			attraction = null;
-		}
-		try {
-			slotTo = properties.getTimeProperty("slotTo");
-		} catch (PropertyNotFoundException e) {
-			// Optional property
-			slotTo = null;
-		}
-	}
+    public AvailabilityAction(PropertyManager properties) throws PropertyException {
+        // TODO: Check argument naming
+        day = properties.getDayOfYearProperty("day");
+        slot = properties.getTimeProperty("slot");
+        try {
+            attraction = properties.getProperty("attraction");
+        } catch (PropertyNotFoundException e) {
+            // Optional property
+            attraction = null;
+        }
+        try {
+            slotTo = properties.getTimeProperty("slotTo");
+        } catch (PropertyNotFoundException e) {
+            // Optional property
+            slotTo = null;
+        }
+    }
 
-	@Override
-	public String toString() {
-		return String.format("{day: %d, attraction: \"%s\", slot: %d, slotTo: %d}", day, attraction, slot, slotTo);
-	}
+    @Override
+    public String toString() {
+        return String.format("{day: %d, attraction: \"%s\", slot: %d, slotTo: %d}", day, attraction, slot, slotTo);
+    }
 }
 
 class ReservationAction extends BookClientAction {
-	UUID visitor;
-	int day;
-	String attraction;
-	int slot;
+    UUID visitor;
+    int day;
+    String attraction;
+    int slot;
 
-	public ReservationAction(PropertyManager properties) throws PropertyException {
-		// TODO: Check argument naming
-		visitor = properties.getUUIDProperty("visitor");
-		day = properties.getDayOfYearProperty("day");
-		attraction = properties.getProperty("attraction");
-		slot = properties.getTimeProperty("slot");
-	}
+    public ReservationAction(PropertyManager properties) throws PropertyException {
+        // TODO: Check argument naming
+        visitor = properties.getUUIDProperty("visitor");
+        day = properties.getDayOfYearProperty("day");
+        attraction = properties.getProperty("attraction");
+        slot = properties.getTimeProperty("slot");
+    }
 
-	@Override
-	public String toString() {
-		return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d}", visitor, day, attraction,
-				slot);
-	}
+    @Override
+    public String toString() {
+        return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d}", visitor, day, attraction,
+                slot);
+    }
 }
 
 class BookAction extends ReservationAction {
-	public BookAction(PropertyManager properties) throws PropertyException {
-		super(properties);
-	}
+    public BookAction(PropertyManager properties) throws PropertyException {
+        super(properties);
+    }
 }
 
 class ConfirmAction extends ReservationAction {
-	public ConfirmAction(PropertyManager properties) throws PropertyException {
-		super(properties);
-	}
+    public ConfirmAction(PropertyManager properties) throws PropertyException {
+        super(properties);
+    }
 }
 
 class CancelAction extends ReservationAction {
-	public CancelAction(PropertyManager properties) throws PropertyException {
-		super(properties);
-	}
+    public CancelAction(PropertyManager properties) throws PropertyException {
+        super(properties);
+    }
 }
 
 public class BookClientProperties extends BaseClientProperties {
-	private enum ActionType {
-		Attractions,
-		Availability,
-		Book,
-		Confirm,
-		Cancel
-	}
+    private enum ActionType {
+        Attractions,
+        Availability,
+        Book,
+        Confirm,
+        Cancel
+    }
 
-	private BookClientAction action;
+    private BookClientAction action;
 
-	public BookClientProperties(PropertyManager properties) throws PropertyException, IOException {
-		super(properties);
-		var actionType = properties.getParsedProperty("action", (s) -> {
-			switch (s) {
-				case "attractions":
-					return ActionType.Attractions;
-				case "availability":
-					return ActionType.Availability;
-				case "book":
-					return ActionType.Book;
-				case "confirm":
-					return ActionType.Confirm;
-				case "cancel":
-					return ActionType.Cancel;
-				default:
-					throw new ParseException();
-			}
-		});
-		switch (actionType) {
-			case Attractions:
-				action = new AttractionsAction();
-				break;
-			case Availability:
-				action = new AvailabilityAction(properties);
-				break;
-			case Book:
-				action = new BookAction(properties);
-				break;
-			case Confirm:
-				action = new ConfirmAction(properties);
-				break;
-			case Cancel:
-				action = new CancelAction(properties);
-				break;
-		}
-	}
+    public BookClientProperties(PropertyManager properties) throws PropertyException, IOException {
+        super(properties);
+        var actionType = properties.getParsedProperty("action", (s) -> {
+            switch (s) {
+                case "attractions":
+                    return ActionType.Attractions;
+                case "availability":
+                    return ActionType.Availability;
+                case "book":
+                    return ActionType.Book;
+                case "confirm":
+                    return ActionType.Confirm;
+                case "cancel":
+                    return ActionType.Cancel;
+                default:
+                    throw new ParseException();
+            }
+        });
+        switch (actionType) {
+            case Attractions:
+                action = new AttractionsAction();
+                break;
+            case Availability:
+                action = new AvailabilityAction(properties);
+                break;
+            case Book:
+                action = new BookAction(properties);
+                break;
+            case Confirm:
+                action = new ConfirmAction(properties);
+                break;
+            case Cancel:
+                action = new CancelAction(properties);
+                break;
+        }
+    }
 
-	public BookClientAction getAction() {
-		return action;
-	}
+    public BookClientAction getAction() {
+        return action;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("{action: %s}", action.toString());
-	}
+    @Override
+    public String toString() {
+        return String.format("{action: %s}", action.toString());
+    }
 }
