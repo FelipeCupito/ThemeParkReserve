@@ -8,6 +8,11 @@ public abstract class PropertyException extends Exception {
 		this.propertyName = propertyName;
 	}
 
+	public PropertyException(String propertyName, String message) {
+		super(String.format("Error on property with name \"%s\": %s", propertyName, message));
+		this.propertyName = propertyName;
+	}
+
 	public String getPropertyName() {
 		return propertyName;
 	}

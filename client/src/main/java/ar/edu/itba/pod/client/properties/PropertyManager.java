@@ -53,8 +53,8 @@ public class PropertyManager {
 	public int getIntInRangeProperty(String name, Integer minBound, Integer maxBound) throws PropertyException {
 		int value = getIntProperty(name);
 		if ((minBound != null && value < minBound) || (maxBound != null && value >= maxBound))
-			throw new IntegerNotInRangeException(name, minBound, maxBound);
-		
+			throw new IntegerNotInRangeException(name, value, minBound, maxBound);
+
 		return value;
 	}
 
