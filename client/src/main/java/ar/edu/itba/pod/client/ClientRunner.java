@@ -23,10 +23,7 @@ public class ClientRunner<P extends BaseClientProperties> {
 				.build();
 
 		try {
-            Action action = properties.getAction();
-            logger.info("Running action: {}", action);
-
-			action.run();
+            properties.runAction();
 		} finally {
 			channel.shutdown().awaitTermination(10, TimeUnit.SECONDS);
 		}
