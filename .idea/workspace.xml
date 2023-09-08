@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="fix test">
+    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/ParkRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/ParkRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/PassType.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/PassType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/SlotAvailabilityResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/SlotAvailabilityResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +73,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AdminServiceTest">
+  <component name="RunManager" selected="Application.Server">
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.server.Server" />
       <module name="ThemeParkReserve-server" />
@@ -253,11 +245,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Server" />
         <item itemvalue="JUnit.AdminServiceTest" />
         <item itemvalue="JUnit.AdminServiceTest.setAttractionCapacityInvalidDay" />
         <item itemvalue="JUnit.AdminServiceTest.testAddAttractionWithNonPositiveSlotMinutes" />
         <item itemvalue="JUnit.AdminServiceTest.testAddValidAttraction" />
-        <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
   </component>
@@ -277,7 +269,7 @@
       <workItem from="1694052337947" duration="598000" />
       <workItem from="1694094395004" duration="14071000" />
       <workItem from="1694144572267" duration="14000" />
-      <workItem from="1694185414679" duration="8304000" />
+      <workItem from="1694185414679" duration="10052000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -359,7 +351,23 @@
       <option name="project" value="LOCAL" />
       <updated>1694129915119</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="make Reservation thread safe">
+      <option name="closed" value="true" />
+      <created>1694212845568</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1694212845568</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix">
+      <option name="closed" value="true" />
+      <created>1694212870334</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1694212870334</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -382,9 +390,10 @@
     <MESSAGE value="service models" />
     <MESSAGE value="add more models" />
     <MESSAGE value="gitignore" />
-    <MESSAGE value="fix" />
     <MESSAGE value="make thead safe all ParkRepository func" />
-    <option name="LAST_COMMIT_MESSAGE" value="make thead safe all ParkRepository func" />
+    <MESSAGE value="make Reservation thread safe" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
