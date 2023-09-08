@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AvailabilityAction implements ClientAction {
-    private static Logger logger = LoggerFactory.getLogger(AvailabilityAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(AvailabilityAction.class);
 
     int day;
     String attraction;

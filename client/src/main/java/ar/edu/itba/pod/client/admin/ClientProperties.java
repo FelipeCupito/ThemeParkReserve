@@ -18,33 +18,21 @@ public class ClientProperties extends BaseClientProperties {
         Slots
     }
 
-    private ClientAction action;
+    private final ClientAction action;
 
     public ClientProperties(PropertyManager properties) throws PropertyException, IOException {
         super(properties);
-        var actionType = properties.getParsedProperty("action", (s) -> {
-            switch (s) {
-                case "rides":
-                    return ActionType.Rides;
-                case "tickets":
-                    return ActionType.Tickets;
-                case "slots":
-                    return ActionType.Slots;
-                default:
-                    throw new ParseException();
-            }
+        var actionType = properties.getParsedProperty("action", (s) -> switch (s) {
+            case "rides" -> ActionType.Rides;
+            case "tickets" -> ActionType.Tickets;
+            case "slots" -> ActionType.Slots;
+            default -> throw new ParseException();
         });
-        switch (actionType) {
-            case Rides:
-                action = new RidesAction(properties);
-                break;
-            case Tickets:
-                action = new TicketsAction(properties);
-                break;
-            case Slots:
-                action = new SlotsAction(properties);
-                break;
-        }
+        action = switch (actionType) {
+            case Rides -> new RidesAction(properties);
+            case Tickets -> new TicketsAction(properties);
+            case Slots -> new SlotsAction(properties);
+        };
     }
 
     public ClientAction getAction() {

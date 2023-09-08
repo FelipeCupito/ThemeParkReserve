@@ -16,28 +16,19 @@ public class ClientProperties extends BaseClientProperties {
         Confirmed
     }
 
-    private ClientAction action;
+    private final ClientAction action;
 
     public ClientProperties(PropertyManager properties) throws PropertyException, IOException {
         super(properties);
-        var actionType = properties.getParsedProperty("action", (s) -> {
-            switch (s) {
-                case "capacity":
-                    return ActionType.Capacity;
-                case "confirmed":
-                    return ActionType.Confirmed;
-                default:
-                    throw new ParseException();
-            }
+        var actionType = properties.getParsedProperty("action", (s) -> switch (s) {
+            case "capacity" -> ActionType.Capacity;
+            case "confirmed" -> ActionType.Confirmed;
+            default -> throw new ParseException();
         });
-        switch (actionType) {
-            case Capacity:
-                action = new CapacityAction(properties);
-                break;
-            case Confirmed:
-                action = new ConfirmedAction(properties);
-                break;
-        }
+        action = switch (actionType) {
+            case Capacity -> new CapacityAction(properties);
+            case Confirmed -> new ConfirmedAction(properties);
+        };
     }
 
     public ClientAction getAction() {

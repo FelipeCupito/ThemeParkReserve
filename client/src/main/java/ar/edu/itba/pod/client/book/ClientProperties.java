@@ -18,43 +18,25 @@ public class ClientProperties extends BaseClientProperties {
         Cancel
     }
 
-    private ClientAction action;
+    private final ClientAction action;
 
     public ClientProperties(PropertyManager properties) throws PropertyException, IOException {
         super(properties);
-        var actionType = properties.getParsedProperty("action", (s) -> {
-            switch (s) {
-                case "attractions":
-                    return ActionType.Attractions;
-                case "availability":
-                    return ActionType.Availability;
-                case "book":
-                    return ActionType.Book;
-                case "confirm":
-                    return ActionType.Confirm;
-                case "cancel":
-                    return ActionType.Cancel;
-                default:
-                    throw new ParseException();
-            }
+        var actionType = properties.getParsedProperty("action", (s) -> switch (s) {
+            case "attractions" -> ActionType.Attractions;
+            case "availability" -> ActionType.Availability;
+            case "book" -> ActionType.Book;
+            case "confirm" -> ActionType.Confirm;
+            case "cancel" -> ActionType.Cancel;
+            default -> throw new ParseException();
         });
-        switch (actionType) {
-            case Attractions:
-                action = new AttractionsAction();
-                break;
-            case Availability:
-                action = new AvailabilityAction(properties);
-                break;
-            case Book:
-                action = new BookAction(properties);
-                break;
-            case Confirm:
-                action = new ConfirmAction(properties);
-                break;
-            case Cancel:
-                action = new CancelAction(properties);
-                break;
-        }
+        action = switch (actionType) {
+            case Attractions -> new AttractionsAction();
+            case Availability -> new AvailabilityAction(properties);
+            case Book -> new BookAction(properties);
+            case Confirm -> new ConfirmAction(properties);
+            case Cancel -> new CancelAction(properties);
+        };
     }
 
     public ClientAction getAction() {

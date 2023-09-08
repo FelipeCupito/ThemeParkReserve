@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FollowAction extends NotificationClientAction {
-    private static Logger logger = LoggerFactory.getLogger(FollowAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(FollowAction.class);
 
     public FollowAction(PropertyManager properties) throws PropertyException {
         super(properties);

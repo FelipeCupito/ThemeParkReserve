@@ -14,7 +14,7 @@ import ar.edu.itba.pod.client.properties.parsers.CSVParser;
 import services.Park.Attraction;
 
 public class RidesAction implements ClientAction {
-    private static Logger logger = LoggerFactory.getLogger(RidesAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(RidesAction.class);
 
     private Stream<Attraction> attractions;
 

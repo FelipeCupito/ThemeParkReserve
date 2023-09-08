@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CancelAction extends ReservationAction {
-    private static Logger logger = LoggerFactory.getLogger(CancelAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(CancelAction.class);
 
     public CancelAction(PropertyManager properties) throws PropertyException {
         super(properties);

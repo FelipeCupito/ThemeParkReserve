@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConfirmAction extends ReservationAction {
-    private static Logger logger = LoggerFactory.getLogger(ConfirmAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConfirmAction.class);
 
     public ConfirmAction(PropertyManager properties) throws PropertyException {
         super(properties);

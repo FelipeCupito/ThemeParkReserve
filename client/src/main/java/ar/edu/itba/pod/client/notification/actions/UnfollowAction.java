@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UnfollowAction extends NotificationClientAction {
-    private static Logger logger = LoggerFactory.getLogger(UnfollowAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(UnfollowAction.class);
 
     public UnfollowAction(PropertyManager properties) throws PropertyException {
         super(properties);

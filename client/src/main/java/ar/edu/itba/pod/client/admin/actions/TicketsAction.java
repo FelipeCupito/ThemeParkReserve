@@ -14,7 +14,7 @@ import ar.edu.itba.pod.client.properties.parsers.PassLineParser;
 import services.Park.Pass;
 
 public class TicketsAction implements ClientAction {
-    private static Logger logger = LoggerFactory.getLogger(TicketsAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(TicketsAction.class);
 
     private Stream<Pass> passes;
 

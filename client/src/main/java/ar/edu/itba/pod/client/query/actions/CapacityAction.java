@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CapacityAction extends QueryClientAction {
-    private static Logger logger = LoggerFactory.getLogger(CapacityAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(CapacityAction.class);
 
     public CapacityAction(PropertyManager properties) throws PropertyException {
         super(properties);

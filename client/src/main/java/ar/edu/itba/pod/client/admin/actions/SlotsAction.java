@@ -1,14 +1,13 @@
 package ar.edu.itba.pod.client.admin.actions;
 
 import ar.edu.itba.pod.client.ClientAction;
+import ar.edu.itba.pod.client.properties.PropertyManager;
+import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ar.edu.itba.pod.client.properties.PropertyManager;
-import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
-
 public class SlotsAction implements ClientAction {
-    private static Logger logger = LoggerFactory.getLogger(SlotsAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(SlotsAction.class);
 
     String rideName;
     int dayOfYear;
@@ -21,8 +20,7 @@ public class SlotsAction implements ClientAction {
     }
 
     public SlotsAction(PropertyManager properties) throws PropertyException {
-        // TODO: check if parameter names are correct acording to spec (spec is
-        // inconsistent)
+        // TODO: check if parameter names are correct according to spec (spec is inconsistent)
         rideName = properties.getProperty("rideName");
         dayOfYear = properties.getDayOfYearProperty("dayOfYear");
         amount = properties.getPositiveIntProperty("amount");

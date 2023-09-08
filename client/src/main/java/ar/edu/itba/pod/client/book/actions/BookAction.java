@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BookAction extends ReservationAction {
-    private static Logger logger = LoggerFactory.getLogger(BookAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(BookAction.class);
 
     public BookAction(PropertyManager properties) throws PropertyException {
         super(properties);

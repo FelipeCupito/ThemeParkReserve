@@ -16,28 +16,19 @@ public class ClientProperties extends BaseClientProperties {
         Unfollow
     }
 
-    private ClientAction action;
+    private final ClientAction action;
 
     public ClientProperties(PropertyManager properties) throws PropertyException, IOException {
         super(properties);
-        var actionType = properties.getParsedProperty("action", (s) -> {
-            switch (s) {
-                case "follow":
-                    return ActionType.Follow;
-                case "unfollow":
-                    return ActionType.Unfollow;
-                default:
-                    throw new ParseException();
-            }
+        var actionType = properties.getParsedProperty("action", (s) -> switch (s) {
+            case "follow" -> ActionType.Follow;
+            case "unfollow" -> ActionType.Unfollow;
+            default -> throw new ParseException();
         });
-        switch (actionType) {
-            case Follow:
-                action = new FollowAction(properties);
-                break;
-            case Unfollow:
-                action = new UnfollowAction(properties);
-                break;
-        }
+        action = switch (actionType) {
+            case Follow -> new FollowAction(properties);
+            case Unfollow -> new UnfollowAction(properties);
+        };
     }
 
     public ClientAction getAction() {
