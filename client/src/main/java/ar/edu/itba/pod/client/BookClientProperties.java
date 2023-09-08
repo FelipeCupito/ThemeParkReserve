@@ -4,23 +4,25 @@ import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import services.Park.UUID;
 
 import java.io.IOException;
 
-abstract class BookAction {
+abstract class BookClientAction {
 
 }
 
-class AttractionsAction extends BookAction {
+class AttractionsAction extends BookClientAction {
 }
 
-class AvailabilityAction extends BookAction {
+class AvailabilityAction extends BookClientAction {
 	int day;
 	String attraction;
 	int slot;
 	Integer slotTo;
 
 	public AvailabilityAction(PropertyManager properties) throws PropertyException {
+		// TODO: Check argument naming
 		day = properties.getDayOfYearProperty("day");
 		slot = properties.getTimeProperty("slot");
 		try {
@@ -43,6 +45,26 @@ class AvailabilityAction extends BookAction {
 	}
 }
 
+class BookAction extends BookClientAction {
+	UUID visitor;
+	int day;
+	String attraction;
+	int slot;
+
+	public BookAction(PropertyManager properties) throws PropertyException {
+		// TODO: Check argument naming
+		visitor = properties.getUUIDProperty("visitor");
+		day = properties.getDayOfYearProperty("day");
+		attraction = properties.getProperty("attraction");
+		slot = properties.getTimeProperty("slot");
+	}
+
+	@Override
+	public String toString() {
+		return String.format("{visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d}", visitor, day, attraction, slot);
+	}
+}
+
 public class BookClientProperties extends BaseClientProperties {
 	private enum ActionType {
 		Attractions,
@@ -52,7 +74,7 @@ public class BookClientProperties extends BaseClientProperties {
 		Cancel
 	}
 
-	private BookAction action;
+	private BookClientAction action;
 
 	public BookClientProperties(PropertyManager properties) throws PropertyException, IOException {
 		super(properties);
@@ -73,16 +95,19 @@ public class BookClientProperties extends BaseClientProperties {
 			}
 		});
 		switch (actionType) {
-			 case Attractions:
-				 action = new AttractionsAction();
-				 break;
-			 case Availability:
-				 action = new AvailabilityAction(properties);
-				 break;
+			case Attractions:
+				action = new AttractionsAction();
+				break;
+			case Availability:
+				action = new AvailabilityAction(properties);
+				break;
+			case Book:
+				action = new BookAction(properties);
+				break;
 		}
 	}
 
-	public BookAction getAction() {
+	public BookClientAction getAction() {
 		return action;
 	}
 
