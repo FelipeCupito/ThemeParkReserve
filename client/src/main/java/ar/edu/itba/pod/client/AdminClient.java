@@ -103,18 +103,36 @@ class SlotsAction extends Action {
 }
 
 class AdminProperties extends BaseClientProperties {
+	private enum ActionType {
+		Rides,
+		Tickets,
+		Slots
+	}
+
 	private Action action;
 
 	public AdminProperties(PropertyManager properties) throws PropertyException, IOException {
 		super(properties);
-		switch (properties.getProperty("action")) {
-			case "rides":
+		var actionType = properties.getParsedProperty("action", (s) -> {
+			switch (s) {
+				case "rides":
+					return ActionType.Rides;
+				case "tickets":
+					return ActionType.Tickets;
+				case "slots":
+					return ActionType.Slots;
+				default:
+					return null;
+			}
+		});
+		switch (actionType) {
+			case Rides:
 				action = new RidesAction(properties);
 				break;
-			case "tickets":
+			case Tickets:
 				action = new TicketsAction(properties);
 				break;
-			case "slots":
+			case Slots:
 				action = new SlotsAction(properties);
 				break;
 		}

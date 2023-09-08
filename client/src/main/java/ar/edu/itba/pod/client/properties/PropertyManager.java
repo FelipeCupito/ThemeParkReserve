@@ -3,6 +3,7 @@ package ar.edu.itba.pod.client.properties;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
+import java.util.function.Function;
 
 import ar.edu.itba.pod.client.properties.exceptions.*;
 
@@ -17,6 +18,17 @@ public class PropertyManager {
 		var value = properties.getProperty(name);
 		if (value == null)
 			throw new PropertyNotFoundException(name);
+
+		return value;
+	}
+
+	/**
+	 * @param parser should return null on parsing error
+	 */
+	public <T> T getParsedProperty(String name, Function<String, T> parser) throws PropertyException {
+		var value = parser.apply(getProperty(name));
+		if (value == null)
+			throw new PropertyParseException(name);
 
 		return value;
 	}
