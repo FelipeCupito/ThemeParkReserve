@@ -23,7 +23,10 @@ public class TableWriter implements Closeable {
             // Not first column
             if (column > 0)
                 outputWriter.append('|');
-            outputWriter.append(String.format(columnProperties.getFormatString(), value));
+            var serializedValue = String.format(' ' + columnProperties.getFormatString() + ' ', value);
+            if (column == values.length - 1)
+                serializedValue = serializedValue.stripTrailing();
+            outputWriter.append(serializedValue);
         }
         outputWriter.append('\n');
     }

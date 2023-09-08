@@ -19,7 +19,7 @@ public class TableWriterTest {
         writer.addRow(new String[]{"10:30"});
         writer.close();
 
-        assertEquals("Time \n00:00\n10:30\n", output.toString());
+        assertEquals(" Time\n 00:00\n 10:30\n", output.toString());
     }
 
     @Test
@@ -36,6 +36,6 @@ public class TableWriterTest {
         writer.addRow(new String[]{"10:30", "6", "Very large text, this is a text"});
         writer.close();
 
-        assertEquals("  Time|Amount|Name\n 00:00|10    |Test 1\n 10:30|6     |Very large text, this is a text\n", output.toString());
+        assertEquals("   Time | Amount | Name\n  00:00 | 10     | Test 1\n  10:30 | 6      | Very large text, this is a text\n", output.toString());
     }
 }
