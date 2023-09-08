@@ -21,7 +21,7 @@ public class AdminClient implements Client<AdminClientProperties> {
 	@Override
 	public void run(AdminClientProperties properties) {
 		// TODO: Implement client instead of logging
-		logger.info("properties: %s", properties.toString());
+		logger.info("properties: {}", properties.toString());
 		var action = properties.getAction();
 		if (action instanceof RidesAction) {
 			logger.info(((RidesAction) action).getAttractions().collect(Collectors.toList()).toString());
