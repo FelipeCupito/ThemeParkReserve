@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.client;
 
-import java.util.Properties;
+import ar.edu.itba.pod.client.properties.PropertyManager;
+import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 
 public class BaseClientProperties {
 	private String serverAddress;
@@ -9,8 +10,8 @@ public class BaseClientProperties {
 		this.serverAddress = serverAddress;
 	}
 
-	public BaseClientProperties(Properties properties) {
-		serverAddress = properties.getProperty("serverAddress");
+	public BaseClientProperties(PropertyManager properties) throws PropertyNotFoundException {
+		this(properties.getProperty("serverAddress"));
 	}
 
 	public String getServerAddress() {
