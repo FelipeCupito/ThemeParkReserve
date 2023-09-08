@@ -33,8 +33,8 @@ class RidesAction extends Action {
 
 		throw new UnsupportedOperationException("Not yet implemented");
 
-		return Attraction.newBuilder()
-				.build();
+		//return Attraction.newBuilder()
+				//.build();
 	}
 
 	public Stream<Attraction> getAttractions() {
@@ -58,8 +58,8 @@ class TicketsAction extends Action {
 
 		throw new UnsupportedOperationException("Not yet implemented");
 
-		return Pass.newBuilder()
-				.build();
+		//return Pass.newBuilder()
+				//.build();
 	}
 
 	public Stream<Pass> getPasses() {
