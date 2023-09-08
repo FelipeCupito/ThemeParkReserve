@@ -1,10 +1,4 @@
 package ar.edu.itba.pod.server.models;
-
-import services.Park;
-
-import java.util.List;
-import java.util.UUID;
-
 public class Utils {
 
     public final static int MINUTES_OF_DAY = 1440;
@@ -17,6 +11,12 @@ public class Utils {
     public static void checkAttractionName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Attraction name cannot be null or empty");
+        }
+    }
+
+    public static void checkString(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("cannot be null or empty");
         }
     }
 
@@ -37,6 +37,22 @@ public class Utils {
             throw new IllegalArgumentException("Capacity must be greater than 0");
         }
     }
+
+
+    //check pass for this day and minutes
+    public static void checkPass(Pass pass, Integer day, Integer minutes){
+        if(!pass.isValid(day, minutes)){
+            throw new IllegalArgumentException("Pass is not available for this day");
+        }
+    }
+
+    public static void checkReservation(Pass pass){
+        if(!pass.canReserve()){
+            throw new IllegalArgumentException("Pass is not available for this day");
+        }
+    }
+
+
 
 
 

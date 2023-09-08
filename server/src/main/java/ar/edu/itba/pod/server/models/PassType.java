@@ -5,9 +5,8 @@ import services.Park;
 enum PassType {
     UNLIMITED {
         @Override
-        public boolean canReserve(Pass pass, Integer day, Integer minutes) {
-            Utils.checkDay(day);
-            return pass.getDay() == day;
+        public boolean canReserve(Pass pass) {
+            return true;
         }
 
         @Override
@@ -19,9 +18,8 @@ enum PassType {
     },
     THREE {
         @Override
-        public boolean canReserve(Pass pass, Integer day, Integer minutes) {
-            Utils.checkDay(day);
-            return pass.getDay() == day && pass.getReservationNumber() < 3;
+        public boolean canReserve(Pass pass) {
+            return pass.getReservationNumber() < 3;
         }
 
         @Override
@@ -32,10 +30,8 @@ enum PassType {
     },
     HALF_DAY {
         @Override
-        public boolean canReserve(Pass pass, Integer day, Integer minutes) {
-            Utils.checkDay(day);
-            Utils.checkMinutes(minutes);
-            return pass.getDay() == day && minutes <= Utils.MINUTES_OF_DAY / 2;
+        public boolean canReserve(Pass pass) {
+            return true;
         }
 
         @Override
@@ -56,8 +52,8 @@ enum PassType {
         };
     }
 
-    //si pude reserva
-    abstract public boolean canReserve(Pass pass, Integer day, Integer minutes);
+    //si pude reserva por cantidad de reservas
+    abstract public boolean canReserve(Pass pass);
 
     //si es valido para el dia y el minuto
     abstract public boolean isValid(Pass pass, Integer day, Integer minutes);

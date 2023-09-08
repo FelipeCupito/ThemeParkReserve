@@ -46,9 +46,9 @@ public class AttractionDay {
     }
 
     synchronized public Status addReservation(Pass pass, Integer slotIndex){
-        //TODO:se sebe bloquear el acceso a la lista de slots cuando se esta setiando la capacidad
         checkIndex(slotIndex);
 
+        //se bloquea el acceso a la lista de slots cuando se esta setieando la capacidad de este dia
         capacityLock.writeLock().lock();
         try{
             return slots.get(slotIndex).addReservation(pass);

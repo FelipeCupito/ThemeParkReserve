@@ -2,7 +2,11 @@ package ar.edu.itba.pod.server.models;
 
 import services.Park;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -83,18 +87,15 @@ public class ParkRepository {
     }
 
     public Status addReservation(String uuidString, String attractionName, Integer day, Integer minutes) {
-        //get attraction
-        Attraction attraction = getAttractionIfExist(attractionName);
         //get pass
         Pass pass = getPassIfExist(uuidString);
+        //check pass for this day and minutes
+        Utils.checkPass(pass, day, minutes);
+        //get attraction
+        Attraction attraction = getAttractionIfExist(attractionName);
 
-        //check pass
-        if(!pass.canReserve(day, minutes)){
-            throw new IllegalArgumentException("Pass is not available for this day");
-        }
         //add reservation
         return attraction.addReservation(pass, day, minutes);
-
     }
 
     public void confirmReservation(String uuidString, String attractionName, Integer day, Integer minutes) {
@@ -126,12 +127,6 @@ public class ParkRepository {
     ///////////////
     //  Private  //
     //////////////
-    private void checkAttractionName(String name) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Attraction name cannot be null or empty");
-        }
-    }
-
     private Attraction getAttractionIfExist(String name) {
         Utils.checkAttractionName(name);
         Attraction attraction = attractions.get(name);

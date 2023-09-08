@@ -117,8 +117,8 @@ public class Attraction {
 
     public Status addReservation(Pass pass, Integer day, Integer minutes) {
         Utils.checkDay(day);
-        int slotIndex = getSlotIndex(minutes);
 
+        int slotIndex = getSlotIndex(minutes);
         return days.get(day).addReservation(pass, slotIndex);
     }
 
