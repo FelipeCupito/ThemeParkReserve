@@ -10,7 +10,6 @@ import services.Park.Pass;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Properties;
 import java.util.stream.Stream;
 
 abstract class Action {
@@ -79,8 +78,10 @@ class SlotsAction extends Action {
 	}
 
 	public SlotsAction(PropertyManager properties) throws PropertyException {
+		// TODO: check if parameter names are correct acording to spec (spec is
+		// inconsistent)
 		rideName = properties.getProperty("rideName");
-		dayOfYear = properties.getDayOfYearProperty("rideName");
+		dayOfYear = properties.getDayOfYearProperty("dayOfYear");
 		amount = properties.getPositiveIntProperty("amount");
 	}
 
