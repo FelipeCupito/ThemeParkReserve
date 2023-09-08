@@ -6,7 +6,7 @@ import ar.edu.itba.pod.client.notification.actions.FollowAction;
 import ar.edu.itba.pod.client.notification.actions.UnfollowAction;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 
 import java.io.IOException;
 

@@ -1,11 +1,11 @@
 package ar.edu.itba.pod.client.properties;
 
+import ar.edu.itba.pod.client.parsers.*;
 import ar.edu.itba.pod.client.properties.exceptions.FileDoesNotExistException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyParseException;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
-import ar.edu.itba.pod.client.properties.parsers.*;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 import services.Park.UUID;
 
 import java.nio.file.Files;

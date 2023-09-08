@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
-import ar.edu.itba.pod.client.properties.parsers.CSVParser;
-import ar.edu.itba.pod.client.properties.parsers.PassLineParser;
+import ar.edu.itba.pod.client.parsers.CSVParser;
+import ar.edu.itba.pod.client.parsers.PassLineParser;
 import services.Park.Pass;
 
 public class TicketsAction implements ClientAction {

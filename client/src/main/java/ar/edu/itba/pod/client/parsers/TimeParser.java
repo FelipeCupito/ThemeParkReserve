@@ -1,8 +1,7 @@
-package ar.edu.itba.pod.client.properties.parsers;
+package ar.edu.itba.pod.client.parsers;
 
-import ar.edu.itba.pod.client.properties.Parser;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
-import ar.edu.itba.pod.client.properties.exceptions.parser.TimeFormatException;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.TimeFormatException;
 
 public class TimeParser implements Parser<Integer> {
     @Override

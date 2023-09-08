@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.client.properties.exceptions.parser;
+package ar.edu.itba.pod.client.parsers.exceptions;
 
 // Includes minBound, excludes maxBound
 public class IntegerNotInRangeException extends ParseException {

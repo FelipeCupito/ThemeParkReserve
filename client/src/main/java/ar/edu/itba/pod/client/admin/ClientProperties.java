@@ -7,7 +7,7 @@ import ar.edu.itba.pod.client.admin.actions.SlotsAction;
 import ar.edu.itba.pod.client.admin.actions.TicketsAction;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 
 import java.io.IOException;
 

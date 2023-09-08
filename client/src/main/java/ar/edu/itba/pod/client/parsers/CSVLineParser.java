@@ -1,8 +1,7 @@
-package ar.edu.itba.pod.client.properties.parsers;
+package ar.edu.itba.pod.client.parsers;
 
-import ar.edu.itba.pod.client.properties.Parser;
-import ar.edu.itba.pod.client.properties.exceptions.parser.CSVParseException;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.CSVParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 
 public abstract class CSVLineParser<T> implements Parser<T> {
     private int fieldCount;

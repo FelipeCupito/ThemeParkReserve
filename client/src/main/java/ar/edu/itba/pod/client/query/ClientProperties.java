@@ -4,7 +4,7 @@ import ar.edu.itba.pod.client.BaseClientProperties;
 import ar.edu.itba.pod.client.ClientAction;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 import ar.edu.itba.pod.client.query.actions.CapacityAction;
 import ar.edu.itba.pod.client.query.actions.ConfirmedAction;
 

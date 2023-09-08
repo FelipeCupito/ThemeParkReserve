@@ -1,7 +1,6 @@
-package ar.edu.itba.pod.client.properties.parsers;
+package ar.edu.itba.pod.client.parsers;
 
-import ar.edu.itba.pod.client.properties.Parser;
-import ar.edu.itba.pod.client.properties.exceptions.parser.ParseException;
+import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 
 public class DayOfYearParser implements Parser<Integer> {
     /**
