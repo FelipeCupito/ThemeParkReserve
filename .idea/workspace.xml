@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="fix">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/SlotAvailabilityResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/servant/ReservationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/proto/park.proto" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/proto/park.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/ParkRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/ParkRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Pass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/PassType.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/PassType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Status.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AdminServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AdminServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +58,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "add-server-admin-service",
+    "git-widget-placeholder": "add-Reservation-Service",
     "last_opened_file_path": "/Users/felucupito/WorkSpace/POD/ThemeParkReserve",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -68,7 +80,20 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.AdminServiceTest">
+  <component name="RunManager" selected="Application.Server">
+    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.server.Server" />
+      <module name="ThemeParkReserve-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.itba.pod.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="theme-park-reserve-server" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -195,10 +220,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Server" />
         <item itemvalue="JUnit.AdminServiceTest.testAddValidAttraction" />
         <item itemvalue="JUnit.AdminServiceTest" />
-        <item itemvalue="JUnit.AdminServiceTest" />
         <item itemvalue="JUnit.AdminServiceTest.testAddValidAttraction" />
+        <item itemvalue="JUnit.AdminServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -290,7 +316,15 @@
       <option name="project" value="LOCAL" />
       <updated>1694043906907</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="make thead safe all ParkRepository func">
+      <option name="closed" value="true" />
+      <created>1694129915119</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1694129915119</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,17 +348,7 @@
     <MESSAGE value="add more models" />
     <MESSAGE value="gitignore" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java</url>
-          <line>26</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="make thead safe all ParkRepository func" />
+    <option name="LAST_COMMIT_MESSAGE" value="make thead safe all ParkRepository func" />
   </component>
 </project>
