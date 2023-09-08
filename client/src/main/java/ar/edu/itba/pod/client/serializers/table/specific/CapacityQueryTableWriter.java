@@ -17,7 +17,7 @@ public class CapacityQueryTableWriter extends TableWriter {
         super(outputWriter, new ColumnProperties[]{
                 new ColumnProperties(5, ColumnAlignment.Right),
                 new ColumnProperties(header[1].length(), ColumnAlignment.Right),
-                new ColumnProperties(0, ColumnAlignment.Left),
+                new ColumnProperties(1, ColumnAlignment.Left),
         });
         super.addRow(header);
     }

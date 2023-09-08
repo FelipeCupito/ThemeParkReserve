@@ -17,7 +17,7 @@ public class AvailabilityTableWriter extends TableWriter {
                 new ColumnProperties(header[1].length(), ColumnAlignment.Right),
                 new ColumnProperties(header[2].length(), ColumnAlignment.Right),
                 new ColumnProperties(header[3].length(), ColumnAlignment.Right),
-                new ColumnProperties(0, ColumnAlignment.Left),
+                new ColumnProperties(1, ColumnAlignment.Left),
         });
         super.addRow(header);
     }
