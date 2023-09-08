@@ -47,4 +47,12 @@ public class Pass {
     public int hashCode() {
         return uuid != null ? uuid.hashCode() : 0;
     }
+
+    public boolean canReserve(Integer day, Integer minutes) {
+        return type.canReserve(this, day, minutes);
+    }
+
+    public boolean isValid(Integer day, Integer minutes) {
+        return type.isValid(this, day, minutes);
+    }
 }

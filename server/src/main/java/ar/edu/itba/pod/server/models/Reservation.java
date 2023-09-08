@@ -5,23 +5,15 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class Reservation implements Comparable<Reservation> {
+public class Reservation{
     private final Pass pass;
-    private final Integer day;
+    //private final Integer day;
     private Status status;
 
-    public Reservation(Pass pass, Status status, int day) {
+    public Reservation(Pass pass, Status status) {
         this.pass = pass;
-        this.day = day;
+        //this.day = day;
         this.status = status;
-    }
-
-    @Override
-    public int compareTo(Reservation o) {
-        if (this.equals(o)) {
-            return 0;
-        }
-        return this.day.compareTo(o.day);
     }
 
     @Override
@@ -51,7 +43,4 @@ public class Reservation implements Comparable<Reservation> {
         this.status = Status.PENDING;
     }
 
-    public void reassign() {
-        this.status = Status.REASSIGNED;
-    }
 }
