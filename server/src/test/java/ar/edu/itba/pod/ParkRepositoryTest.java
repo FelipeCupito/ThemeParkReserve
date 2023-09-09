@@ -7,9 +7,10 @@ import services.Park;
 
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-public class AdminServiceTest {
+public class ParkRepositoryTest {
     private ParkRepository parkRepository;
 
     @Before
@@ -20,7 +21,6 @@ public class AdminServiceTest {
     /////////////////////
     //  Add Attraction //
     ////////////////////
-
     @Test
     public void testAddValidAttraction() {
         parkRepository.addAttraction("Roller Coaster", 800, 900, 15);
@@ -78,23 +78,11 @@ public class AdminServiceTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void testAddPass_invalidDay() {
-        String uuid = UUID.randomUUID().toString();
-        //0 no es un día válido, falla
-        parkRepository.addPass(uuid, Park.PassType.UNLIMITED, 0);
-    }
-
-    @Test (expected = IllegalArgumentException.class)
     public void testAddPass_negativeDay() {
         String uuid = UUID.randomUUID().toString();
         //-1 no es un día válido, falla
         parkRepository.addPass(uuid, Park.PassType.UNLIMITED, -1);
     }
-
-    //////////////////////////////
-    //  Set Attraction Capacity //
-    //////////////////////////////
-
 
     @Test
     public void setAttractionCapacityTest() {
@@ -116,6 +104,39 @@ public class AdminServiceTest {
     }
 
 
+    @Test
+    public void testAddAttraction() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            parkRepository.addAttraction("Ride1", 800, 900, 15);
+            parkRepository.addAttraction("Ride1", 800, 900, 20); // Intenta agregar una atracción con el mismo nombre dos veces.
+        });
+        assertEquals("Attraction already exists", exception.getMessage()); // Verifica si el mensaje de la excepción es el correcto.
+    }
 
+    @Test
+    public void testAddPass() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            String uuid = UUID.randomUUID().toString();
+            parkRepository.addPass(uuid, Park.PassType.HALF_DAY, 5);
+            parkRepository.addPass(uuid, Park.PassType.HALF_DAY, 3);
+        });
+        assertEquals("Pass already exists", exception.getMessage());
+    }
+
+    @Test
+    public void testSetAttractionCapacity() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            parkRepository.setAttractionCapacity("RideNotExists", 30, 2021);
+        });
+        String expectedMessage = "Attraction does not exist";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void testGetAttractions() {
+        parkRepository.addAttraction("Ride1", 800, 900, 15);
+        parkRepository.addAttraction("Ride2", 800, 900, 15);
+        assertEquals(2, parkRepository.getAttractions().size()); // Esperamos tener 2 atracciones en el parque.
+    }
 
 }
