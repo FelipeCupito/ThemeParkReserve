@@ -58,7 +58,7 @@ public class AttractionDay {
             return slots.get(slotIndex).addReservation(pass);
 
         }finally {
-            capacityLock.readLock().lock();
+            capacityLock.readLock().unlock();
         }
     }
 

@@ -4,19 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="make thread safe AttractionDay">
-      <change afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionDayTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionSlotTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionTest.java" afterDir="false" />
+    <list default="true" id="0a7fb934-1617-41b6-915e-dc0a367b6190" name="Changes" comment="Fix checkMinutes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Attraction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionSlot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/SlotAvailabilityResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/SlotAvailabilityResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AdminServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/ParkRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionDayTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionDayTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,25 +48,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "add-test",
-    "last_opened_file_path": "/Users/felucupito/WorkSpace/POD/ThemeParkReserve",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.24023438",
-    "project.structure.side.proportion": "0.26292628",
-    "settings.editor.selected.configurable": "com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;add-test&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/felucupito/WorkSpace/POD/ThemeParkReserve&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.24023438&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.26292628&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ar.edu.itba.pod.server.models" />
@@ -83,7 +75,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.AttractionDayTest">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="theme-park-reserve-server" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -104,6 +96,37 @@
       <option name="OPTIONS" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="AttractionDayTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ThemeParkReserve-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.itba.pod.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.itba.pod" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.AttractionDayTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AttractionDayTest.testSetCapacityWithReservationsOverCapacity" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ThemeParkReserve-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.itba.pod.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.itba.pod" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.AttractionDayTest" />
+      <option name="METHOD_NAME" value="testSetCapacityWithReservationsOverCapacity" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AttractionDayTest.testSetCapacityWithReservationsUnderCapacity" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ThemeParkReserve-server" />
       <extension name="coverage">
@@ -115,6 +138,22 @@
       <option name="PACKAGE_NAME" value="ar.edu.itba.pod" />
       <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.AttractionDayTest" />
       <option name="METHOD_NAME" value="testSetCapacityWithReservationsUnderCapacity" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AttractionDayTest.testSetCapacityWithReservationsUnderCapacityCanceled" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ThemeParkReserve-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.itba.pod.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.itba.pod" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.AttractionDayTest" />
+      <option name="METHOD_NAME" value="testSetCapacityWithReservationsUnderCapacityCanceled" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -195,7 +234,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.AttractionDayTest" />
+        <item itemvalue="JUnit.AttractionDayTest.testSetCapacityWithReservationsOverCapacity" />
         <item itemvalue="JUnit.AttractionDayTest.testSetCapacityWithReservationsUnderCapacity" />
+        <item itemvalue="JUnit.AttractionDayTest.testSetCapacityWithReservationsUnderCapacityCanceled" />
       </list>
     </recent_temporary>
   </component>
@@ -215,7 +257,8 @@
       <workItem from="1694052337947" duration="598000" />
       <workItem from="1694094395004" duration="14071000" />
       <workItem from="1694144572267" duration="14000" />
-      <workItem from="1694185414679" duration="18495000" />
+      <workItem from="1694185414679" duration="18976000" />
+      <workItem from="1694234528373" duration="2157000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -321,7 +364,63 @@
       <option name="project" value="LOCAL" />
       <updated>1694214025842</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="add getReservation()">
+      <option name="closed" value="true" />
+      <created>1694234248924</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234248924</updated>
+    </task>
+    <task id="LOCAL-00015" summary="add AttractionDayTest">
+      <option name="closed" value="true" />
+      <created>1694234266441</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234266441</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add AttractionSlotTest">
+      <option name="closed" value="true" />
+      <created>1694234277243</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234277243</updated>
+    </task>
+    <task id="LOCAL-00017" summary="add AttractionTest">
+      <option name="closed" value="true" />
+      <created>1694234292529</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234292529</updated>
+    </task>
+    <task id="LOCAL-00018" summary="add ParkRepositoryTest">
+      <option name="closed" value="true" />
+      <created>1694234304358</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234304358</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Fix SlotAvailabilityResponse">
+      <option name="closed" value="true" />
+      <created>1694234320700</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234320700</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fix checkMinutes">
+      <option name="closed" value="true" />
+      <created>1694234332933</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1694234332933</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -348,7 +447,49 @@
     <MESSAGE value="make Reservation thread safe" />
     <MESSAGE value="fix" />
     <MESSAGE value="make thread safe AttractionDay" />
-    <option name="LAST_COMMIT_MESSAGE" value="make thread safe AttractionDay" />
+    <MESSAGE value="add getReservation()" />
+    <MESSAGE value="add AttractionDayTest" />
+    <MESSAGE value="add AttractionSlotTest" />
+    <MESSAGE value="add AttractionTest" />
+    <MESSAGE value="add ParkRepositoryTest" />
+    <MESSAGE value="Fix SlotAvailabilityResponse" />
+    <MESSAGE value="Fix checkMinutes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix checkMinutes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/Reservation.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/main/java/ar/edu/itba/pod/server/models/AttractionDay.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionDayTest.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionDayTest.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/server/src/test/java/ar/edu/itba/pod/AttractionDayTest.java</url>
+          <line>84</line>
+          <properties class="ar.edu.itba.pod.AttractionDayTest" method="testSetCapacityWithReservationsOverCapacity">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ThemeParkReserve$AttractionSlotTest_testSetCapacity_ConfirmAllReservations.ic" NAME="AttractionSlotTest.testSetCapacity_ConfirmAllReservations Coverage Results" MODIFIED="1694231444239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

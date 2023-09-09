@@ -24,6 +24,8 @@ public class AttractionSlot {
             for(int i = capacity; i < reservations.size(); i++){
                 to_reassign.add(reservations.get(i));
             }
+            //elimino las reservas que no se pudieron confirmar
+            reservations.removeAll(to_reassign);
         }
         return to_reassign;
     }
