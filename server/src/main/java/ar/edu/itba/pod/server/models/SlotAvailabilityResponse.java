@@ -1,15 +1,17 @@
 package ar.edu.itba.pod.server.models;
 
+import lombok.Getter;
 import services.Park;
 
 import java.util.List;
 
+@Getter
 public class SlotAvailabilityResponse {
 
     private final Integer capacity;
-    private Integer confirmed = 0;
-    private Integer cancelled = 0;
-    private Integer pending = 0;
+    private int confirmed = 0;
+    private int cancelled = 0;
+    private int pending = 0;
 
     public SlotAvailabilityResponse(Integer Capacity) {
         this.capacity = Capacity;
