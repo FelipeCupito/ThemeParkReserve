@@ -95,6 +95,17 @@ public class AttractionDay {
         }
     }
 
+    public Reservation getReservation(int slotIndex, Pass pass) {
+        //se bloquea el acceso a la lista de slots cuando se esta setieando la capacidad de este dia
+        capacityLock.readLock().lock();
+        try{
+            checkIndex(slotIndex);
+            return slots.get(slotIndex).getReservation(pass);
+        }finally {
+            capacityLock.readLock().unlock();
+        }
+    }
+
     private void checkIndex(int index){
         if(index < 0 || index >= soltNumber){
             throw new IllegalArgumentException("Invalid slot index");

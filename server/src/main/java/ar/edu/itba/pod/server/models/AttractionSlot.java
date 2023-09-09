@@ -82,6 +82,15 @@ public class AttractionSlot {
         throw new IllegalArgumentException("Pass does not exist");
     }
 
+    public Reservation getReservation(Pass pass) {
+        for (Reservation reservation : reservations) {
+            if(reservation.getPass().equals(pass)){
+                return reservation;
+            }
+        }
+        throw new IllegalArgumentException("Pass does not exist");
+    }
+
     public boolean hasNotCapacity(){
         return capacity == null;
     }
@@ -90,10 +99,8 @@ public class AttractionSlot {
     private void checkIfExist(Pass pass){
         for (Reservation reservation : reservations) {
             if(reservation.getPass().equals(pass)){
-                return;
+                throw new IllegalArgumentException("Pass already exist");
             }
         }
-        throw new IllegalArgumentException("Pass already exist");
     }
-
 }

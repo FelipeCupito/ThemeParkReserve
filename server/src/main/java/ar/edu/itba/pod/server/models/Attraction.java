@@ -59,8 +59,15 @@ public class Attraction {
         return responses;
     }
 
+    public Reservation getReservation(Pass pass, Integer day, Integer minutes) {
+        Utils.checkDay(day);
+        int slotIndex = getSlotIndex(minutes);
 
-    private int calculateSlotsPerDay(){
+        return days.get(day).getReservation(slotIndex, pass);
+    }
+
+
+    public int calculateSlotsPerDay(){
         // Calcular la cantidad de minutos entre el horario de apertura y cierre
         int duration = closeTime - openTime;
 
@@ -74,20 +81,11 @@ public class Attraction {
         return slotsPerDay;
     }
 
-    private int getSlotIndex(int minutes) {
+    public int getSlotIndex(int minutes) {
         Utils.checkMinutes(minutes);
         if (minutes < openTime || minutes > closeTime) {
             throw new IllegalArgumentException("Invalid time");
         }
-
-//        // Resta los minutos de apertura a los minutos actuales y divide por la duracion de cada slot. Esto te dirá en qué slot caen los minutos.
-//        int slotIndex = (minutes - openTime) / minutesPerSlot;
-//
-//        // Check if the minutes correspond to the start of a slot. If not, then return the index of the previous slot.
-//        if ((minutes - openTime) % minutesPerSlot != 0) {
-//            slotIndex--;
-//        }
-//        return slotIndex;
 
         // Modificación necesaria en caso de que los minutos del día estén en el intervalo de tiempo de un slot.
         // Si no, el slot devuelto será el siguiente slot
@@ -97,7 +95,7 @@ public class Attraction {
         return (slotMinutes - openTime) / minutesPerSlot;
     }
 
-    private List<Integer> getSlotIndicesInRange(int startMinutes, int endMinutes) {
+    public List<Integer> getSlotIndicesInRange(int startMinutes, int endMinutes) {
         Utils.checkMinutes(startMinutes);
         Utils.checkMinutes(endMinutes);
         if (startMinutes < openTime || endMinutes > closeTime || startMinutes >= endMinutes) {

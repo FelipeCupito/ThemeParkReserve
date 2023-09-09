@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class Reservation{
     private final Pass pass;
-    private Status status;
+    private Status status = Status.PENDING;
 
     public Reservation(Pass pass){
         this.pass = pass;
