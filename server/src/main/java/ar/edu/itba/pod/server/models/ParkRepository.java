@@ -36,6 +36,15 @@ public class ParkRepository {
         }
     }
 
+    public boolean attractionExists(String name){
+        attractionLock.readLock().lock();
+        try{
+            return attractions.containsKey(name);
+        } finally {
+            attractionLock.readLock().unlock();
+        }
+    }
+
     /**
      * Adds a new pass to the park
      */
