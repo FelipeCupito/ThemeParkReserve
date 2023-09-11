@@ -171,7 +171,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             }
 
             Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_CONFIRMED);
-            this.reservationsRepository.confirmReservation(reservation);
+            this.reservationsRepository.confirmReservationIfCapacityIsNotExceeded(reservation);
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
