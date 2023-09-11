@@ -4,8 +4,10 @@ import ar.edu.itba.pod.client.ClientAction;
 import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import ar.edu.itba.pod.client.serializers.DayOfYearSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.Park;
 
 public class SlotsAction implements ClientAction {
     private static final Logger logger = LoggerFactory.getLogger(SlotsAction.class);
@@ -29,9 +31,18 @@ public class SlotsAction implements ClientAction {
 
     @Override
     public void run(Clients clients) {
-        // TODO: Implement
-
-        logger.info(toString());
+        clients.getAdminService().addSlotCapacity(
+                Park.SlotCapacityRequest.newBuilder()
+                        .setAttractionName(rideName)
+                        .setDay(dayOfYear)
+                        .setCapacity(amount)
+                        .build()
+        );
+        logger.info("Loaded capacity of {} for SpaceMountain on day {}", amount, new DayOfYearSerializer().serialize(dayOfYear));
+        // TODO: Get confirmed, relocations and cancelled
+        logger.info("{} bookings confirmed without changes", 0);
+        logger.info("{} bookings relocated", 0);
+        logger.info("{} bookings cancelled", 0);
     }
 
     public String getRideName() {
