@@ -1,18 +1,18 @@
 package ar.edu.itba.pod.client.admin.actions;
 
-import java.io.IOException;
-import java.util.stream.Stream;
-
 import ar.edu.itba.pod.client.ClientAction;
 import ar.edu.itba.pod.client.Clients;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ar.edu.itba.pod.client.properties.PropertyManager;
-import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.parsers.AttractionLineParser;
 import ar.edu.itba.pod.client.parsers.CSVParser;
+import ar.edu.itba.pod.client.properties.PropertyManager;
+import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import services.Park.AttractionInfo;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class RidesAction implements ClientAction {
     private static final Logger logger = LoggerFactory.getLogger(RidesAction.class);
@@ -30,13 +30,23 @@ public class RidesAction implements ClientAction {
 
     @Override
     public void run(Clients clients) {
-        // TODO: Implement
-
-        logger.info("Attractions:");
+        AtomicInteger addedCount = new AtomicInteger();
+        AtomicInteger notAddedCount = new AtomicInteger();
 
         attractions.forEach((attraction) -> {
-            logger.info("{\n{}}", attraction.toString());
+            // TODO: Check if attraction was added succesfully
+            try {
+                clients.getAdminService().addAttraction(attraction);
+                addedCount.getAndIncrement();
+            } catch (Exception e) {
+                notAddedCount.getAndIncrement();
+            }
         });
+
+        if (notAddedCount.get() > 0)
+            logger.info("Cannot add {} attractions", notAddedCount.get());
+
+        logger.info("{} attractions added", addedCount.get());
     }
 
     @Override
