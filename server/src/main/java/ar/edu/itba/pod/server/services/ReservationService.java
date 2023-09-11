@@ -144,7 +144,8 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                     throw new IllegalArgumentException("Capacity exceeded");
                 }
             }
-            Reservation reservation = new Reservation(attractionName, day, openTime, userId, reservationType);
+            int duration = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
+            Reservation reservation = new Reservation(attractionName, day, openTime, userId, reservationType, duration);
             this.reservationsRepository.addReservationIfCapacityIsNotExceeded(reservation);
 
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
@@ -170,7 +171,8 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 throw new IllegalArgumentException("Capacity not set");
             }
 
-            Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_CONFIRMED);
+            Integer duration = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
+            Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_CONFIRMED, duration);
             this.reservationsRepository.confirmReservationIfCapacityIsNotExceeded(reservation);
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
             responseObserver.onCompleted();

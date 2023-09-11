@@ -68,6 +68,7 @@ public class AttractionReservations {
     }
 
     public void cancelReservation(Reservation reservation) throws IllegalArgumentException {
+
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }

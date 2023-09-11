@@ -19,6 +19,18 @@ public class AttractionRepository {
         attractions.add(attraction);
     }
 
+    public Attraction getAttraction(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Attraction name cannot be null");
+        }
+        for (Attraction a : attractions) {
+            if (a.name().equals(name)) {
+                return a;
+            }
+        }
+        throw new IllegalArgumentException("Attraction does not exist");
+    }
+
     public List<Attraction> getAttractions() {
         return attractions.stream().toList();
     }

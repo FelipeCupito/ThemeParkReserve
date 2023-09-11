@@ -5,12 +5,13 @@ import services.Park;
 public class Reservation {
     private final String attractionName; // Not mutable
     private final Integer day; // Not mutable
-    private final Integer openTime; // Not mutable
+    private Integer openTime; // Not mutable
     private final Park.UUID userId; // Not mutable
     private Park.ReservationType status;
+    private final Integer duration;
 
 
-    public Reservation(String attractionName, Integer day, Integer openTime, Park.UUID userId, Park.ReservationType status) {
+    public Reservation(String attractionName, Integer day, Integer openTime, Park.UUID userId, Park.ReservationType status, Integer duration) {
         if (attractionName == null) {
             throw new IllegalArgumentException("Attraction name cannot be null");
         }
@@ -26,12 +27,16 @@ public class Reservation {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null");
         }
+        if (duration == null || duration < 1) {
+            throw new IllegalArgumentException("Duration must be a number greater than 0");
+        }
 
         this.attractionName = attractionName;
         this.day = day;
         this.openTime = openTime;
         this.userId = userId;
         this.status = status;
+        this.duration = duration;
     }
 
     @Override
@@ -65,5 +70,13 @@ public class Reservation {
 
     public synchronized void setStatus(Park.ReservationType status) {
         this.status = status;
+    }
+
+    public synchronized void setOpenTime(Integer openTime) {
+        this.openTime = openTime;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

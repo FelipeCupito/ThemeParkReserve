@@ -56,7 +56,8 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
             }
             Integer capacity = request.getCapacity();
             Integer day = request.getDay();
-            this.reservationsRepository.setCapacity(day, attractionName, capacity);
+            Integer endTime = this.attractionRepository.getAttraction(attractionName).endTime();
+            this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime);
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
