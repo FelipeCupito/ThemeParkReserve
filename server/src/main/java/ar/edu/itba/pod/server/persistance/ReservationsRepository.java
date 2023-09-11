@@ -2,6 +2,7 @@ package ar.edu.itba.pod.server.persistance;
 
 import ar.edu.itba.pod.server.models.AttractionReservations;
 import ar.edu.itba.pod.server.models.Reservation;
+import services.Park;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -111,5 +112,20 @@ public class ReservationsRepository {
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
         reservationsPerDay.get(day).putIfAbsent(attractionName, new AttractionReservations());
         return reservationsPerDay.get(day).get(attractionName).getCapacity();
+    }
+
+    public int totalReservationsByUser(Park.UUID userId, Integer day) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User id cannot be null");
+        }
+        if (day == null || day <= 1 || day > 365) {
+            return 0;
+        }
+
+        int total = 0;
+        for (String attractionName : reservationsPerDay.get(day).keySet()) {
+            total += reservationsPerDay.get(day).get(attractionName).getReservations().stream().filter(reservation -> reservation.getUserId().equals(userId)).count();
+        }
+        return total;
     }
 }

@@ -2,17 +2,15 @@ package ar.edu.itba.pod.server.models;
 
 import services.Park;
 
-import java.util.UUID;
-
 public class Reservation {
     private final String attractionName; // Not mutable
     private final Integer day; // Not mutable
     private final Integer openTime; // Not mutable
-    private final UUID userId; // Not mutable
+    private final Park.UUID userId; // Not mutable
     private Park.ReservationType status;
 
 
-    public Reservation(String attractionName, Integer day, Integer openTime, UUID userId, Park.ReservationType status) {
+    public Reservation(String attractionName, Integer day, Integer openTime, Park.UUID userId, Park.ReservationType status) {
         if (attractionName == null) {
             throw new IllegalArgumentException("Attraction name cannot be null");
         }
@@ -57,7 +55,7 @@ public class Reservation {
         return openTime;
     }
 
-    public UUID getUserId() {
+    public Park.UUID getUserId() {
         return userId;
     }
 
