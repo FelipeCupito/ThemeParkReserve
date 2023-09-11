@@ -42,6 +42,12 @@ enum PassType {
  PASS_HALF_DAY = 3;
 }
 
+enum ReservationType {
+ RESERVATION_UNKNOWN = 0;
+ RESERVATION_CONFIRMED = 1;
+ RESERVATION_PENDING = 2;
+}
+
 message UUID {
  string value = 1;
 }
@@ -98,7 +104,8 @@ message ReservationInfo {
  string attractionName = 1;
  int32 day = 2;
  int32 openTime = 3;
- UUID userId = 4;
+ ReservationType type = 4;
+ UUID userId = 5;
 }
 
 message ReservationInfoList {
