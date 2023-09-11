@@ -31,4 +31,30 @@ public class PassRepository {
         }
         passes.get(userId).put(day, passType);
     }
+
+    public boolean passExists(Park.UUID userId, Integer day) {
+        if (userId == null) {
+            return false;
+        }
+        if (day == null || day <= 1 || day > 365) {
+            return false;
+        }
+        return passes.containsKey(userId) && passes.get(userId).containsKey(day);
+    }
+
+    public Park.PassType getPassType(Park.UUID userId, Integer day) {
+        if (userId == null) {
+            throw new IllegalArgumentException("Park id cannot be null");
+        }
+        if (day == null || day <= 1 || day > 365) {
+            throw new IllegalArgumentException("Day must be a number between a and 365");
+        }
+        if (!passes.containsKey(userId)) {
+            throw new IllegalArgumentException("User does not exist");
+        }
+        if (!passes.get(userId).containsKey(day)) {
+            throw new IllegalArgumentException("Pass does not exist");
+        }
+        return passes.get(userId).get(day);
+    }
 }

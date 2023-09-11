@@ -121,6 +121,27 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
         }
     }
 
+    @Override
+    public void addReservation(services.Park.ReservationInfo request, io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+        try {
+            String attractionName = request.getAttractionName();
+            int day = request.getDay();
+            int openTime = request.getOpenTime();
+            Park.UUID userId = request.getUserId();
+            if (userId.getValue().equals("")) {
+                throw new IllegalArgumentException("User id cannot be empty");
+            }
+            checkSlotRequestValues(attractionName, day, openTime);
+            checkIfPassIsValid(userId, day, openTime);
+
+            Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_PENDING);
+            this.reservationsRepository.addReservation(reservation);
+            responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
+            responseObserver.onCompleted();
+        } catch (IllegalArgumentException e) {
+            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+        }
+    }
 
 
 
@@ -172,5 +193,29 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 .setPending(pending)
                 .setSlot(openTime)
                 .build();
+    }
+
+    private void checkIfPassIsValid(Park.UUID userId, Integer day, Integer openTime) {
+        if (!this.passRepository.passExists(userId, day)) {
+            throw new IllegalArgumentException("Pass does not exist");
+        }
+        Park.PassType passType = this.passRepository.getPassType(userId, day);
+        if (passType.equals(Park.PassType.PASS_UNKNOWN)) {
+            throw new IllegalArgumentException("Pass type is unknown");
+        }
+
+        if (passType.equals(Park.PassType.PASS_HALF_DAY)) {
+            if (openTime < 0 || openTime > 839) { // Before 14:00
+                throw new IllegalArgumentException("Open time must be a number between 0 and 839");
+            }
+            return;
+        }
+
+        if (passType.equals(Park.PassType.PASS_THREE)) {
+            int totalReservations = this.reservationsRepository.totalReservationsByUser(userId, day);
+            if (totalReservations >= 3) {
+                throw new IllegalArgumentException("User already has 3 reservations");
+            }
+        }
     }
 }
