@@ -3,8 +3,11 @@ package ar.edu.itba.pod.client.book.actions;
 import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import ar.edu.itba.pod.client.serializers.DayOfYearSerializer;
+import ar.edu.itba.pod.client.serializers.TimeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.Park;
 
 public class BookAction extends ReservationAction {
     private static final Logger logger = LoggerFactory.getLogger(BookAction.class);
@@ -15,7 +18,23 @@ public class BookAction extends ReservationAction {
 
     @Override
     public void run(Clients clients) {
-        // TODO: Implement
+        // TODO: get reservation confirmation status
+        clients.getReservationService().addReservation(
+                Park.ReservationInfo.newBuilder()
+                        .setUserId(visitor)
+                        .setDay(day)
+                        .setAttractionName(attraction)
+                        .setOpenTime(slot)
+                        .build()
+        );
+
+        System.out.printf(
+                "The reservation for %s at %s on the day %s is %s\n",
+                attraction,
+                new TimeSerializer().serialize(slot),
+                new DayOfYearSerializer().serialize(day),
+                "PENDING"
+        );
     }
 
     @Override
