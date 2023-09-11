@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class AttractionReservations {
     private final ConcurrentLinkedQueue<Reservation> reservations = new ConcurrentLinkedQueue<>();
+    private Integer capacity = 0;
 
     public void addReservation(Reservation reservation) throws IllegalArgumentException {
         if (reservation == null) {
@@ -46,5 +47,19 @@ public class AttractionReservations {
 
     public List<Reservation> getReservations() {
         return reservations.stream().toList();
+    }
+
+    public synchronized void setCapacity(Integer capacity) {
+        if (capacity == null || capacity < 0) {
+            throw new IllegalArgumentException("Capacity must be a positive number");
+        }
+        if (this.capacity != 0) {
+            throw new IllegalArgumentException("Capacity already set");
+        }
+        this.capacity = capacity;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
     }
 }
