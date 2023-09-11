@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.server.services;
 
 import ar.edu.itba.pod.server.models.Attraction;
+import ar.edu.itba.pod.server.models.CapcitySetStats;
 import ar.edu.itba.pod.server.persistance.AttractionRepository;
 import ar.edu.itba.pod.server.persistance.PassRepository;
 import ar.edu.itba.pod.server.persistance.ReservationsRepository;
@@ -48,7 +49,7 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
     }
 
     @Override
-    public void addSlotCapacity(services.Park.SlotCapacityRequest request, io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+    public void addSlotCapacity(services.Park.SlotCapacityRequest request, io.grpc.stub.StreamObserver<Park.ReservationsResponse> responseObserver) {
         try {
             String attractionName = request.getAttractionName();
             if (!this.attractionRepository.attractionExists(attractionName)) {
@@ -57,8 +58,13 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
             Integer capacity = request.getCapacity();
             Integer day = request.getDay();
             Integer endTime = this.attractionRepository.getAttraction(attractionName).endTime();
-            this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime);
-            responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
+            CapcitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime);
+            Park.ReservationsResponse response = Park.ReservationsResponse.newBuilder()
+                    .setConfirmed(stats.confirmed())
+                    .setCancelled(stats.cancelled())
+                    .setMoved(stats.moved())
+                    .build();
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
