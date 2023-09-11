@@ -3,10 +3,51 @@ syntax = "proto3";
  import "google/protobuf/wrappers.proto";
  import "google/protobuf/empty.proto";
 
-// package service;
+package services;
 
 // option java_package = "ar.edu.itba.pod.grpc";
 // option java_outer_classname = "ServiceModel";
 // option java_multiple_files = true;
+
+service ParkAdminService {
+ rpc AddAttraction(AttractionInfo) returns (google.protobuf.Empty);
+ rpc AddPass(PassRequest) returns (google.protobuf.Empty);
+ rpc AddSlotCapacity(SlotCapacityRequest) returns (google.protobuf.Empty);
+}
+
+enum PassType {
+ PASS_UNKNOWN = 0;
+ PASS_UNLIMITED = 1;
+ PASS_THREE = 2;
+ PASS_HALF_DAY = 3;
+}
+
+message UUID {
+ string value = 1;
+}
+
+message AttractionInfo {
+ string name = 1;
+ int32 openTime = 2;
+ int32 closeTime = 3;
+ int32 slotDuration = 4;
+}
+
+message PassRequest {
+ UUID id = 1;
+ PassType type = 2;
+ int32 day = 3;
+}
+
+message SlotCapacityRequest {
+ string attractionName = 1;
+ int32 day = 2;
+ int32 capacity = 3;
+}
+
+
+
+
+
 
 
