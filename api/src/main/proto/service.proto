@@ -20,9 +20,19 @@ service ReservationService {
  rpc GetSlotAvailability(SlotRequest) returns (SlotAvailabilityInfo);
  rpc GetSlotRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
  rpc GetAllSlotsRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
- rpc AddReservation(ReservationRequest) returns (google.protobuf.Empty);
- rpc ConfirmReservation(ReservationRequest) returns (google.protobuf.Empty);
- rpc CancelReservation(ReservationRequest) returns (google.protobuf.Empty);
+ rpc AddReservation(ReservationInfo) returns (google.protobuf.Empty);
+ rpc ConfirmReservation(ReservationInfo) returns (google.protobuf.Empty);
+ rpc CancelReservation(ReservationInfo) returns (google.protobuf.Empty);
+}
+
+service NotificationService {
+ rpc RegisterUser(NotificationRequest) returns (google.protobuf.Empty);
+ rpc UnregisterUser(NotificationRequest) returns (google.protobuf.Empty);
+}
+
+service QueryService {
+ rpc GetSuggestedCapacity(Day) returns (SuggestedCapacitySlotList);
+ rpc GetConfirmedReservations(Day) returns (ReservationInfoList);
 }
 
 enum PassType {
@@ -48,7 +58,7 @@ message AttractionInfoList {
 }
 
 message PassRequest {
- UUID id = 1;
+ UUID userId = 1;
  PassType type = 2;
  int32 day = 3;
 }
@@ -83,11 +93,35 @@ message SlotAvailabilityInfoList {
  repeated SlotAvailabilityInfo slots = 1;
 }
 
-message ReservationRequest {
+message ReservationInfo {
  string attractionName = 1;
  int32 day = 2;
  int32 openTime = 3;
  UUID userId = 4;
+}
+
+message ReservationInfoList {
+ repeated ReservationInfo reservations = 1;
+}
+
+message NotificationRequest {
+ string name = 1;
+ UUID userId = 2;
+ int32 day = 3;
+}
+
+message Day {
+ int32 day = 1;
+}
+
+message SuggestedCapacitySlot {
+ string attractionName = 1;
+ int32 suggestedCapacity = 2;
+ int32 openTime = 3;
+}
+
+message SuggestedCapacitySlotList {
+ repeated SuggestedCapacitySlot slots = 1;
 }
 
 
