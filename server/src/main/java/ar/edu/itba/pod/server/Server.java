@@ -2,6 +2,7 @@ package ar.edu.itba.pod.server;
 import io.grpc.ServerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.AdminServiceGrpc;
 
 import java.io.IOException;
 
@@ -27,4 +28,6 @@ public class Server {
             server.shutdown();
             logger.info("Server shut down");
         }));
-    }}
+    }
+}
+
