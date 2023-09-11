@@ -6,12 +6,13 @@ import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
 import ar.edu.itba.pod.client.serializers.table.specific.AvailabilityTableWriter;
-import ar.edu.itba.pod.client.serializers.table.specific.CapacityQueryTableWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.Park;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.stream.Stream;
 
 public class AvailabilityAction implements ClientAction {
     private static final Logger logger = LoggerFactory.getLogger(AvailabilityAction.class);
@@ -37,15 +38,56 @@ public class AvailabilityAction implements ClientAction {
             // Optional property
             slotTo = null;
         }
+        if (slotTo == null && attraction == null) {
+            throw new PropertyException("slotTo, attraction", "Invalid combination");
+        }
     }
 
     @Override
     public void run(Clients clients) throws IOException {
-        // TODO: Implement
+        Stream<Park.SlotAvailabilityInfo> rows;
+
+        if (slotTo == null && attraction != null) {
+            var response = clients.getReservationService()
+                    .getSlotAvailability(Park.SlotRequest.newBuilder()
+                            .setDay(day)
+                            .setAttractionName(attraction)
+                            .setOpenTime(slot)
+                            .build());
+            rows = Stream.of(response);
+        } else if (slotTo != null && attraction != null) {
+            var response = clients.getReservationService()
+                    .getSlotRangeAvailability(Park.SlotRangeRequest.newBuilder()
+                            .setDay(day)
+                            .setAttractionName(attraction)
+                            .setOpenTime1(slot)
+                            .setOpenTime2(slotTo)
+                            .build());
+
+            rows = response.getSlotsList().stream();
+        } else if (slotTo != null && attraction == null) {
+            var response = clients.getReservationService()
+                    .getAllSlotsRangeAvailability(Park.SlotRangeRequest.newBuilder()
+                            .setDay(day)
+                            .setOpenTime1(slot)
+                            .setOpenTime2(slotTo)
+                            .build());
+
+            rows = response.getSlotsList().stream();
+        } else {
+            throw new IllegalStateException();
+        }
+
         var tableWriter = new AvailabilityTableWriter(new OutputStreamWriter(System.out));
-        // Placeholder data
-        tableWriter.addRow(600, 30, 5, 10, "Test Attraction 1");
-        tableWriter.addRow(660, null, 25, 0, "Test Attraction 2");
+
+        rows.forEach((row) -> {
+            try {
+                tableWriter.addRow(row.getSlot(), row.getCapacity(), row.getPending(), row.getConfirmed(), row.getAttractionName());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         tableWriter.close();
     }
 
