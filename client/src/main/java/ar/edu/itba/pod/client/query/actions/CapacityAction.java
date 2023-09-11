@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.client.query.actions;
 
+import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.serializers.table.specific.CapacityQueryTableWriter;
@@ -18,7 +19,7 @@ public class CapacityAction extends QueryClientAction {
     }
 
     @Override
-    public void run() throws IOException {
+    public void run(Clients clients) throws IOException {
         // TODO: Implement
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new CapacityQueryTableWriter(new OutputStreamWriter(writer));

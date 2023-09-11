@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import ar.edu.itba.pod.client.ClientAction;
+import ar.edu.itba.pod.client.Clients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,7 @@ public class RidesAction implements ClientAction {
     }
 
     @Override
-    public void run() {
+    public void run(Clients clients) {
         // TODO: Implement
 
         logger.info("Attractions:");

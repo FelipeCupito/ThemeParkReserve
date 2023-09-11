@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.client.book.actions;
 
 import ar.edu.itba.pod.client.ClientAction;
+import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyNotFoundException;
@@ -39,7 +40,7 @@ public class AvailabilityAction implements ClientAction {
     }
 
     @Override
-    public void run() throws IOException {
+    public void run(Clients clients) throws IOException {
         // TODO: Implement
         var tableWriter = new AvailabilityTableWriter(new OutputStreamWriter(System.out));
         // Placeholder data

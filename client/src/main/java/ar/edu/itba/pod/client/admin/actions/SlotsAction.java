@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.client.admin.actions;
 
 import ar.edu.itba.pod.client.ClientAction;
+import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class SlotsAction implements ClientAction {
     }
 
     @Override
-    public void run() {
+    public void run(Clients clients) {
         // TODO: Implement
 
         logger.info(toString());

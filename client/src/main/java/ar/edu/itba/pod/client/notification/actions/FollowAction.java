@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.client.notification.actions;
 
+import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ public class FollowAction extends NotificationClientAction {
     }
 
     @Override
-    public void run() {
+    public void run(Clients clients) {
         // TODO: Implement
     }
 

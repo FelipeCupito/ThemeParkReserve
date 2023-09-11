@@ -24,7 +24,7 @@ public class ClientRunner<P extends BaseClientProperties> {
                 .build();
 
         try {
-            properties.runAction();
+            properties.runAction(Clients.fromChannel(channel));
         } catch (IOException e) {
             logger.error("Exception", e);
         } finally {

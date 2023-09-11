@@ -27,10 +27,10 @@ abstract public class BaseClientProperties {
 
     abstract public ClientAction getAction();
 
-    public void runAction() throws IOException {
+    public void runAction(Clients clients) throws IOException {
         ClientAction action = getAction();
         logger.info("Running action: {}", action);
 
-        action.run();
+        action.run(clients);
     }
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.client.query.actions;
 
+import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.parsers.UUIDParser;
 import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 import ar.edu.itba.pod.client.properties.PropertyManager;
@@ -21,7 +22,7 @@ public class ConfirmedAction extends QueryClientAction {
     }
 
     @Override
-    public void run() throws IOException {
+    public void run(Clients clients) throws IOException {
         // TODO: Implement
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new ConfirmedQueryTableWriter(new OutputStreamWriter(writer));

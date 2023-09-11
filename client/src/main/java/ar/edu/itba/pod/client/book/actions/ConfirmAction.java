@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.client.book.actions;
 
+import ar.edu.itba.pod.client.Clients;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ public class ConfirmAction extends ReservationAction {
     }
 
     @Override
-    public void run() {
+    public void run(Clients clients) {
         // TODO: Implement
     }
 
