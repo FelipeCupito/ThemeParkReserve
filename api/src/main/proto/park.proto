@@ -13,7 +13,7 @@ service AdminService {
  rpc AddAttraction(AttractionInfo) returns (google.protobuf.Empty);
  rpc AddPass(PassRequest) returns (google.protobuf.Empty);
  // FIXME: should return the amount of passes confirmed, relocated and cancelled
- rpc AddSlotCapacity(SlotCapacityRequest) returns (google.protobuf.Empty);
+ rpc AddSlotCapacity(SlotCapacityRequest) returns (ReservationsResponse);
 }
 
 service ReservationService {
@@ -76,6 +76,12 @@ message SlotCapacityRequest {
  string attractionName = 1;
  int32 day = 2;
  int32 capacity = 3;
+}
+
+message ReservationsResponse {
+ int32 confirmed = 1;
+ int32 moved = 2;
+ int32 cancelled = 3;
 }
 
 message SlotRequest {
