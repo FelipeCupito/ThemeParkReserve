@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.client.admin.actions;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import ar.edu.itba.pod.client.ClientAction;
@@ -26,13 +27,23 @@ public class TicketsAction implements ClientAction {
 
     @Override
     public void run(Clients clients) {
-        // TODO: Implement
-
-        logger.info("Tickets:");
+        AtomicInteger addedCount = new AtomicInteger();
+        AtomicInteger notAddedCount = new AtomicInteger();
 
         passes.forEach((pass) -> {
-            logger.info("{\n{}}", pass.toString());
+            // TODO: Check if pass was added succesfully
+            try {
+                clients.getAdminService().addPass(pass);
+                addedCount.getAndIncrement();
+            } catch (Exception e) {
+                notAddedCount.getAndIncrement();
+            }
         });
+
+        if (notAddedCount.get() > 0)
+            logger.info("Cannot add {} passes", notAddedCount.get());
+
+        logger.info("{} passes added", addedCount.get());
     }
 
     public Stream<PassRequest> getPasses() {
