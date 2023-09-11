@@ -11,19 +11,19 @@ import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.parsers.AttractionLineParser;
 import ar.edu.itba.pod.client.parsers.CSVParser;
-import services.Park.Attraction;
+import services.Park.AttractionInfo;
 
 public class RidesAction implements ClientAction {
     private static final Logger logger = LoggerFactory.getLogger(RidesAction.class);
 
-    private Stream<Attraction> attractions;
+    private Stream<AttractionInfo> attractions;
 
     public RidesAction(PropertyManager properties) throws PropertyException, IOException {
         attractions = new CSVParser<>(properties.getPathProperty("inPath"), new AttractionLineParser(), true)
                 .toStream();
     }
 
-    public Stream<Attraction> getAttractions() {
+    public Stream<AttractionInfo> getAttractions() {
         return attractions;
     }
 

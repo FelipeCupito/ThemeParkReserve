@@ -11,12 +11,12 @@ import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.parsers.CSVParser;
 import ar.edu.itba.pod.client.parsers.PassLineParser;
-import services.Park.Pass;
+import services.Park.PassRequest;
 
 public class TicketsAction implements ClientAction {
     private static final Logger logger = LoggerFactory.getLogger(TicketsAction.class);
 
-    private Stream<Pass> passes;
+    private Stream<PassRequest> passes;
 
     public TicketsAction(PropertyManager properties) throws PropertyException, IOException {
         passes = new CSVParser<>(properties.getPathProperty("inPath"), new PassLineParser(), true)
@@ -34,7 +34,7 @@ public class TicketsAction implements ClientAction {
         });
     }
 
-    public Stream<Pass> getPasses() {
+    public Stream<PassRequest> getPasses() {
         return passes;
     }
 

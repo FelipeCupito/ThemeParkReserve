@@ -1,11 +1,11 @@
 package ar.edu.itba.pod.client.parsers;
 
 import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
-import services.Park.Pass;
+import services.Park.PassRequest;
 import services.Park.PassType;
 import services.Park.UUID;
 
-public class PassLineParser extends CSVLineParser<Pass> {
+public class PassLineParser extends CSVLineParser<PassRequest> {
     public PassLineParser() {
         super(3);
     }
@@ -13,25 +13,25 @@ public class PassLineParser extends CSVLineParser<Pass> {
     private PassType parsePassType(String string) throws ParseException {
         switch (string.toUpperCase()) {
             case "UNLIMITED":
-                return PassType.UNLIMITED;
+                return PassType.PASS_UNLIMITED;
             case "THREE":
-                return PassType.THREE;
+                return PassType.PASS_THREE;
             case "HALFDAY":
-                return PassType.HALF_DAY;
+                return PassType.PASS_HALF_DAY;
             default:
                 throw new ParseException(String.format("Invalid PassType \"%s\"", string));
         }
     }
 
     @Override
-    Pass parseFields(String[] parts) throws ParseException {
+    PassRequest parseFields(String[] parts) throws ParseException {
         UUID id = new UUIDParser().parse(parts[0]);
         PassType passType = parsePassType(parts[1]);
         int day = new PositiveIntegerParser().parse(parts[2]);
 
-        return Pass
+        return PassRequest
                 .newBuilder()
-                .setId(id)
+                .setUserId(id)
                 .setDay(day)
                 .setType(passType)
                 .build();
