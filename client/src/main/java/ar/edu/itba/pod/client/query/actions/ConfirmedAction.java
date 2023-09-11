@@ -1,8 +1,6 @@
 package ar.edu.itba.pod.client.query.actions;
 
 import ar.edu.itba.pod.client.Clients;
-import ar.edu.itba.pod.client.parsers.UUIDParser;
-import ar.edu.itba.pod.client.parsers.exceptions.ParseException;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.serializers.table.specific.ConfirmedQueryTableWriter;
@@ -23,18 +21,21 @@ public class ConfirmedAction extends QueryClientAction {
 
     @Override
     public void run(Clients clients) throws IOException {
-        // TODO: Implement
+        var confirmedBookings = clients.getQueryService()
+                .getConfirmedReservations(
+                        Park.Day.newBuilder()
+                                .setDay(getDay())
+                                .build()
+                )
+                .getReservationsList();
+
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new ConfirmedQueryTableWriter(new OutputStreamWriter(writer));
-        // Placeholder data
-        Park.UUID uuid;
-        try {
-            uuid = new UUIDParser().parse("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
-        } catch (ParseException e) {
-            throw new RuntimeException();
+
+        for (var row : confirmedBookings) {
+            tableWriter.addRow(row.getOpenTime(), row.getUserId(), row.getAttractionName());
         }
-        tableWriter.addRow(600, uuid, "Test Attraction 1");
-        tableWriter.addRow(660, uuid, "Test Attraction 2");
+
         tableWriter.close();
     }
 
