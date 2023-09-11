@@ -5,6 +5,7 @@ import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.Park;
 
 public class UnfollowAction extends NotificationClientAction {
     private static final Logger logger = LoggerFactory.getLogger(UnfollowAction.class);
@@ -15,7 +16,15 @@ public class UnfollowAction extends NotificationClientAction {
 
     @Override
     public void run(Clients clients) {
-        // TODO: Implement
+        clients.getNotificationService().unregisterUser(
+                Park.NotificationRequest.newBuilder()
+                        .setName(attraction)
+                        .setDay(day)
+                        .setUserId(visitor)
+                        .build()
+        );
+
+        // TODO: No output?
     }
 
     @Override
