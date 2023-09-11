@@ -9,10 +9,20 @@ package services;
 // option java_outer_classname = "ServiceModel";
 // option java_multiple_files = true;
 
-service ParkAdminService {
+service AdminService {
  rpc AddAttraction(AttractionInfo) returns (google.protobuf.Empty);
  rpc AddPass(PassRequest) returns (google.protobuf.Empty);
  rpc AddSlotCapacity(SlotCapacityRequest) returns (google.protobuf.Empty);
+}
+
+service ReservationService {
+ rpc GetAttractions(google.protobuf.Empty) returns (AttractionInfoList);
+ rpc GetSlotAvailability(SlotRequest) returns (SlotAvailabilityInfo);
+ rpc GetSlotRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
+ rpc GetAllSlotsRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
+ rpc AddReservation(ReservationRequest) returns (google.protobuf.Empty);
+ rpc ConfirmReservation(ReservationRequest) returns (google.protobuf.Empty);
+ rpc CancelReservation(ReservationRequest) returns (google.protobuf.Empty);
 }
 
 enum PassType {
@@ -33,6 +43,10 @@ message AttractionInfo {
  int32 slotDuration = 4;
 }
 
+message AttractionInfoList {
+ repeated AttractionInfo attractions = 1;
+}
+
 message PassRequest {
  UUID id = 1;
  PassType type = 2;
@@ -43,6 +57,37 @@ message SlotCapacityRequest {
  string attractionName = 1;
  int32 day = 2;
  int32 capacity = 3;
+}
+
+message SlotRequest {
+  string attractionName = 1;
+  int32 day = 2;
+  int32 openTime = 3;
+}
+
+message SlotRangeRequest {
+  optional string attractionName = 1;
+  int32 day = 2;
+  int32 openTime1 = 3;
+  int32 openTime2 = 4;
+}
+
+message SlotAvailabilityInfo {
+ string attractionName = 1;
+ int32 confirmed = 2;
+ int32 pending = 3;
+ int32 capacity = 4;
+}
+
+message SlotAvailabilityInfoList {
+ repeated SlotAvailabilityInfo slots = 1;
+}
+
+message ReservationRequest {
+ string attractionName = 1;
+ int32 day = 2;
+ int32 openTime = 3;
+ UUID userId = 4;
 }
 
 
