@@ -43,7 +43,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
     public void getSlotAvailability(services.Park.SlotRequest request, io.grpc.stub.StreamObserver<services.Park.SlotAvailabilityInfo> responseObserver) {
         try {
             String attractionName = request.getAttractionName();
-            int openTime = request.getOpenTime();
+            int openTime = request.getSlot();
             int day = request.getDay();
             checkSlotRequestValues(attractionName, day, openTime);
 
@@ -68,8 +68,8 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 throw new IllegalArgumentException("Attraction name cannot be empty");
             }
             int day = request.getDay();
-            int openTime1 = request.getOpenTime1();
-            int openTime2 = request.getOpenTime2();
+            int openTime1 = request.getSlot1();
+            int openTime2 = request.getSlot2();
             checkSlotRequestValues(name, day, openTime1, openTime2);
 
             List<Reservation> reservations = this.reservationsRepository.getReservations(day, name).stream()
@@ -98,8 +98,8 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             Park.SlotAvailabilityInfoList.Builder slotAvailabilityInfoList = Park.SlotAvailabilityInfoList.newBuilder();
             List<String> names = this.attractionRepository.getAttractions().stream().map(Attraction::name).toList();
             int day = request.getDay();
-            int openTime1 = request.getOpenTime1();
-            int openTime2 = request.getOpenTime2();
+            int openTime1 = request.getSlot1();
+            int openTime2 = request.getSlot2();
             checkSlotRequestValues(day, openTime1, openTime2);
             for (String name : names) {
                 List<Reservation> reservations = this.reservationsRepository.getReservations(day, name).stream()
@@ -126,7 +126,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
         try {
             String attractionName = request.getAttractionName();
             int day = request.getDay();
-            int openTime = request.getOpenTime();
+            int openTime = request.getSlot();
             Park.UUID userId = request.getUserId();
             if (userId.getValue().equals("")) {
                 throw new IllegalArgumentException("User id cannot be empty");
@@ -159,7 +159,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
         try {
             String attractionName = request.getAttractionName();
             int day = request.getDay();
-            int openTime = request.getOpenTime();
+            int openTime = request.getSlot();
             Park.UUID userId = request.getUserId();
             if (userId.getValue().equals("")) {
                 throw new IllegalArgumentException("User id cannot be empty");

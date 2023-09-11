@@ -81,14 +81,14 @@ message SlotCapacityRequest {
 message SlotRequest {
   string attractionName = 1;
   int32 day = 2;
-  int32 openTime = 3;
+  int32 slot = 3;
 }
 
 message SlotRangeRequest {
   optional string attractionName = 1;
   int32 day = 2;
-  int32 openTime1 = 3;
-  int32 openTime2 = 4;
+  int32 slot1 = 3;
+  int32 slot2 = 4;
 }
 
 message SlotAvailabilityInfo {
@@ -107,7 +107,7 @@ message ReservationInfo {
  string attractionName = 1;
  int32 day = 2;
  // FIXME: Weird name, should be more like "slot"
- int32 openTime = 3;
+ int32 slot = 3;
  ReservationType type = 4;
  UUID userId = 5;
 }
@@ -129,7 +129,7 @@ message Day {
 message SuggestedCapacitySlot {
  string attractionName = 1;
  int32 suggestedCapacity = 2;
- int32 openTime = 3;
+ int32 slot = 3;
 }
 
 message SuggestedCapacitySlotList {
