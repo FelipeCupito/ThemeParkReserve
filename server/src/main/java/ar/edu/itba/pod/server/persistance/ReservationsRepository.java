@@ -76,4 +76,24 @@ public class ReservationsRepository {
         reservationsPerDay.get(day).putIfAbsent(attractionName, new AttractionReservations());
         return reservationsPerDay.get(day).get(attractionName).getReservations();
     }
+
+    public void setCapacity(Integer day, String attractionName, Integer capacity) {
+        // Assumes that the attractionName is valid
+        if (day == null || day <= 1 || day > 365) {
+            throw new IllegalArgumentException("Day must be a number between 1 and 365");
+        }
+        if (attractionName == null) {
+            throw new IllegalArgumentException("Attraction name cannot be null");
+        }
+        if (capacity == null || capacity < 0) {
+            throw new IllegalArgumentException("Capacity must be a positive number");
+        }
+        reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
+        reservationsPerDay.get(day).putIfAbsent(attractionName, new AttractionReservations());
+
+        if (reservationsPerDay.get(day).get(attractionName).getCapacity() != 0) {
+            throw new IllegalArgumentException("Capacity already set");
+        }
+        reservationsPerDay.get(day).get(attractionName).setCapacity(capacity);
+    }
 }

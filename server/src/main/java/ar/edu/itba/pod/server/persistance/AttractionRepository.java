@@ -17,4 +17,16 @@ public class AttractionRepository {
         }
         attractions.add(attraction);
     }
+
+    public boolean attractionExists(String name) {
+        if (name == null) {
+            return false;
+        }
+        for (Attraction a : attractions) {
+            if (a.name().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

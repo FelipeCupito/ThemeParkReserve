@@ -20,6 +20,10 @@ public class PassRepository {
             throw new IllegalArgumentException("Day must be a number between a and 365");
         }
 
+        if (passType != Park.PassType.PASS_UNLIMITED && passType != Park.PassType.PASS_HALF_DAY && passType != Park.PassType.PASS_THREE) {
+            throw new IllegalArgumentException("Pass type must be valid");
+        }
+
         passes.putIfAbsent(userId, new ConcurrentHashMap<>());
 
         if (passes.get(userId).containsKey(day)) {
