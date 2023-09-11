@@ -6,6 +6,7 @@ import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import ar.edu.itba.pod.client.serializers.table.specific.CapacityQueryTableWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.Park;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -20,12 +21,18 @@ public class CapacityAction extends QueryClientAction {
 
     @Override
     public void run(Clients clients) throws IOException {
-        // TODO: Implement
+        var suggestedCapacity = clients.getQueryService().getSuggestedCapacity(
+                Park.Day.newBuilder()
+                        .setDay(getDay())
+                        .build()
+        ).getSlotsList();
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new CapacityQueryTableWriter(new OutputStreamWriter(writer));
-        // Placeholder data
-        tableWriter.addRow(600, 30, "Test Attraction 1");
-        tableWriter.addRow(660, 25, "Test Attraction 2");
+
+        for (var row : suggestedCapacity) {
+            tableWriter.addRow(row.getOpenTime(), row.getSuggestedCapacity(), row.getAttractionName());
+        }
+
         tableWriter.close();
     }
 
