@@ -134,8 +134,44 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             checkSlotRequestValues(attractionName, day, openTime);
             checkIfPassIsValid(userId, day, openTime);
 
-            Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_PENDING);
-            this.reservationsRepository.addReservation(reservation);
+            Park.ReservationType reservationType = Park.ReservationType.RESERVATION_PENDING;
+
+            int capacity = this.reservationsRepository.getCapacity(day, attractionName);
+            if (capacity > 0) {
+                if (this.reservationsRepository.getTotalConfirmedReservations(day, attractionName) < capacity) {
+                    reservationType = Park.ReservationType.RESERVATION_CONFIRMED;
+                } else {
+                    throw new IllegalArgumentException("Capacity exceeded");
+                }
+            }
+            Reservation reservation = new Reservation(attractionName, day, openTime, userId, reservationType);
+            this.reservationsRepository.addReservationIfCapacityIsNotExceeded(reservation);
+
+            responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
+            responseObserver.onCompleted();
+        } catch (IllegalArgumentException e) {
+            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+        }
+    }
+
+    @Override
+    public void confirmReservation(services.Park.ReservationInfo request, io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+        try {
+            String attractionName = request.getAttractionName();
+            int day = request.getDay();
+            int openTime = request.getOpenTime();
+            Park.UUID userId = request.getUserId();
+            if (userId.getValue().equals("")) {
+                throw new IllegalArgumentException("User id cannot be empty");
+            }
+            checkSlotRequestValues(attractionName, day, openTime);
+            this.passRepository.getPassType(userId, day);
+            if (this.reservationsRepository.getCapacity(day, attractionName) == 0) {
+                throw new IllegalArgumentException("Capacity not set");
+            }
+
+            Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_CONFIRMED);
+            this.reservationsRepository.confirmReservation(reservation);
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
