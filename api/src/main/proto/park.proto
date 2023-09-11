@@ -87,6 +87,7 @@ message SlotAvailabilityInfo {
  int32 confirmed = 2;
  int32 pending = 3;
  int32 capacity = 4;
+ int32 slot = 5;
 }
 
 message SlotAvailabilityInfoList {
