@@ -96,4 +96,20 @@ public class ReservationsRepository {
         }
         reservationsPerDay.get(day).get(attractionName).setCapacity(capacity);
     }
+
+    public int getCapacity(Integer day, String attractionName) {
+        if (day == null || day <= 1 || day > 365) {
+            throw new IllegalArgumentException("Day must be a number between 1 and 365");
+        }
+        if (attractionName == null) {
+            throw new IllegalArgumentException("Attraction name cannot be null");
+        }
+
+        if (!reservationsPerDay.containsKey(day) || !reservationsPerDay.get(day).containsKey(attractionName)) {
+            return 0;
+        }
+        reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
+        reservationsPerDay.get(day).putIfAbsent(attractionName, new AttractionReservations());
+        return reservationsPerDay.get(day).get(attractionName).getCapacity();
+    }
 }

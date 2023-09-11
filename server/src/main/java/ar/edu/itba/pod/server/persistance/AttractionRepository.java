@@ -2,6 +2,7 @@ package ar.edu.itba.pod.server.persistance;
 
 import ar.edu.itba.pod.server.models.Attraction;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class AttractionRepository {
@@ -16,6 +17,10 @@ public class AttractionRepository {
             throw new IllegalArgumentException("Attraction already exists");
         }
         attractions.add(attraction);
+    }
+
+    public List<Attraction> getAttractions() {
+        return attractions.stream().toList();
     }
 
     public boolean attractionExists(String name) {
