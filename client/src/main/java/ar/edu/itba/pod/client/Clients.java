@@ -10,10 +10,10 @@ import services.ReservationServiceGrpc;
 import services.ReservationServiceGrpc.ReservationServiceBlockingStub;
 
 public class Clients {
-    AdminServiceBlockingStub adminService;
-    NotificationServiceBlockingStub notificationService;
-    ReservationServiceBlockingStub reservationService;
-    QueryServiceBlockingStub queryService;
+    private AdminServiceBlockingStub adminService;
+    private NotificationServiceBlockingStub notificationService;
+    private ReservationServiceBlockingStub reservationService;
+    private QueryServiceBlockingStub queryService;
 
     private Clients(AdminServiceBlockingStub adminService, NotificationServiceBlockingStub notificationService, ReservationServiceBlockingStub reservationService, QueryServiceBlockingStub queryService) {
         this.adminService = adminService;
@@ -29,5 +29,21 @@ public class Clients {
         var queryService = QueryServiceGrpc.newBlockingStub(channel);
 
         return new Clients(adminService, notificationService, reservationService, queryService);
+    }
+
+    public AdminServiceBlockingStub getAdminService() {
+        return adminService;
+    }
+
+    public NotificationServiceBlockingStub getNotificationService() {
+        return notificationService;
+    }
+
+    public ReservationServiceBlockingStub getReservationService() {
+        return reservationService;
+    }
+
+    public QueryServiceBlockingStub getQueryService() {
+        return queryService;
     }
 }
