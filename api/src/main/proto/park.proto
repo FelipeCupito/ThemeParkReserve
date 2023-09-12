@@ -1,140 +1,150 @@
 syntax = "proto3";
 
-import "google/protobuf/wrappers.proto";
-import "google/protobuf/empty.proto";
+ import "google/protobuf/wrappers.proto";
+ import "google/protobuf/empty.proto";
 
 package services;
 
-service ParkAdminService {
-  rpc AddAttraction(Attraction) returns (google.protobuf.Empty);
-  rpc AddPass(Pass) returns (google.protobuf.Empty);
-  rpc AddSlotCapacity(SlotCapacity) returns (SlotCapacityResponse);
+// option java_package = "ar.edu.itba.pod.grpc";
+// option java_outer_classname = "ServiceModel";
+// option java_multiple_files = true;
+
+service AdminService {
+ rpc AddAttraction(AttractionInfo) returns (google.protobuf.Empty);
+ rpc AddPass(PassRequest) returns (google.protobuf.Empty);
+ // FIXME: should return the amount of passes confirmed, relocated and cancelled
+ rpc AddSlotCapacity(SlotCapacityRequest) returns (ReservationsResponse);
 }
 
 service ReservationService {
-  rpc GetAttractions(google.protobuf.Empty) returns (AttractionList);
-  rpc GetSingleSlotAvailability(Slot) returns (SlotCapacityResponse);
-  rpc GetAttractionSlotsAvailabilityByRange(SlotRange) returns (SlotCapacityResponseList);
-  rpc AddReservation(ReservationRequest) returns (ReservationResponse);
-  rpc ConfirmReservation(ReservationRequest) returns (google.protobuf.Empty);
-  rpc CancelReservation(ReservationRequest) returns (google.protobuf.Empty);
+ rpc GetAttractions(google.protobuf.Empty) returns (AttractionInfoList);
+ rpc GetSlotAvailability(SlotRequest) returns (SlotAvailabilityInfo);
+ rpc GetSlotRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
+ rpc GetAllSlotsRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
+ // FIXME: should return the reservation status (CONFIRMED, PENDING)
+ rpc AddReservation(ReservationInfo) returns (google.protobuf.Empty);
+ rpc ConfirmReservation(ReservationInfo) returns (google.protobuf.Empty);
+ rpc CancelReservation(ReservationInfo) returns (google.protobuf.Empty);
 }
 
-service RegistrationService {
-  rpc RegisterUser(NotificationRegistryRequest) returns (google.protobuf.Empty);
-  rpc UnregisterUser(NotificationRegistryRequest) returns (google.protobuf.Empty);
+service NotificationService {
+ // FIXME: should return streaming events
+ rpc RegisterUser(NotificationRequest) returns (google.protobuf.Empty);
+ rpc UnregisterUser(NotificationRequest) returns (google.protobuf.Empty);
 }
 
 service QueryService {
-  rpc GetSuggestedCapacity(DayRequest) returns (SuggestedCapacityResponseList);
-  rpc GetConfirmedReservationsByDay(DayRequest) returns (ConfirmedReservationResponseList);
-}
-
-// -----------------------------------------------------------------------------------------//
-
-message Attraction {
-  string name = 1;
-  int32 openTime = 2; // minutes since midnight
-  int32 closeTime = 3; // minutes since midnight
-  int32 minutesPerSlot = 4;
-}
-
-message AttractionList {
-  repeated Attraction attractions = 1;
+ rpc GetSuggestedCapacity(Day) returns (SuggestedCapacitySlotList);
+ rpc GetConfirmedReservations(Day) returns (ReservationInfoList);
 }
 
 enum PassType {
-  UNKNOWN = 0;
-  UNLIMITED = 1;
-  THREE = 2;
-  HALF_DAY = 3;
+ PASS_UNKNOWN = 0;
+ PASS_UNLIMITED = 1;
+ PASS_THREE = 2;
+ PASS_HALF_DAY = 3;
 }
 
 enum ReservationType {
-  RESERVATION_UNKNOWN = 0;
-  RESERVATION_PENDING = 1;
-  RESERVATION_CONFIRMED = 2;
+ RESERVATION_UNKNOWN = 0;
+ RESERVATION_CONFIRMED = 1;
+ RESERVATION_PENDING = 2;
 }
 
 message UUID {
-   string value = 1;
+ string value = 1;
 }
 
-message Pass {
-  UUID id = 1;
-  PassType type = 2;
-  int32 day = 3;
+message AttractionInfo {
+ string name = 1;
+ int32 openTime = 2;
+ int32 closeTime = 3;
+ int32 slotDuration = 4;
 }
 
-message SlotCapacity {
+message AttractionInfoList {
+ repeated AttractionInfo attractions = 1;
+}
+
+message PassRequest {
+ UUID userId = 1;
+ PassType type = 2;
+ int32 day = 3;
+}
+
+message SlotCapacityRequest {
+ string attractionName = 1;
+ int32 day = 2;
+ int32 capacity = 3;
+}
+
+message ReservationsResponse {
+ int32 confirmed = 1;
+ int32 moved = 2;
+ int32 cancelled = 3;
+}
+
+message SlotRequest {
   string attractionName = 1;
   int32 day = 2;
-  int32 capacity = 3;
+  int32 slot = 3;
 }
 
-message SlotCapacityResponse {
-  int32 confirmed = 1;
-  int32 cancelled = 2;
-  int32 pending = 3;
-  int32 capacity = 4; //-1 no tiene capacidad
-  string attractionName = 5;
-  int32 slot = 6;
-}
-
-message SlotCapacityResponseList {
-  repeated SlotCapacityResponse slotCapacityResponses = 1;
-}
-
-message Slot {
-  string attractionName = 1;
-  int32 day = 2;
-  int32 minutes = 3;
-}
-
-message SlotRange {
+message SlotRangeRequest {
   optional string attractionName = 1;
   int32 day = 2;
-  int32 startMinutes = 3;
-  int32 endMinutes = 4;
+  int32 slot1 = 3;
+  int32 slot2 = 4;
 }
 
-message ReservationRequest {
-  UUID passId = 1;
-  Slot slot = 2;
+message SlotAvailabilityInfo {
+ string attractionName = 1;
+ int32 confirmed = 2;
+ int32 pending = 3;
+ int32 capacity = 4;
+ int32 slot = 5;
 }
 
-message ReservationResponse {
-  UUID passId = 1;
-  Slot slot = 2;
-  ReservationType reservationType = 3;
+message SlotAvailabilityInfoList {
+ repeated SlotAvailabilityInfo slots = 1;
 }
 
-message NotificationRegistryRequest {
-  UUID passId = 1;
-  string attractionName = 2;
-  int32 day = 3;
+message ReservationInfo {
+ string attractionName = 1;
+ int32 day = 2;
+ // FIXME: Weird name, should be more like "slot"
+ int32 slot = 3;
+ ReservationType type = 4;
+ UUID userId = 5;
 }
 
-message DayRequest {
-  int32 day = 1;
+message ReservationInfoList {
+ repeated ReservationInfo reservations = 1;
 }
 
-message SuggestedCapacityResponse {
-  string attractionName = 1;
-  int32 suggestedCapacity = 2;
-  int32 minutes = 3;
+message NotificationRequest {
+ string name = 1;
+ UUID userId = 2;
+ int32 day = 3;
 }
 
-message SuggestedCapacityResponseList {
-  repeated SuggestedCapacityResponse suggestedCapacityResponses = 1;
+message Day {
+ int32 day = 1;
 }
 
-message ConfirmedReservationResponse {
-  string attractionName = 1;
-  repeated UUID confirmedUsers = 2;
-  int32 minutes = 3;
+message SuggestedCapacitySlot {
+ string attractionName = 1;
+ int32 suggestedCapacity = 2;
+ int32 slot = 3;
 }
 
-message ConfirmedReservationResponseList {
-  repeated ConfirmedReservationResponse confirmedReservationResponses = 1;
+message SuggestedCapacitySlotList {
+ repeated SuggestedCapacitySlot slots = 1;
 }
+
+
+
+
+
+
+

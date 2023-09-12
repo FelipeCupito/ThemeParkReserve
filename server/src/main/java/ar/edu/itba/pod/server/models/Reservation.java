@@ -1,46 +1,82 @@
 package ar.edu.itba.pod.server.models;
 
-import lombok.Getter;
+import services.Park;
 
-@Getter
-public class Reservation{
-    private final Pass pass;
-    private Status status = Status.PENDING;
+public class Reservation {
+    private final String attractionName; // Not mutable
+    private final Integer day; // Not mutable
+    private Integer openTime; // Not mutable
+    private final Park.UUID userId; // Not mutable
+    private Park.ReservationType status;
+    private final Integer duration;
 
-    public Reservation(Pass pass){
-        this.pass = pass;
-    }
 
-    synchronized Reservation makeReservation(Status status){
-        pass.addReservation();
-        this.status = status;
-        return this;
-    }
-
-    synchronized Reservation cancelReservation(){
-        if(!(status == Status.CANCELLED)){
-            pass.removeReservation();
+    public Reservation(String attractionName, Integer day, Integer openTime, Park.UUID userId, Park.ReservationType status, Integer duration) {
+        if (attractionName == null) {
+            throw new IllegalArgumentException("Attraction name cannot be null");
         }
-        return this;
-    }
+        if (day == null || day <= 1 || day > 365) {
+            throw new IllegalArgumentException("Day must be a number between 1 and 365");
+        }
+        if (openTime == null || openTime < 0 || openTime > 1439) {
+            throw new IllegalArgumentException("Open time must be a number between 0 and 1439");
+        }
+        if (userId == null) {
+            throw new IllegalArgumentException("User id cannot be null");
+        }
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
+        if (duration == null || duration < 1) {
+            throw new IllegalArgumentException("Duration must be a number greater than 0");
+        }
 
-    public void confirm(){
-        status = Status.CONFIRMED;
+        this.attractionName = attractionName;
+        this.day = day;
+        this.openTime = openTime;
+        this.userId = userId;
+        this.status = status;
+        this.duration = duration;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Reservation that = (Reservation) o;
-
-        return pass.equals(that.pass);
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Reservation)) {
+            return false;
+        }
+        Reservation other = (Reservation) obj;
+        return this.attractionName.equals(other.attractionName) && this.day.equals(other.day) && this.openTime.equals(other.openTime) && this.userId.equals(other.userId);
     }
 
-    @Override
-    public int hashCode() {
-        return pass.hashCode();
+    public String getAttractionName() {
+        return attractionName;
     }
 
+    public Integer getDay() {
+        return day;
+    }
+
+    public Integer getOpenTime() {
+        return openTime;
+    }
+
+    public Park.UUID getUserId() {
+        return userId;
+    }
+
+    public Park.ReservationType getStatus() {
+        return status;
+    }
+
+    public synchronized void setStatus(Park.ReservationType status) {
+        this.status = status;
+    }
+
+    public synchronized void setOpenTime(Integer openTime) {
+        this.openTime = openTime;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
 }

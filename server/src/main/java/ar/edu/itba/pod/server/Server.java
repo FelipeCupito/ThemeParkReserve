@@ -1,11 +1,8 @@
 package ar.edu.itba.pod.server;
-
-import ar.edu.itba.pod.server.models.ParkRepository;
-import ar.edu.itba.pod.server.servant.AdminService;
-import ar.edu.itba.pod.server.servant.ReservationService;
 import io.grpc.ServerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.AdminServiceGrpc;
 
 import java.io.IOException;
 
@@ -15,13 +12,13 @@ public class Server {
     public static void main(String[] args) throws InterruptedException, IOException {
         logger.info(" Server Starting ...");
 
-        ParkRepository parkRepository = new ParkRepository();
+//        ParkRepository parkRepository = new ParkRepository();
 
         int port = 50051;
         io.grpc.Server server = ServerBuilder
                 .forPort(port)
-                .addService(new AdminService(parkRepository))
-                .addService(new ReservationService(parkRepository))
+//                .addService(new AdminService(parkRepository))
+//                .addService(new ReservationService(parkRepository))
                 .build();
         server.start();
         logger.info("Server started, listening on " + port);
@@ -31,4 +28,6 @@ public class Server {
             server.shutdown();
             logger.info("Server shut down");
         }));
-    }}
+    }
+}
+
