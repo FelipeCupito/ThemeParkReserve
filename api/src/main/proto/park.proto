@@ -12,7 +12,6 @@ package services;
 service AdminService {
  rpc AddAttraction(AttractionInfo) returns (google.protobuf.Empty);
  rpc AddPass(PassRequest) returns (google.protobuf.Empty);
- // FIXME: should return the amount of passes confirmed, relocated and cancelled
  rpc AddSlotCapacity(SlotCapacityRequest) returns (ReservationsResponse);
 }
 
@@ -112,7 +111,6 @@ message SlotAvailabilityInfoList {
 message ReservationInfo {
  string attractionName = 1;
  int32 day = 2;
- // FIXME: Weird name, should be more like "slot"
  int32 slot = 3;
  ReservationType type = 4;
  UUID userId = 5;
