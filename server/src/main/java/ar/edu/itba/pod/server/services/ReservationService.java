@@ -84,7 +84,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             int attractionStartTime = this.attractionRepository.getAttraction(name).startTime();
             int attractionEndTime = this.attractionRepository.getAttraction(name).endTime();
             int minutesPerSlot = this.attractionRepository.getAttraction(name).minutesPerSlot();
-            for (int i = attractionStartTime; i <= attractionEndTime; i += minutesPerSlot) {
+            for (int i = attractionStartTime; i < attractionEndTime; i += minutesPerSlot) {
                 reservationsSeparated.putIfAbsent(i, new ArrayList<>());
             }
 
@@ -121,7 +121,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 int attractionStartTime = this.attractionRepository.getAttraction(name).startTime();
                 int attractionEndTime = this.attractionRepository.getAttraction(name).endTime();
                 int minutesPerSlot = this.attractionRepository.getAttraction(name).minutesPerSlot();
-                for (int i = attractionStartTime; i <= attractionEndTime; i += minutesPerSlot) {
+                for (int i = attractionStartTime; i < attractionEndTime; i += minutesPerSlot) {
                     reservationsSeparated.putIfAbsent(i, new ArrayList<>());
                 }
 
@@ -277,7 +277,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
         int startTime = this.attractionRepository.getAttraction(attractionName).startTime();
         int endTime = this.attractionRepository.getAttraction(attractionName).endTime();
         int minutesPerSlot = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
-        if (openTime < startTime || openTime > endTime) {
+        if (openTime < startTime || openTime >= endTime) {
             throw new IllegalArgumentException("Slot time must be between attraction start time and end time");
         }
         if ((openTime - startTime) % minutesPerSlot != 0) {
