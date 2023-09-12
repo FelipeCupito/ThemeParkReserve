@@ -9,6 +9,6 @@ public class DayOfYearParser implements Parser<Integer> {
      */
     @Override
     public Integer parse(String day) throws ParseException {
-        return new IntegerInRangeParser(1, 365 + 1).parse(day) - 1;
+        return new IntegerInRangeParser(1, 365 + 1).parse(day);
     }
 }
