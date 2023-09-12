@@ -15,7 +15,7 @@ public class AttractionReservations {
     private ReadWriteLock setUpCapacityLock = new ReentrantReadWriteLock(true);
 
     public void addReservation(Reservation reservation) throws IllegalArgumentException {
-        setUpCapacityLock.readLock().lock();
+        setUpCapacityLock.writeLock().lock();
         try {
             if (reservation == null) {
                 throw new IllegalArgumentException("Reservation cannot be null");
@@ -25,12 +25,12 @@ public class AttractionReservations {
             }
             reservations.add(reservation);
         } finally {
-            setUpCapacityLock.readLock().unlock();
+            setUpCapacityLock.writeLock().unlock();
         }
     }
 
-    public synchronized void addReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
-        setUpCapacityLock.readLock().lock();
+    public synchronized Park.ReservationType addReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
+        setUpCapacityLock.writeLock().lock();
         try {
             if (reservation == null) {
                 throw new IllegalArgumentException("Reservation cannot be null");
@@ -42,8 +42,14 @@ public class AttractionReservations {
                 throw new IllegalArgumentException("Capacity exceeded");
             }
             reservations.add(reservation);
+            if (capacity == 0) {
+                reservation.setStatus(Park.ReservationType.RESERVATION_PENDING);
+            } else {
+                reservation.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
+            }
+            return reservation.getStatus();
         } finally {
-            setUpCapacityLock.readLock().unlock();
+            setUpCapacityLock.writeLock().unlock();
         }
     }
 

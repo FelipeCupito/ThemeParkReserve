@@ -20,15 +20,13 @@ service ReservationService {
  rpc GetSlotAvailability(SlotRequest) returns (SlotAvailabilityInfo);
  rpc GetSlotRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
  rpc GetAllSlotsRangeAvailability(SlotRangeRequest) returns (SlotAvailabilityInfoList);
- // FIXME: should return the reservation status (CONFIRMED, PENDING)
- rpc AddReservation(ReservationInfo) returns (google.protobuf.Empty);
+ rpc AddReservation(ReservationInfo) returns (ReservationInfoType);
  rpc ConfirmReservation(ReservationInfo) returns (google.protobuf.Empty);
  rpc CancelReservation(ReservationInfo) returns (google.protobuf.Empty);
 }
 
 service NotificationService {
- // FIXME: should return streaming events
- rpc RegisterUser(NotificationRequest) returns (google.protobuf.Empty);
+ rpc RegisterUser(NotificationRequest) returns (NotificationResponse);
  rpc UnregisterUser(NotificationRequest) returns (google.protobuf.Empty);
 }
 
@@ -120,10 +118,18 @@ message ReservationInfoList {
  repeated ReservationInfo reservations = 1;
 }
 
+message ReservationInfoType {
+ ReservationType type = 1;
+}
+
 message NotificationRequest {
  string name = 1;
  UUID userId = 2;
  int32 day = 3;
+}
+
+message NotificationResponse {
+ string message = 1;
 }
 
 message Day {
@@ -139,6 +145,8 @@ message SuggestedCapacitySlot {
 message SuggestedCapacitySlotList {
  repeated SuggestedCapacitySlot slots = 1;
 }
+
+
 
 
 

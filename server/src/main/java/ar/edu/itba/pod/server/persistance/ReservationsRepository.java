@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class ReservationsRepository {
     private final ConcurrentHashMap<Integer, ConcurrentHashMap<String, AttractionReservations>> reservationsPerDay = new ConcurrentHashMap<>();
 
-    public void addReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
+    public Park.ReservationType addReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
         // It assumes that the attraction already Exists
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
@@ -30,7 +30,7 @@ public class ReservationsRepository {
         }
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
         reservationsPerDay.get(day).putIfAbsent(name, new AttractionReservations());
-        reservationsPerDay.get(day).get(name).addReservationIfCapacityIsNotExceeded(reservation);
+        return reservationsPerDay.get(day).get(name).addReservationIfCapacityIsNotExceeded(reservation);
     }
 
     public void addReservation(Reservation reservation) throws IllegalArgumentException {

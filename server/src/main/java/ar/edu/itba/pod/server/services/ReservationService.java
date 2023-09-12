@@ -122,7 +122,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
     }
 
     @Override
-    public void addReservation(services.Park.ReservationInfo request, io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+    public void addReservation(services.Park.ReservationInfo request, io.grpc.stub.StreamObserver<Park.ReservationInfoType> responseObserver) {
         try {
             String attractionName = request.getAttractionName();
             int day = request.getDay();
@@ -146,9 +146,9 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             }
             int duration = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
             Reservation reservation = new Reservation(attractionName, day, openTime, userId, reservationType, duration);
-            this.reservationsRepository.addReservationIfCapacityIsNotExceeded(reservation);
+            Park.ReservationType type = this.reservationsRepository.addReservationIfCapacityIsNotExceeded(reservation);
 
-            responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
+            responseObserver.onNext(Park.ReservationInfoType.newBuilder().setType(type).build());
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
