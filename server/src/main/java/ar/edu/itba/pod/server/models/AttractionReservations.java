@@ -125,8 +125,10 @@ public class AttractionReservations {
         return reservations.size();
     }
 
-    public int getTotalConfirmedReservations() {
-        return (int) reservations.stream().filter(r -> r.getStatus() == Park.ReservationType.RESERVATION_CONFIRMED).count();
+    public int getTotalConfirmedReservationsBySlot(Integer openTime) {
+        return (int) reservations.stream()
+                .filter(r -> r.getStatus() == Park.ReservationType.RESERVATION_CONFIRMED && r.getOpenTime().equals(openTime))
+                .count();
     }
 
     public synchronized void setCapacity(Integer capacity) {

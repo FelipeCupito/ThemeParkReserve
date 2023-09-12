@@ -8,6 +8,7 @@ import ar.edu.itba.pod.server.persistance.ReservationsRepository;
 import services.Park;
 import services.ReservationServiceGrpc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,6 +47,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             int openTime = request.getSlot();
             int day = request.getDay();
             checkSlotRequestValues(attractionName, day, openTime);
+            checkValidOpenTime(attractionName, openTime);
 
             List<Reservation> slotReservations = this.reservationsRepository.getReservations(day, attractionName).stream()
                     .filter(reservation -> reservation.getOpenTime().equals(openTime))
@@ -79,6 +81,13 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             Map<Integer, List<Reservation>> reservationsSeparated = reservations.stream()
                     .collect(Collectors.groupingBy(Reservation::getOpenTime));
 
+            int attractionStartTime = this.attractionRepository.getAttraction(name).startTime();
+            int attractionEndTime = this.attractionRepository.getAttraction(name).endTime();
+            int minutesPerSlot = this.attractionRepository.getAttraction(name).minutesPerSlot();
+            for (int i = attractionStartTime; i < attractionEndTime; i += minutesPerSlot) {
+                reservationsSeparated.putIfAbsent(i, new ArrayList<>());
+            }
+
             for (Integer openTime : reservationsSeparated.keySet()) {
                 Park.SlotAvailabilityInfo slotAvailabilityInfo = buildSlotAvailabilityInfo(name, day, openTime, reservationsSeparated.get(openTime));
                 slotAvailabilityInfoList.addSlots(slotAvailabilityInfo);
@@ -109,6 +118,13 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 Map<Integer, List<Reservation>> reservationsSeparated = reservations.stream()
                         .collect(Collectors.groupingBy(Reservation::getOpenTime));
 
+                int attractionStartTime = this.attractionRepository.getAttraction(name).startTime();
+                int attractionEndTime = this.attractionRepository.getAttraction(name).endTime();
+                int minutesPerSlot = this.attractionRepository.getAttraction(name).minutesPerSlot();
+                for (int i = attractionStartTime; i < attractionEndTime; i += minutesPerSlot) {
+                    reservationsSeparated.putIfAbsent(i, new ArrayList<>());
+                }
+
                 for (Integer openTime : reservationsSeparated.keySet()) {
                     Park.SlotAvailabilityInfo slotAvailabilityInfo = buildSlotAvailabilityInfo(name, day, openTime, reservationsSeparated.get(openTime));
                     slotAvailabilityInfoList.addSlots(slotAvailabilityInfo);
@@ -138,7 +154,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
 
             int capacity = this.reservationsRepository.getCapacity(day, attractionName);
             if (capacity > 0) {
-                if (this.reservationsRepository.getTotalConfirmedReservations(day, attractionName) < capacity) {
+                if (this.reservationsRepository.getTotalConfirmedReservationsBySlot(day, attractionName, openTime) < capacity) {
                     reservationType = Park.ReservationType.RESERVATION_CONFIRMED;
                 } else {
                     throw new IllegalArgumentException("Capacity exceeded");
@@ -220,9 +236,9 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
 
     private Park.SlotAvailabilityInfo buildSlotAvailabilityInfo(String attractionName, Integer day, Integer openTime, List<Reservation> slotReservations) {
         int capacity = this.reservationsRepository.getCapacity(day, attractionName);
-        int confirmed = (int) slotReservations.stream().filter(
-                reservation -> reservation.getStatus().equals(Park.ReservationType.RESERVATION_CONFIRMED)
-        ).count();
+        int confirmed = (int) slotReservations.stream()
+                .filter(reservation -> reservation.getStatus().equals(Park.ReservationType.RESERVATION_CONFIRMED))
+                .count();
         int pending = slotReservations.size() - confirmed;
         return Park.SlotAvailabilityInfo.newBuilder()
                 .setAttractionName(attractionName)
@@ -254,6 +270,18 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             if (totalReservations >= 3) {
                 throw new IllegalArgumentException("User already has 3 reservations");
             }
+        }
+    }
+
+    private void checkValidOpenTime(String attractionName, int openTime) {
+        int startTime = this.attractionRepository.getAttraction(attractionName).startTime();
+        int endTime = this.attractionRepository.getAttraction(attractionName).endTime();
+        int minutesPerSlot = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
+        if (openTime < startTime || openTime >= endTime) {
+            throw new IllegalArgumentException("Slot time must be between attraction start time and end time");
+        }
+        if ((openTime - startTime) % minutesPerSlot != 0) {
+            throw new IllegalArgumentException("Slot time must be a multiple of attraction slot duration");
         }
     }
 }
