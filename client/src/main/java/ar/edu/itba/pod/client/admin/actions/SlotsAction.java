@@ -31,7 +31,7 @@ public class SlotsAction implements ClientAction {
 
     @Override
     public void run(Clients clients) {
-        clients.getAdminService().addSlotCapacity(
+        var response = clients.getAdminService().addSlotCapacity(
                 Park.SlotCapacityRequest.newBuilder()
                         .setAttractionName(rideName)
                         .setDay(dayOfYear)
@@ -39,10 +39,9 @@ public class SlotsAction implements ClientAction {
                         .build()
         );
         logger.info("Loaded capacity of {} for SpaceMountain on day {}", amount, new DayOfYearSerializer().serialize(dayOfYear));
-        // TODO: Get confirmed, relocations and cancelled
-        logger.info("{} bookings confirmed without changes", 0);
-        logger.info("{} bookings relocated", 0);
-        logger.info("{} bookings cancelled", 0);
+        logger.info("{} bookings confirmed without changes", response.getConfirmed());
+        logger.info("{} bookings relocated", response.getMoved());
+        logger.info("{} bookings cancelled", response.getCancelled());
     }
 
     public String getRideName() {
