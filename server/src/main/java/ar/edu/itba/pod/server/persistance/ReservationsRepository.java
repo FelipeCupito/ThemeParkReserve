@@ -6,10 +6,7 @@ import ar.edu.itba.pod.server.models.Reservation;
 import services.Park;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 public class ReservationsRepository {
     private final ConcurrentHashMap<Integer, ConcurrentHashMap<String, AttractionReservations>> reservationsPerDay = new ConcurrentHashMap<>();
@@ -154,7 +151,7 @@ public class ReservationsRepository {
         return reservationsPerDay.get(day).get(attractionName).getTotalReservations();
     }
 
-    public int getTotalConfirmedReservations(Integer day, String attractionName) throws IllegalArgumentException {
+    public int getTotalConfirmedReservationsBySlot(Integer day, String attractionName, Integer openTime) throws IllegalArgumentException {
         if (day == null || day <= 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
@@ -163,7 +160,7 @@ public class ReservationsRepository {
         }
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
         reservationsPerDay.get(day).putIfAbsent(attractionName, new AttractionReservations());
-        return reservationsPerDay.get(day).get(attractionName).getTotalConfirmedReservations();
+        return reservationsPerDay.get(day).get(attractionName).getTotalConfirmedReservationsBySlot(openTime);
     }
 
     public synchronized CapcitySetStats setCapacity(Integer day, String attractionName, Integer capacity, Integer endTime) {
