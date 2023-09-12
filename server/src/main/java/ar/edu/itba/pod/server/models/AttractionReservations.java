@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.server.models;
 
+import ar.edu.itba.pod.server.Utils;
 import ar.edu.itba.pod.server.services.NotificationService;
 import services.Park;
 
@@ -69,6 +70,7 @@ public class AttractionReservations {
                         throw new IllegalArgumentException("Reservation status is Unknown");
                     }
                     r.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
+
                     return;
                 }
             }
@@ -144,13 +146,13 @@ public class AttractionReservations {
         }
         this.capacity = capacity;
         Set<Park.UUID> userIds = new HashSet<>();
-        reservations.stream()
-                 .filter(res -> userIds.add(res.getUserId()))
-                 .forEach(reservation -> CompletableFuture.runAsync(() -> {
-                     String attractionName = reservation.getAttractionName();
-                     int day = reservation.getDay();
-                     notificationService.sendNotification(attractionName, day, reservation.getUserId(), String.format("%s announced slot capacity for the day %d: %d places.", attractionName, day, capacity));
-                 }));
+        CompletableFuture.runAsync(() -> { // Run another thread to avoid blocking the main thread for notifications
+            reservations.forEach(reservation -> {
+                    String attractionName = reservation.getAttractionName();
+                    int day = reservation.getDay();
+                    notificationService.sendNotification(attractionName, day, reservation.getUserId(), String.format("%s announced slot capacity for the day %d: %d places.", attractionName, day, capacity));
+            });
+        });
     }
 
     public Integer getCapacity() {
@@ -174,7 +176,11 @@ public class AttractionReservations {
                         break;
                     }
                     reservation.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
-                    // notificationService.sendNotification(reservation.getAttractionName(), reservation.getDay(), reservation.getUserId(), String.format("")
+                    notificationService.sendNotification(reservation.getAttractionName(), reservation.getDay(), reservation.getUserId(), String.format("The reservation for %s at %s on the day %d has been %s.",
+                            reservation.getAttractionName(),
+                            Utils.minutesToTime(reservation.getOpenTime()),
+                            reservation.getDay(),
+                            "CONFIRMED"));
                     confirmed++;
                     capacity--;
                 }
@@ -195,8 +201,14 @@ public class AttractionReservations {
                     int finalOpenTime = openTime;
                     long totalConfirmed = this.getReservations().stream().filter(r -> r.getOpenTime() == finalOpenTime).count();
                     if (totalConfirmed < this.getCapacity()) {
+                        int prevOpenTime = res.getOpenTime();
                         res.setOpenTime(openTime);
                         res.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
+                        notificationService.sendNotification(res.getAttractionName(), res.getDay(), res.getUserId(), String.format("The reservation for %s at %s on the day %d was moved to %s and is PENDING.",
+                                res.getAttractionName(),
+                                Utils.minutesToTime(prevOpenTime),
+                                res.getDay(),
+                                Utils.minutesToTime(res.getOpenTime())));
                         moved++;
                         break;
                     }
@@ -208,6 +220,10 @@ public class AttractionReservations {
             for (Reservation res : pendingReservations) {
                 if (res.getStatus() == Park.ReservationType.RESERVATION_PENDING) {
                     cancelled++;
+                    notificationService.sendNotification(res.getAttractionName(), res.getDay(), res.getUserId(), String.format("The reservation for %s at %s on the day %d has been CANCELLED.",
+                            res.getAttractionName(),
+                            Utils.minutesToTime(res.getOpenTime()),
+                            res.getDay()));
                     this.reservations.remove(res);
                 }
             }
