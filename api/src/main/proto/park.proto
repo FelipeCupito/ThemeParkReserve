@@ -26,7 +26,7 @@ service ReservationService {
 }
 
 service NotificationService {
- rpc RegisterUser(NotificationRequest) returns (NotificationResponse);
+ rpc RegisterUser(NotificationRequest) returns (stream NotificationResponse);
  rpc UnregisterUser(NotificationRequest) returns (google.protobuf.Empty);
 }
 
