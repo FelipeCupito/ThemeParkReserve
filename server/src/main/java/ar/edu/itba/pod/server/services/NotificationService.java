@@ -9,7 +9,6 @@ import services.Park;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 public class NotificationService extends NotificationServiceGrpc.NotificationServiceImplBase {
     private final ConcurrentHashMap<Map.Entry<String, Integer>, ConcurrentHashMap<Park.UUID, StreamObserver<Park.NotificationResponse>>>  userStreamObservers = new ConcurrentHashMap<>();
@@ -35,6 +34,9 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
 
         userStreamObservers.putIfAbsent(key, new ConcurrentHashMap<>());
         userStreamObservers.get(key).put(userId, responseObserver);
+        responseObserver.onNext(Park.NotificationResponse.newBuilder()
+                .setMessage("User registered for notifications on '" + attractionName + "' reservation on day " + day + ".")
+                .build());
     }
 
 
@@ -61,11 +63,23 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         if (streamObserver == null) { // Just in case
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
         } else {
-            streamObserver.onCompleted();
+            removeUserFromMap(attractionName, day, userId);
         }
 
         responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
         responseObserver.onCompleted();
+    }
+
+    public void removeUserFromMap(String attractionName, int day, Park.UUID userId) {
+        Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
+        if (!userStreamObservers.containsKey(key)) {
+            return;
+        }
+        if (!userStreamObservers.get(key).containsKey(userId)) {
+            return;
+        }
+        StreamObserver<Park.NotificationResponse> observer = userStreamObservers.get(key).remove(userId);
+        observer.onCompleted();
     }
 
     private static boolean checkValidRequest(StreamObserver responseObserver, String attractionName, int day, Park.UUID userId, AttractionRepository attractionRepository, PassRepository passRepository) {
@@ -84,7 +98,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         return false;
     }
 
-    private void sendNotification(String attractionName, int day, Park.UUID userId, String message) {
+    public void sendNotification(String attractionName, int day, Park.UUID userId, String message) {
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
         if (!userStreamObservers.containsKey(key)) {
             return;
@@ -98,5 +112,4 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
                 .build();
         responseObserver.onNext(response);
     }
-
 }

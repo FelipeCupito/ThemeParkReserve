@@ -1,9 +1,13 @@
 package ar.edu.itba.pod.server.models;
 
+import ar.edu.itba.pod.server.services.NotificationService;
 import services.Park;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -131,7 +135,7 @@ public class AttractionReservations {
                 .count();
     }
 
-    public synchronized void setCapacity(Integer capacity) {
+    public synchronized void setCapacity(Integer capacity, NotificationService notificationService) {
         if (capacity == null || capacity < 0) {
             throw new IllegalArgumentException("Capacity must be a positive number");
         }
@@ -139,13 +143,21 @@ public class AttractionReservations {
             throw new IllegalArgumentException("Capacity already set");
         }
         this.capacity = capacity;
+        Set<Park.UUID> userIds = new HashSet<>();
+        reservations.stream()
+                 .filter(res -> userIds.add(res.getUserId()))
+                 .forEach(reservation -> CompletableFuture.runAsync(() -> {
+                     String attractionName = reservation.getAttractionName();
+                     int day = reservation.getDay();
+                     notificationService.sendNotification(attractionName, day, reservation.getUserId(), String.format("%s announced slot capacity for the day %d: %d places.", attractionName, day, capacity));
+                 }));
     }
 
     public Integer getCapacity() {
         return capacity;
     }
 
-    public CapcitySetStats confirmAndMoveReservations(Integer endTime) {
+    public CapcitySetStats confirmAndMoveReservations(Integer endTime, NotificationService notificationService) {
         setUpCapacityLock.writeLock().lock();
         try {
             int confirmed = 0;
@@ -162,6 +174,7 @@ public class AttractionReservations {
                         break;
                     }
                     reservation.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
+                    // notificationService.sendNotification(reservation.getAttractionName(), reservation.getDay(), reservation.getUserId(), String.format("")
                     confirmed++;
                     capacity--;
                 }

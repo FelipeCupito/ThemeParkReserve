@@ -60,7 +60,7 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
             Integer capacity = request.getCapacity();
             Integer day = request.getDay();
             Integer endTime = this.attractionRepository.getAttraction(attractionName).endTime();
-            CapcitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime);
+            CapcitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime, notificationService);
             Park.ReservationsResponse response = Park.ReservationsResponse.newBuilder()
                     .setConfirmed(stats.confirmed())
                     .setCancelled(stats.cancelled())
