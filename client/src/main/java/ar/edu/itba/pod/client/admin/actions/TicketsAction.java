@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import ar.edu.itba.pod.client.ClientAction;
 import ar.edu.itba.pod.client.Clients;
+import io.grpc.StatusRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,11 @@ public class TicketsAction implements ClientAction {
         AtomicInteger notAddedCount = new AtomicInteger();
 
         passes.forEach((pass) -> {
-            // TODO: Check if pass was added succesfully
             try {
                 clients.getAdminService().addPass(pass);
                 addedCount.getAndIncrement();
-            } catch (Exception e) {
+            } catch (StatusRuntimeException e) {
+                logger.info(e.getMessage());
                 notAddedCount.getAndIncrement();
             }
         });

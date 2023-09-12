@@ -6,6 +6,7 @@ import ar.edu.itba.pod.client.parsers.AttractionLineParser;
 import ar.edu.itba.pod.client.parsers.CSVParser;
 import ar.edu.itba.pod.client.properties.PropertyManager;
 import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
+import io.grpc.StatusRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.Park.AttractionInfo;
@@ -34,11 +35,11 @@ public class RidesAction implements ClientAction {
         AtomicInteger notAddedCount = new AtomicInteger();
 
         attractions.forEach((attraction) -> {
-            // TODO: Check if attraction was added succesfully
             try {
                 clients.getAdminService().addAttraction(attraction);
                 addedCount.getAndIncrement();
-            } catch (Exception e) {
+            } catch (StatusRuntimeException e) {
+                logger.info(e.getMessage());
                 notAddedCount.getAndIncrement();
             }
         });
