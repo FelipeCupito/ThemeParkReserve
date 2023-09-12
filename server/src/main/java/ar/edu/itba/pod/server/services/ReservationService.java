@@ -16,11 +16,13 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
     private final AttractionRepository attractionRepository;
     private final PassRepository passRepository;
     private final ReservationsRepository reservationsRepository;
+    private final NotificationService notificationService;
 
-    public ReservationService(AttractionRepository attractionRepository, PassRepository passRepository, ReservationsRepository reservationsRepository) {
+    public ReservationService(AttractionRepository attractionRepository, PassRepository passRepository, ReservationsRepository reservationsRepository, NotificationService notificationService) {
         this.attractionRepository = attractionRepository;
         this.passRepository = passRepository;
         this.reservationsRepository = reservationsRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
