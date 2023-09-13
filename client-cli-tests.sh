@@ -23,6 +23,7 @@ visitor="ca286ef0-162a-42fd-b9ea-60166ff0a593"
 runClient admin tickets -DinPath=<(
     echo "visitorId;passType;dayOfYear"
     echo "$visitor;UNLIMITED;100"
+    echo "$visitor;UNLIMITED;101"
     echo "2af16ea7-4af1-47f6-bf46-8515de5a500f;HALFDAY;15"
 )
 runClient admin rides -DinPath=<(
@@ -36,9 +37,9 @@ runClient book availability -Dday=100 -Dslot=15:30 -Dride="SpaceMountain"
 runClient book availability -Dday=100 -Dslot=15:30 -DslotTo=16:00 -Dride="SpaceMountain"
 runClient book availability -Dday=100 -Dslot=15:30 -DslotTo=16:00
 runClient book attractions
+runClient book book -Dday=101 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
+runClient book cancel -Dday=101 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
 runClient book book -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
-runClient book confirm -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
-runClient book cancel -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
 
 runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dride="SpaceMountain" &
 subscription=$!
