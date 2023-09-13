@@ -23,10 +23,9 @@ public class SlotsAction implements ClientAction {
     }
 
     public SlotsAction(PropertyManager properties) throws PropertyException {
-        // TODO: check if parameter names are correct according to spec (spec is inconsistent)
-        rideName = properties.getProperty("rideName");
-        dayOfYear = properties.getDayOfYearProperty("dayOfYear");
-        amount = properties.getPositiveIntProperty("amount");
+        rideName = properties.getProperty("ride");
+        dayOfYear = properties.getDayOfYearProperty("day");
+        amount = properties.getPositiveIntProperty("capacity");
     }
 
     @Override
