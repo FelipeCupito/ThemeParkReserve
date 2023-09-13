@@ -37,6 +37,8 @@ public class ConfirmedAction extends QueryClientAction {
         }
 
         tableWriter.close();
+
+        System.out.printf("Output written to \"%s\".\n", getOutPath());
     }
 
     @Override
