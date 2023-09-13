@@ -199,6 +199,31 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
         }
     }
 
+    @Override
+
+    public void cancelReservation(services.Park.ReservationInfo request, io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
+        try {
+            String attractionName = request.getAttractionName();
+            int day = request.getDay();
+            int openTime = request.getSlot();
+            Park.UUID userId = request.getUserId();
+            if (userId.getValue().equals("")) {
+                throw new IllegalArgumentException("User id cannot be empty");
+            }
+            checkSlotRequestValues(attractionName, day, openTime);
+            checkValidOpenTime(attractionName, openTime);
+            this.passRepository.getPassType(userId, day);
+
+            Integer duration = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
+            Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_UNKNOWN, duration);
+            this.reservationsRepository.cancelReservation(reservation);
+            responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
+            responseObserver.onCompleted();
+        } catch (IllegalArgumentException e) {
+            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+        }
+    }
+
 
 
     private void checkSlotRequestValues(String attractionName, int day, int openTime) {
