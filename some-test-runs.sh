@@ -43,10 +43,10 @@ runClient book cancel -Dday=100 -Dvisitor="$visitor" -Dattraction="SpaceMountain
 runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dattraction="SpaceMountain" &
 subscription=$!
 
-sleep 1
+sleep 5
 runClient notification unfollow -Dvisitor="$visitor" -Dday=100 -Dattraction="SpaceMountain"
 
 wait $subscription
 
-runClient query capacity -Dday=4 -DoutPath="/dev/stdout"
-runClient query confirmed -Dday=4 -DoutPath="/dev/stdout"
+#runClient query capacity -Dday=100 -DoutPath="/dev/stdout"
+#runClient query confirmed -Dday=100 -DoutPath="/dev/stdout"
