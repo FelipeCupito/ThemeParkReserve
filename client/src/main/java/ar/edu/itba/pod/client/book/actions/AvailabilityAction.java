@@ -81,7 +81,7 @@ public class AvailabilityAction implements ClientAction {
         var tableWriter = new AvailabilityTableWriter(new OutputStreamWriter(System.out));
 
         Comparator<Park.SlotAvailabilityInfo> comparator = Comparator.comparing(Park.SlotAvailabilityInfo::getAttractionName)
-                .thenComparing(Comparator.comparing(Park.SlotAvailabilityInfo::getSlot));
+                .thenComparing(Park.SlotAvailabilityInfo::getSlot);
 
         // TODO: Check ordering
         rows.sorted(comparator)
