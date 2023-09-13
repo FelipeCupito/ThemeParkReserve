@@ -197,7 +197,7 @@ public class AttractionReservations {
             for (Reservation res : pendingReservations) {
                 int duration = res.getDuration();
                 int openTime = res.getOpenTime();
-                while (openTime <= endTime) {
+                while (openTime < endTime) {
                     int finalOpenTime = openTime;
                     long totalConfirmed = this.getReservations().stream().filter(r -> r.getOpenTime() == finalOpenTime).count();
                     if (totalConfirmed < this.getCapacity()) {
