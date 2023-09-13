@@ -2,13 +2,18 @@ package ar.edu.itba.pod.server.models;
 
 import services.Park;
 
+import java.util.concurrent.atomic.LongAccumulator;
+
 public class Reservation {
+    private static Long CONFIRMATION_ORDER = 0L;
+
     private final String attractionName; // Not mutable
     private final Integer day; // Not mutable
     private Integer openTime; // Not mutable
     private final Park.UUID userId; // Not mutable
     private Park.ReservationType status;
     private final Integer duration;
+    private Long confirmationOrder = 0L;
 
 
     public Reservation(String attractionName, Integer day, Integer openTime, Park.UUID userId, Park.ReservationType status, Integer duration) {
@@ -70,6 +75,10 @@ public class Reservation {
 
     public synchronized void setStatus(Park.ReservationType status) {
         this.status = status;
+        if (status == Park.ReservationType.RESERVATION_CONFIRMED) {
+            this.confirmationOrder = CONFIRMATION_ORDER;
+            CONFIRMATION_ORDER += 1L;
+        }
     }
 
     public synchronized void setOpenTime(Integer openTime) {
@@ -78,5 +87,9 @@ public class Reservation {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public Long getConfirmationOrder() {
+        return confirmationOrder;
     }
 }
