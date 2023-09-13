@@ -81,7 +81,7 @@ public class ReservationsRepository {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
 
-        if (!reservationsPerDay.contains(day)) {
+        if (!reservationsPerDay.containsKey(day)) {
             throw new IllegalArgumentException("Invalid reservation for that day");
         }
 
@@ -105,7 +105,7 @@ public class ReservationsRepository {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
 
-        if (!reservationsPerDay.contains(day)) {
+        if (!reservationsPerDay.containsKey(day)) {
             throw new IllegalArgumentException("Invalid reservation for that day");
         }
 
