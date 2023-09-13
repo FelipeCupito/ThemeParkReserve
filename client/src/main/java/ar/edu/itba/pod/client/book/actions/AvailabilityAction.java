@@ -12,6 +12,7 @@ import services.Park;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 public class AvailabilityAction implements ClientAction {
@@ -80,13 +81,18 @@ public class AvailabilityAction implements ClientAction {
 
         var tableWriter = new AvailabilityTableWriter(new OutputStreamWriter(System.out));
 
-        rows.forEach((row) -> {
-            try {
-                tableWriter.addRow(row.getSlot(), row.getCapacity(), row.getPending(), row.getConfirmed(), row.getAttractionName());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        Comparator<Park.SlotAvailabilityInfo> comparator = Comparator.comparing(Park.SlotAvailabilityInfo::getAttractionName)
+                .thenComparing(Comparator.comparing(Park.SlotAvailabilityInfo::getSlot));
+
+        // TODO: Check ordering
+        rows.sorted(comparator)
+                .forEach((row) -> {
+                    try {
+                        tableWriter.addRow(row.getSlot(), row.getCapacity(), row.getPending(), row.getConfirmed(), row.getAttractionName());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         tableWriter.close();
     }
