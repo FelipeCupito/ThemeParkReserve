@@ -30,6 +30,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
         if (userStreamObservers.containsKey(key)) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User already registered for that attraction on that day").asRuntimeException());
+            return;
         }
 
         userStreamObservers.putIfAbsent(key, new ConcurrentHashMap<>());
@@ -53,15 +54,18 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
         if (!userStreamObservers.containsKey(key)) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
+            return;
         }
         ConcurrentHashMap<Park.UUID, StreamObserver<Park.NotificationResponse>> observerMap = userStreamObservers.get(key);
         if (!observerMap.containsKey(userId)) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
+            return;
         }
 
         StreamObserver<Park.NotificationResponse> streamObserver = observerMap.remove(userId);
         if (streamObserver == null) { // Just in case
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
+            return;
         } else {
             removeUserFromMap(attractionName, day, userId);
         }
