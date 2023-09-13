@@ -19,7 +19,7 @@ public class BookAction extends ReservationAction {
     @Override
     public void run(Clients clients) {
         // TODO: get reservation confirmation status
-        clients.getReservationService().addReservation(
+        var status = clients.getReservationService().addReservation(
                 Park.ReservationInfo.newBuilder()
                         .setUserId(visitor)
                         .setDay(day)
@@ -33,7 +33,11 @@ public class BookAction extends ReservationAction {
                 attraction,
                 new TimeSerializer().serialize(slot),
                 new DayOfYearSerializer().serialize(day),
-                "PENDING"
+                switch (status.getType()) {
+                    case RESERVATION_UNKNOWN, UNRECOGNIZED -> throw new IllegalStateException();
+                    case RESERVATION_CONFIRMED -> "CONFIRMED";
+                    case RESERVATION_PENDING -> "PENDING";
+                }
         );
     }
 
