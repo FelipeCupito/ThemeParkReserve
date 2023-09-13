@@ -1,14 +1,12 @@
 package ar.edu.itba.pod.server.services;
 
 import ar.edu.itba.pod.server.models.Attraction;
-import ar.edu.itba.pod.server.models.CapcitySetStats;
+import ar.edu.itba.pod.server.models.CapacitySetStats;
 import ar.edu.itba.pod.server.persistance.AttractionRepository;
 import ar.edu.itba.pod.server.persistance.PassRepository;
 import ar.edu.itba.pod.server.persistance.ReservationsRepository;
 import services.AdminServiceGrpc;
 import services.Park;
-
-import java.util.UUID;
 
 public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
     private final AttractionRepository attractionRepository;
@@ -60,7 +58,7 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
             Integer capacity = request.getCapacity();
             Integer day = request.getDay();
             Integer endTime = this.attractionRepository.getAttraction(attractionName).endTime();
-            CapcitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime, notificationService);
+            CapacitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime, notificationService);
             Park.ReservationsResponse response = Park.ReservationsResponse.newBuilder()
                     .setConfirmed(stats.confirmed())
                     .setCancelled(stats.cancelled())

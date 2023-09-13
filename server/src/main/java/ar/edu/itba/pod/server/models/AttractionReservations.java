@@ -159,7 +159,7 @@ public class AttractionReservations {
         return capacity;
     }
 
-    public CapcitySetStats confirmAndMoveReservations(Integer endTime, NotificationService notificationService) {
+    public CapacitySetStats confirmAndMoveReservations(Integer endTime, NotificationService notificationService) {
         setUpCapacityLock.writeLock().lock();
         try {
             int confirmed = 0;
@@ -228,7 +228,7 @@ public class AttractionReservations {
                 }
             }
 
-            return new CapcitySetStats(confirmed, moved, cancelled);
+            return new CapacitySetStats(confirmed, moved, cancelled);
         } finally {
             setUpCapacityLock.writeLock().unlock();
         }

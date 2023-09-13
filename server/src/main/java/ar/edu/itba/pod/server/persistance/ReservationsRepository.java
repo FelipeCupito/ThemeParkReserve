@@ -1,7 +1,7 @@
 package ar.edu.itba.pod.server.persistance;
 
 import ar.edu.itba.pod.server.models.AttractionReservations;
-import ar.edu.itba.pod.server.models.CapcitySetStats;
+import ar.edu.itba.pod.server.models.CapacitySetStats;
 import ar.edu.itba.pod.server.models.Reservation;
 import ar.edu.itba.pod.server.services.NotificationService;
 import services.Park;
@@ -121,7 +121,7 @@ public class ReservationsRepository {
         return reservationsPerDay.get(day).get(attractionName).getTotalConfirmedReservationsBySlot(openTime);
     }
 
-    public synchronized CapcitySetStats setCapacity(Integer day, String attractionName, Integer capacity, Integer endTime, NotificationService notificationService) {
+    public synchronized CapacitySetStats setCapacity(Integer day, String attractionName, Integer capacity, Integer endTime, NotificationService notificationService) {
         // Assumes that the attractionName is valid
         if (day == null || day <= 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
