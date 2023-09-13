@@ -1,12 +1,15 @@
 package ar.edu.itba.pod.server.services;
 
+import ar.edu.itba.pod.server.models.Reservation;
 import ar.edu.itba.pod.server.persistance.AttractionRepository;
 import ar.edu.itba.pod.server.persistance.PassRepository;
+import ar.edu.itba.pod.server.persistance.ReservationsRepository;
 import io.grpc.stub.StreamObserver;
 import services.NotificationServiceGrpc;
 import services.Park;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,10 +17,12 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
     private final ConcurrentHashMap<Map.Entry<String, Integer>, ConcurrentHashMap<Park.UUID, StreamObserver<Park.NotificationResponse>>>  userStreamObservers = new ConcurrentHashMap<>();
     private final AttractionRepository attractionRepository;
     private final PassRepository passRepository;
+    private final ReservationsRepository reservationsRepository;
 
-    public NotificationService(AttractionRepository attractionRepository, PassRepository passRepository) {
+    public NotificationService(AttractionRepository attractionRepository, PassRepository passRepository, ReservationsRepository reservationsRepository) {
         this.attractionRepository = attractionRepository;
         this.passRepository = passRepository;
+        this.reservationsRepository = reservationsRepository;
     }
 
     @Override
@@ -27,6 +32,13 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         Park.UUID userId = request.getUserId();
         if (checkValidRequest(responseObserver, attractionName, day, userId, this.attractionRepository, passRepository))
             return;
+
+        List<Reservation> userReservations = reservationsRepository.getReservations(day, attractionName).stream().filter(reservation -> reservation.getUserId().equals(userId)).toList();
+        if (userReservations.size() == 0) {
+            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User has not a valid reservation for that attraction on that day").asRuntimeException());
+            return;
+        }
+
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
         userStreamObservers.putIfAbsent(key, new ConcurrentHashMap<>());
         var dayObservers = userStreamObservers.get(key);
@@ -35,8 +47,20 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User already registered for that attraction on that day").asRuntimeException());
             return;
         }
+
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("User registered for notifications on '").append(attractionName).append("' reservation on day ").append(day).append(".\n");
+        for (Reservation reservation : userReservations) {
+            messageBuilder.append("The reservation for '").append(reservation.getAttractionName()).append("' on day ").append(reservation.getDay()).append(" is ");
+            if (reservation.getStatus() == Park.ReservationType.RESERVATION_CONFIRMED) {
+                messageBuilder.append("CONFIRMED");
+            } else {
+                messageBuilder.append("PENDING");
+            }
+        }
+
         responseObserver.onNext(Park.NotificationResponse.newBuilder()
-                .setMessage("User registered for notifications on '" + attractionName + "' reservation on day " + day + ".")
+                .setMessage(messageBuilder.toString())
                 .build());
     }
 
