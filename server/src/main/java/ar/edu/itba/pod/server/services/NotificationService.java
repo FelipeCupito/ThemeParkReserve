@@ -9,7 +9,6 @@ import services.Park;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 public class NotificationService extends NotificationServiceGrpc.NotificationServiceImplBase {
     private final ConcurrentHashMap<Map.Entry<String, Integer>, ConcurrentHashMap<Park.UUID, StreamObserver<Park.NotificationResponse>>>  userStreamObservers = new ConcurrentHashMap<>();
@@ -29,12 +28,16 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         if (checkValidRequest(responseObserver, attractionName, day, userId, this.attractionRepository, passRepository))
             return;
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
-        if (userStreamObservers.containsKey(key)) {
-            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User already registered for that attraction on that day").asRuntimeException());
-        }
-
         userStreamObservers.putIfAbsent(key, new ConcurrentHashMap<>());
-        userStreamObservers.get(key).put(userId, responseObserver);
+        var dayObservers = userStreamObservers.get(key);
+
+        if (dayObservers.putIfAbsent(userId, responseObserver) != null) {
+            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User already registered for that attraction on that day").asRuntimeException());
+            return;
+        }
+        responseObserver.onNext(Park.NotificationResponse.newBuilder()
+                .setMessage("User registered for notifications on '" + attractionName + "' reservation on day " + day + ".")
+                .build());
     }
 
 
@@ -51,18 +54,17 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
         if (!userStreamObservers.containsKey(key)) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
+            return;
         }
         ConcurrentHashMap<Park.UUID, StreamObserver<Park.NotificationResponse>> observerMap = userStreamObservers.get(key);
-        if (!observerMap.containsKey(userId)) {
+
+        var userObserver = observerMap.remove(userId);
+        if (userObserver == null) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
+            return;
         }
 
-        StreamObserver<Park.NotificationResponse> streamObserver = observerMap.remove(userId);
-        if (streamObserver == null) { // Just in case
-            responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User not registered for that attraction on that day").asRuntimeException());
-        } else {
-            streamObserver.onCompleted();
-        }
+        userObserver.onCompleted();
 
         responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
         responseObserver.onCompleted();
@@ -84,7 +86,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         return false;
     }
 
-    private void sendNotification(String attractionName, int day, Park.UUID userId, String message) {
+    public void sendNotification(String attractionName, int day, Park.UUID userId, String message) {
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
         if (!userStreamObservers.containsKey(key)) {
             return;
@@ -98,5 +100,4 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
                 .build();
         responseObserver.onNext(response);
     }
-
 }

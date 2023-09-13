@@ -13,7 +13,7 @@ public class AttractionRepository {
             throw new IllegalArgumentException("Attraction cannot be null");
         }
 
-        if (attractions.contains(attraction)) {
+        if (attractions.stream().anyMatch(a -> a.name().equals(attraction.name()))) {
             throw new IllegalArgumentException("Attraction already exists");
         }
         attractions.add(attraction);
