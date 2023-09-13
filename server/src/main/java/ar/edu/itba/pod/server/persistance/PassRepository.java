@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 public class PassRepository {
     private final ConcurrentMap<Park.UUID, ConcurrentMap<Integer, Park.PassType>> passes = new ConcurrentHashMap<>();
 
-    public void addPass(Park.UUID userId, Integer day, Park.PassType passType) {
+    public synchronized void addPass(Park.UUID userId, Integer day, Park.PassType passType) {
         if (userId == null) {
             throw new IllegalArgumentException("Park id cannot be null");
         }

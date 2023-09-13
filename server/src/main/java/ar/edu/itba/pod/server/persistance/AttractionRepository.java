@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class AttractionRepository {
     private final ConcurrentLinkedQueue<Attraction> attractions = new ConcurrentLinkedQueue<>();
 
-    public void addAttraction(Attraction attraction) {
+    public synchronized void addAttraction(Attraction attraction) {
         if (attraction == null) {
             throw new IllegalArgumentException("Attraction cannot be null");
         }
