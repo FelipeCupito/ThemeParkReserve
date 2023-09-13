@@ -31,25 +31,6 @@ public class ReservationsRepository {
         return reservationsPerDay.get(day).get(name).addReservationIfCapacityIsNotExceeded(reservation);
     }
 
-    public void addReservation(Reservation reservation) throws IllegalArgumentException {
-        // It assumes that the attraction already Exists
-        if (reservation == null) {
-            throw new IllegalArgumentException("Reservation cannot be null");
-        }
-        String name = reservation.getAttractionName();
-        if (name == null) {
-            throw new IllegalArgumentException("Attraction name cannot be null");
-        }
-
-        Integer day = reservation.getDay();
-        if (day == null || day <= 1 || day > 365) {
-            throw new IllegalArgumentException("Day must be a number between 1 and 365");
-        }
-        reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
-        reservationsPerDay.get(day).putIfAbsent(name, new AttractionReservations());
-        reservationsPerDay.get(day).get(name).addReservation(reservation);
-    }
-
     public void cancelReservation(Reservation reservation) throws IllegalArgumentException {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
@@ -66,30 +47,6 @@ public class ReservationsRepository {
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
         reservationsPerDay.get(day).putIfAbsent(name, new AttractionReservations());
         reservationsPerDay.get(day).get(name).cancelReservation(reservation);
-    }
-
-    public void confirmReservation(Reservation reservation) throws IllegalArgumentException {
-        if (reservation == null) {
-            throw new IllegalArgumentException("Reservation cannot be null");
-        }
-        String name = reservation.getAttractionName();
-        if (name == null) {
-            throw new IllegalArgumentException("Attraction name cannot be null");
-        }
-
-        Integer day = reservation.getDay();
-        if (day == null || day <= 1 || day > 365) {
-            throw new IllegalArgumentException("Day must be a number between 1 and 365");
-        }
-
-        if (!reservationsPerDay.containsKey(day)) {
-            throw new IllegalArgumentException("Invalid reservation for that day");
-        }
-
-        if (!reservationsPerDay.get(day).containsKey(name)) {
-            throw new IllegalArgumentException("Invalid reservation for that attraction");
-        }
-        reservationsPerDay.get(day).get(name).confirmReservation(reservation);
     }
 
     public void confirmReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
