@@ -23,12 +23,14 @@ public class Server {
         ReservationsRepository reservationsRepository = new ReservationsRepository();
 
         NotificationService notificationService = new NotificationService(attractionRepository, passRepository);
+        AdminService adminService = new AdminService(attractionRepository, passRepository, reservationsRepository, notificationService);
+        ReservationService reservationService = new ReservationService(attractionRepository, passRepository, reservationsRepository, notificationService);
 
         int port = 50051;
         io.grpc.Server server = ServerBuilder
                 .forPort(port)
-                .addService(new AdminService(attractionRepository, passRepository, reservationsRepository, notificationService))
-                .addService(new ReservationService(attractionRepository, passRepository, reservationsRepository, notificationService))
+                .addService(adminService)
+                .addService(reservationService)
                 .addService(notificationService)
                 .build();
         server.start();
