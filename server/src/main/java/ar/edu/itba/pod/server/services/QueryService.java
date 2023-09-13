@@ -62,5 +62,46 @@ public class QueryService extends QueryServiceGrpc.QueryServiceImplBase {
             }
             return o2.getSuggestedCapacity() - o1.getSuggestedCapacity();
         });
+
+        Park.SuggestedCapacitySlotList suggestedCapacitySlotList = Park.SuggestedCapacitySlotList.newBuilder()
+                .addAllSlots(slots)
+                .build();
+
+        responseObserver.onNext(suggestedCapacitySlotList);
+        responseObserver.onCompleted();
     }
+
+    @Override
+    public void getConfirmedReservations(services.Park.Day request, io.grpc.stub.StreamObserver<services.Park.ReservationInfoList> responseObserver) {
+        int day = request.getDay();
+        if (day <= 1 || day > 365) {
+            responseObserver.onError(new IllegalArgumentException("Day must be a number between 1 and 365"));
+            return;
+        }
+
+        List<String> attractionNames = attractionRepository.getAttractions().stream().map(Attraction::name).toList();
+        List<Reservation> allReservations = new ArrayList<>();
+
+        for (String name : attractionNames) {
+            List<Reservation> reservations = reservationsRepository.getConfirmedReservations(day, name);
+            allReservations.addAll(reservations);
+        }
+
+        allReservations.sort( (o1, o2) -> o1.getConfirmationOrder().compareTo(o2.getConfirmationOrder()));
+        Park.ReservationInfoList reservationInfoList = Park.ReservationInfoList.newBuilder()
+                .addAllReservations(allReservations.stream().map((res) -> {
+                    return Park.ReservationInfo.newBuilder()
+                            .setDay(res.getDay())
+                            .setSlot(res.getOpenTime())
+                            .setAttractionName(res.getAttractionName())
+                            .setUserId(res.getUserId())
+                            .setType(res.getStatus())
+                            .build();
+                }).toList())
+                .build();
+
+        responseObserver.onNext(reservationInfoList);
+        responseObserver.onCompleted();
+    }
+
 }
