@@ -71,7 +71,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
                 .build());
 
         if (!anyPending) {
-            responseObserver.onCompleted();
+            disconnectUser(userId, attractionName, day);
         }
     }
 

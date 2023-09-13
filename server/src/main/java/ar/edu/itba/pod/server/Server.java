@@ -23,7 +23,7 @@ public class Server {
         PassRepository passRepository = new PassRepository();
         ReservationsRepository reservationsRepository = new ReservationsRepository();
 
-        NotificationService notificationService = new NotificationService(attractionRepository, passRepository);
+        NotificationService notificationService = new NotificationService(attractionRepository, passRepository, reservationsRepository);
         AdminService adminService = new AdminService(attractionRepository, passRepository, reservationsRepository, notificationService);
         ReservationService reservationService = new ReservationService(attractionRepository, passRepository, reservationsRepository, notificationService);
         QueryService queryService = new QueryService(reservationsRepository, attractionRepository);
