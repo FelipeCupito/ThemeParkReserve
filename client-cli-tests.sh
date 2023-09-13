@@ -30,23 +30,23 @@ runClient admin rides -DinPath=<(
     echo "SpaceMountain;09:00;22:00;30"
     echo "TronLightcycle;10:00;22:00;15"
 )
-runClient admin slots -DrideName="SpaceMountain" -DdayOfYear=100 -Damount=30
+runClient admin slots -Dride="SpaceMountain" -Dday=100 -Dcapacity=30
 
-runClient book availability -Dday=100 -Dslot=15:30 -Dattraction="SpaceMountain"
-runClient book availability -Dday=100 -Dslot=15:30 -DslotTo=16:00 -Dattraction="SpaceMountain"
+runClient book availability -Dday=100 -Dslot=15:30 -Dride="SpaceMountain"
+runClient book availability -Dday=100 -Dslot=15:30 -DslotTo=16:00 -Dride="SpaceMountain"
 runClient book availability -Dday=100 -Dslot=15:30 -DslotTo=16:00
 runClient book attractions
-runClient book book -Dday=100 -Dvisitor="$visitor" -Dattraction="SpaceMountain" -Dslot=15:30
-runClient book confirm -Dday=100 -Dvisitor="$visitor" -Dattraction="SpaceMountain" -Dslot=15:30
-runClient book cancel -Dday=100 -Dvisitor="$visitor" -Dattraction="SpaceMountain" -Dslot=15:30
+runClient book book -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
+runClient book confirm -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
+runClient book cancel -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
 
-runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dattraction="SpaceMountain" &
+runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dride="SpaceMountain" &
 subscription=$!
 
 sleep 5
-runClient notification unfollow -Dvisitor="$visitor" -Dday=100 -Dattraction="SpaceMountain"
+runClient notification unfollow -Dvisitor="$visitor" -Dday=100 -Dride="SpaceMountain"
 
 wait $subscription
 
-#runClient query capacity -Dday=100 -DoutPath="/dev/stdout"
-#runClient query confirmed -Dday=100 -DoutPath="/dev/stdout"
+runClient query capacity -Dday=100 -DoutPath="/dev/stdout"
+runClient query confirmed -Dday=100 -DoutPath="/dev/stdout"
