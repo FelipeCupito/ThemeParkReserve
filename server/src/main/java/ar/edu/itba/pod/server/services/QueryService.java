@@ -36,7 +36,7 @@ public class QueryService extends QueryServiceGrpc.QueryServiceImplBase {
         for (String attraction : attractions) {
             Map<Integer, List<Reservation>> groupedReservations = reservationsRepository.getReservations(day, attraction).stream()
                     .collect(Collectors.groupingBy(Reservation::getOpenTime));
-            int maxReservationsOpenTime = 0;
+            int maxReservationsOpenTime = attractionRepository.getAttraction(attraction).startTime();
             int maxReservations = 0;
             for (Integer openTime : groupedReservations.keySet()) {
                 if (groupedReservations.get(openTime).size() == 0) {
