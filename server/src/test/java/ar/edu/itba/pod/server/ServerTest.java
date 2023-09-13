@@ -5,6 +5,7 @@ import ar.edu.itba.pod.server.persistance.PassRepository;
 import ar.edu.itba.pod.server.persistance.ReservationsRepository;
 import ar.edu.itba.pod.server.services.AdminService;
 import ar.edu.itba.pod.server.services.NotificationService;
+import ar.edu.itba.pod.server.services.QueryService;
 import ar.edu.itba.pod.server.services.ReservationService;
 import com.google.protobuf.Empty;
 import io.grpc.inprocess.InProcessChannelBuilder;
@@ -14,6 +15,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import services.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -37,12 +44,14 @@ public class ServerTest {
         NotificationService notificationService = new NotificationService(attractionRepository, passRepository);
         AdminService adminService = new AdminService(attractionRepository, passRepository, reservationsRepository, notificationService);
         ReservationService reservationService = new ReservationService(attractionRepository, passRepository, reservationsRepository, notificationService);
+        QueryService queryService = new QueryService(reservationsRepository, attractionRepository);
 
         grpcCleanup.register(InProcessServerBuilder
                 .forName(serverName).directExecutor()
                 .addService(adminService)
                 .addService(reservationService)
                 .addService(notificationService)
+                .addService(queryService)
                 .build().start());
 
         var channel = grpcCleanup.register(InProcessChannelBuilder.forName(serverName).directExecutor().build());
@@ -56,16 +65,30 @@ public class ServerTest {
         return hours * 60 + minutes;
     }
 
-    @Test
-    public void test() {
-        var attractionName = "SpaceMountain";
+    private String timeToString(int time) {
+        return String.format("%02d:%02d", time / 60, time % 60);
+    }
 
-        admin.addAttraction(Park.AttractionInfo.newBuilder()
-                .setName(attractionName)
-                .setOpenTime(timeToMinutes(9, 0))
-                .setCloseTime(timeToMinutes(22, 0))
-                .setSlotDuration(30)
-                .build());
+    Park.AttractionInfo[] attractions = {
+            Park.AttractionInfo.newBuilder()
+                    .setName("SpaceMountain")
+                    .setOpenTime(timeToMinutes(9, 0))
+                    .setCloseTime(timeToMinutes(22, 0))
+                    .setSlotDuration(30)
+                    .build(),
+            Park.AttractionInfo.newBuilder()
+                    .setName("TronLightcycle")
+                    .setOpenTime(timeToMinutes(10, 0))
+                    .setCloseTime(timeToMinutes(22, 0))
+                    .setSlotDuration(15)
+                    .build(),
+    };
+
+    @Test
+    public void simpleTest() {
+        var attractionName = attractions[0].getName();
+
+        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
 
         // Cannot have two attractions with the same name
         assertThrows(Exception.class, () ->
@@ -91,14 +114,8 @@ public class ServerTest {
                 .setType(Park.PassType.PASS_HALF_DAY)
                 .build());
 
-        assertArrayEquals(new Park.AttractionInfo[]{
-                        Park.AttractionInfo.newBuilder()
-                                .setName(attractionName)
-                                .setOpenTime(timeToMinutes(9, 0))
-                                .setCloseTime(timeToMinutes(22, 0))
-                                .setSlotDuration(30)
-                                .build()
-                },
+        assertArrayEquals(
+                attractions,
                 reservation.getAttractions(Empty.newBuilder().build()).getAttractionsList().toArray()
         );
 
@@ -158,5 +175,54 @@ public class ServerTest {
                         .setUserId(uuid)
                         .build())
         );
+    }
+
+    Park.UUID generateUUID() {
+        return Park.UUID.newBuilder().setValue(UUID.randomUUID().toString()).build();
+    }
+
+    List<Park.PassRequest> visitors = IntStream.range(0, 100).mapToObj(
+                    i -> Park.PassRequest.newBuilder()
+                            .setUserId(generateUUID())
+                            .setDay(100)
+                            .setType(Park.PassType.PASS_UNLIMITED)
+                            .build()
+            )
+            .collect(Collectors.toList());
+
+    @Test
+    public void queryTest() {
+        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
+
+
+        visitors.forEach(v -> admin.addPass(v));
+
+        var spread = new int[]{10, 20, 40, 30};
+        final var maxIndex = 2;
+        final var startHour = 12;
+        var index = 0;
+        for (var count : spread) {
+            final var finalIndex = index;
+            visitors.stream().limit(count).forEach(v -> reservation.addReservation(
+                    Park.ReservationInfo.newBuilder()
+                            .setAttractionName(attractions[0].getName())
+                            .setDay(100)
+                            .setSlot(timeToMinutes(startHour + finalIndex, 0))
+                            .setUserId(v.getUserId())
+                            .build()
+            ));
+            index++;
+        }
+
+        var suggested = query.getSuggestedCapacity(Park.Day.newBuilder().setDay(100).build());
+        var first = suggested.getSlots(0);
+        assertEquals(attractions[0].getName(), first.getAttractionName());
+        assertEquals(timeToMinutes(startHour + maxIndex, 0), first.getSlot());
+        assertEquals(spread[maxIndex], first.getSuggestedCapacity());
+
+        var second = suggested.getSlots(1);
+        assertEquals(attractions[1].getName(), second.getAttractionName());
+        assertEquals(attractions[1].getOpenTime(), second.getSlot());
+        assertEquals(0, second.getSuggestedCapacity());
     }
 }
