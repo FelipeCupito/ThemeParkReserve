@@ -48,6 +48,8 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
             return;
         }
 
+        boolean anyPending = false;
+
         StringBuilder messageBuilder = new StringBuilder();
         messageBuilder.append("User registered for notifications on '").append(attractionName).append("' reservation on day ").append(day).append(".\n");
         for (Reservation reservation : userReservations) {
@@ -57,11 +59,20 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
             } else {
                 messageBuilder.append("PENDING");
             }
+            messageBuilder.append(".\n");
+
+            if (reservation.getStatus() == Park.ReservationType.RESERVATION_PENDING) {
+                anyPending = true;
+            }
         }
 
         responseObserver.onNext(Park.NotificationResponse.newBuilder()
                 .setMessage(messageBuilder.toString())
                 .build());
+
+        if (!anyPending) {
+            responseObserver.onCompleted();
+        }
     }
 
 
