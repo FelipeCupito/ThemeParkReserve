@@ -14,11 +14,13 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
     private final AttractionRepository attractionRepository;
     private final PassRepository passRepository;
     private final ReservationsRepository reservationsRepository;
+    private final NotificationService notificationService;
 
-    public AdminService(AttractionRepository attractionRepository, PassRepository passRepository, ReservationsRepository reservationsRepository) {
+    public AdminService(AttractionRepository attractionRepository, PassRepository passRepository, ReservationsRepository reservationsRepository, NotificationService notificationService) {
         this.attractionRepository = attractionRepository;
         this.passRepository = passRepository;
         this.reservationsRepository = reservationsRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class AdminService extends AdminServiceGrpc.AdminServiceImplBase {
             Integer capacity = request.getCapacity();
             Integer day = request.getDay();
             Integer endTime = this.attractionRepository.getAttraction(attractionName).endTime();
-            CapcitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime);
+            CapcitySetStats stats = this.reservationsRepository.setCapacity(day, attractionName, capacity, endTime, notificationService);
             Park.ReservationsResponse response = Park.ReservationsResponse.newBuilder()
                     .setConfirmed(stats.confirmed())
                     .setCancelled(stats.cancelled())
