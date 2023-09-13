@@ -1,0 +1,10 @@
+#!/bin/bash
+path=$(dirname "$0")
+
+PATH_TO_CODE_BASE=`pwd`
+
+client="$1"
+shift
+MAIN_CLASS="ar.edu.itba.pod.client.$client.Client"
+
+java $JAVA_OPTS -cp "$path"'/lib/jars/*' "$@" $MAIN_CLASS
