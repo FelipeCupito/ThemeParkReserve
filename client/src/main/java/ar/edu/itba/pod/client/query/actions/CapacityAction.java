@@ -26,6 +26,12 @@ public class CapacityAction extends QueryClientAction {
                         .setDay(getDay())
                         .build()
         ).getSlotsList();
+
+        if (suggestedCapacity.isEmpty()) {
+            System.out.printf("There are no attractions.\n");
+            return;
+        }
+
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new CapacityQueryTableWriter(new OutputStreamWriter(writer));
 

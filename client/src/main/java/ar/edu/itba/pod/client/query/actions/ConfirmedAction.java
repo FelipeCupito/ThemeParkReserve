@@ -29,6 +29,11 @@ public class ConfirmedAction extends QueryClientAction {
                 )
                 .getReservationsList();
 
+        if (confirmedBookings.isEmpty()) {
+            System.out.printf("There are no confirmed reservations.\n");
+            return;
+        }
+
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new ConfirmedQueryTableWriter(new OutputStreamWriter(writer));
 
