@@ -28,13 +28,13 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         if (checkValidRequest(responseObserver, attractionName, day, userId, this.attractionRepository, passRepository))
             return;
         Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
-        if (userStreamObservers.containsKey(key)) {
+        userStreamObservers.putIfAbsent(key, new ConcurrentHashMap<>());
+        var dayObservers = userStreamObservers.get(key);
+
+        if (dayObservers.putIfAbsent(userId, responseObserver) != null) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("User already registered for that attraction on that day").asRuntimeException());
             return;
         }
-
-        userStreamObservers.putIfAbsent(key, new ConcurrentHashMap<>());
-        userStreamObservers.get(key).put(userId, responseObserver);
         responseObserver.onNext(Park.NotificationResponse.newBuilder()
                 .setMessage("User registered for notifications on '" + attractionName + "' reservation on day " + day + ".")
                 .build());
