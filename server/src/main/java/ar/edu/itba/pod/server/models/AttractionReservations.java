@@ -80,7 +80,7 @@ public class AttractionReservations {
         }
     }
 
-    public synchronized void confirmReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
+    public synchronized void confirmReservationIfCapacityIsNotExceeded(Reservation reservation, NotificationService notificationService) throws IllegalArgumentException {
         setUpCapacityLock.readLock().lock();
         try {
             for (Reservation r : reservations) {
@@ -95,6 +95,9 @@ public class AttractionReservations {
                         throw new IllegalArgumentException("Capacity exceeded");
                     }
                     r.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
+                    if (this.reservations.stream().noneMatch(res -> res.getStatus() == Park.ReservationType.RESERVATION_PENDING)) {
+                        notificationService.disconnectUser(r.getUserId(), r.getAttractionName(), r.getDay());
+                    }
                     return;
                 }
             }
@@ -104,7 +107,7 @@ public class AttractionReservations {
         }
     }
 
-    public void cancelReservation(Reservation reservation) throws IllegalArgumentException {
+    public void cancelReservation(Reservation reservation, NotificationService notificationService) throws IllegalArgumentException {
         setUpCapacityLock.readLock().lock();
         try {
             if (reservation == null) {
@@ -114,6 +117,7 @@ public class AttractionReservations {
                 throw new IllegalArgumentException("Reservation does not exist");
             }
             reservations.remove(reservation);
+            notificationService.disconnectUser(reservation.getUserId(), reservation.getAttractionName(), reservation.getDay());
         } finally {
             setUpCapacityLock.readLock().unlock();
         }
@@ -193,41 +197,55 @@ public class AttractionReservations {
 
             // Extremely slow operation ahead. Discretion is advised
 
+            Set<Park.UUID> pendingUsers = new HashSet<>();
+
             // For each one, try to move it to the next available slot
             for (Reservation res : pendingReservations) {
                 int duration = res.getDuration();
                 int openTime = res.getOpenTime();
                 while (openTime < endTime) {
                     int finalOpenTime = openTime;
-                    long totalConfirmed = this.getReservations().stream().filter(r -> r.getOpenTime() == finalOpenTime).count();
-                    if (totalConfirmed < this.getCapacity()) {
+                    long totalReservationInSlot = this.getReservations().stream().filter(r -> r.getOpenTime() == finalOpenTime).count();
+                    if (totalReservationInSlot < this.getCapacity()) {
                         int prevOpenTime = res.getOpenTime();
                         res.setOpenTime(openTime);
-                        res.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
                         notificationService.sendNotification(res.getAttractionName(), res.getDay(), res.getUserId(), String.format("The reservation for %s at %s on the day %d was moved to %s and is PENDING.",
                                 res.getAttractionName(),
                                 Utils.minutesToTime(prevOpenTime),
                                 res.getDay(),
                                 Utils.minutesToTime(res.getOpenTime())));
                         moved++;
+                        pendingUsers.add(res.getUserId());
                         break;
                     }
                     openTime += duration;
                 }
+                if (openTime >= endTime) {
+                    res.setStatus(Park.ReservationType.RESERVATION_UNKNOWN);
+                }
+
             }
 
+
             // Finally cancel the ones that couldn't be moved and remove them from the AttractionReservation
-            for (Reservation res : pendingReservations) {
+            for (Reservation res : pendingReservations.stream().filter(reservation -> reservation.getStatus() == Park.ReservationType.RESERVATION_UNKNOWN).toList()) {
                 if (res.getStatus() == Park.ReservationType.RESERVATION_PENDING) {
                     cancelled++;
                     notificationService.sendNotification(res.getAttractionName(), res.getDay(), res.getUserId(), String.format("The reservation for %s at %s on the day %d has been CANCELLED.",
                             res.getAttractionName(),
                             Utils.minutesToTime(res.getOpenTime()),
                             res.getDay()));
-                    this.reservations.remove(res);
+                    pendingUsers.add(res.getUserId());
                 }
             }
 
+            // Lastly, close the notification connections of all the users that are not in the pending set
+            Set<Park.UUID> nonPendingUsers = this.getReservations().stream().map(Reservation::getUserId).filter(userId -> !pendingUsers.contains(userId)).collect(Collectors.toSet());
+            if (nonPendingUsers.size() > 0 && this.capacity > 0) {
+                for (Park.UUID userId : nonPendingUsers) {
+                    notificationService.disconnectUser(userId, this.getReservations().get(0).getAttractionName(), this.getReservations().get(0).getDay());
+                }
+            }
             return new CapacitySetStats(confirmed, moved, cancelled);
         } finally {
             setUpCapacityLock.writeLock().unlock();

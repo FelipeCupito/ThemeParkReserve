@@ -100,4 +100,16 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
                 .build();
         responseObserver.onNext(response);
     }
+
+    public void disconnectUser(Park.UUID userId, String attractionName, int day) {
+        Map.Entry<String, Integer> key = new AbstractMap.SimpleEntry<>(attractionName, day);
+        if (!userStreamObservers.containsKey(key)) {
+            return;
+        }
+        if (!userStreamObservers.get(key).containsKey(userId)) {
+            return;
+        }
+        StreamObserver<Park.NotificationResponse> responseObserver = userStreamObservers.get(key).get(userId);
+        responseObserver.onCompleted();
+    }
 }
