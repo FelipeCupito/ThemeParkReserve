@@ -12,16 +12,15 @@ abstract class ReservationAction implements ClientAction {
     int slot;
 
     public ReservationAction(PropertyManager properties) throws PropertyException {
-        // TODO: Check argument naming
         visitor = properties.getUUIDProperty("visitor");
         day = properties.getDayOfYearProperty("day");
-        attraction = properties.getProperty("attraction");
+        attraction = properties.getProperty("ride");
         slot = properties.getTimeProperty("slot");
     }
 
     @Override
     public String toString() {
-        return String.format("{ visitor: \"%s\", day: %d, attraction: \"%s\", slot: %d }", visitor, day, attraction,
+        return String.format("{ visitor: \"%s\", day: %d, ride: \"%s\", slot: %d }", visitor, day, attraction,
                 slot);
     }
 }

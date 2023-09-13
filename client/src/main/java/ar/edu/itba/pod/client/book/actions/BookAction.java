@@ -18,7 +18,6 @@ public class BookAction extends ReservationAction {
 
     @Override
     public void run(Clients clients) {
-        // TODO: get reservation confirmation status
         var status = clients.getReservationService().addReservation(
                 Park.ReservationInfo.newBuilder()
                         .setUserId(visitor)

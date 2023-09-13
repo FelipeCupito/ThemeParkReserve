@@ -11,14 +11,13 @@ abstract class NotificationClientAction implements ClientAction {
     String attraction;
 
     public NotificationClientAction(PropertyManager properties) throws PropertyException {
-        // TODO: Check argument naming
         visitor = properties.getUUIDProperty("visitor");
         day = properties.getDayOfYearProperty("day");
-        attraction = properties.getProperty("attraction");
+        attraction = properties.getProperty("ride");
     }
 
     @Override
     public String toString() {
-        return String.format("{ visitor: \"%s\", day: %d, attraction: \"%s\" }", visitor, day, attraction);
+        return String.format("{ visitor: \"%s\", day: %d, ride: \"%s\" }", visitor, day, attraction);
     }
 }

@@ -57,7 +57,7 @@ public class SlotsAction implements ClientAction {
 
     @Override
     public String toString() {
-        return String.format("SlotsAction { rideName: \"%s\", dayOfYear: %d, amount: %d }", rideName, dayOfYear,
+        return String.format("SlotsAction { ride: \"%s\", day: %d, capacity: %d }", rideName, dayOfYear,
                 amount);
     }
 }
