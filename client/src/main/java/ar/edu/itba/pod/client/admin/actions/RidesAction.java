@@ -45,9 +45,9 @@ public class RidesAction implements ClientAction {
         });
 
         if (notAddedCount.get() > 0)
-            logger.info("Cannot add {} attractions", notAddedCount.get());
+            System.out.printf("Cannot add %d attractions\n", notAddedCount.get());
 
-        logger.info("{} attractions added", addedCount.get());
+        System.out.printf("%d attractions added\n", addedCount.get());
     }
 
     @Override

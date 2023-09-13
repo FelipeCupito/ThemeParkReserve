@@ -37,10 +37,10 @@ public class SlotsAction implements ClientAction {
                         .setCapacity(amount)
                         .build()
         );
-        logger.info("Loaded capacity of {} for SpaceMountain on day {}", amount, new DayOfYearSerializer().serialize(dayOfYear));
-        logger.info("{} bookings confirmed without changes", response.getConfirmed());
-        logger.info("{} bookings relocated", response.getMoved());
-        logger.info("{} bookings cancelled", response.getCancelled());
+        System.out.printf("Loaded capacity of %d for SpaceMountain on day %s\n", amount, new DayOfYearSerializer().serialize(dayOfYear));
+        System.out.printf("%d bookings confirmed without changes\n", response.getConfirmed());
+        System.out.printf("%d bookings relocated\n", response.getMoved());
+        System.out.printf("%d bookings cancelled\n", response.getCancelled());
     }
 
     public String getRideName() {
