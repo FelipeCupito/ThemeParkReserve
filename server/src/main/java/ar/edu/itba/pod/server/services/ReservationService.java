@@ -87,7 +87,9 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
             int attractionEndTime = this.attractionRepository.getAttraction(name).endTime();
             int minutesPerSlot = this.attractionRepository.getAttraction(name).minutesPerSlot();
             for (int i = attractionStartTime; i < attractionEndTime; i += minutesPerSlot) {
-                reservationsSeparated.putIfAbsent(i, new ArrayList<>());
+                if (i >= openTime1 && i <= openTime2) {
+                    reservationsSeparated.putIfAbsent(i, new ArrayList<>());
+                }
             }
 
             for (Integer openTime : reservationsSeparated.keySet()) {
@@ -124,7 +126,9 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 int attractionEndTime = this.attractionRepository.getAttraction(name).endTime();
                 int minutesPerSlot = this.attractionRepository.getAttraction(name).minutesPerSlot();
                 for (int i = attractionStartTime; i < attractionEndTime; i += minutesPerSlot) {
-                    reservationsSeparated.putIfAbsent(i, new ArrayList<>());
+                    if (i >= openTime1 && i <= openTime2) {
+                        reservationsSeparated.putIfAbsent(i, new ArrayList<>());
+                    }
                 }
 
                 for (Integer openTime : reservationsSeparated.keySet()) {
