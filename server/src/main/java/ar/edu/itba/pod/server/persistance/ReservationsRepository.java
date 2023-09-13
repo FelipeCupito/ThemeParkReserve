@@ -31,7 +31,7 @@ public class ReservationsRepository {
         return reservationsPerDay.get(day).get(name).addReservationIfCapacityIsNotExceeded(reservation);
     }
 
-    public void cancelReservation(Reservation reservation) throws IllegalArgumentException {
+    public void cancelReservation(Reservation reservation, NotificationService notificationService) throws IllegalArgumentException {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
@@ -46,10 +46,10 @@ public class ReservationsRepository {
         }
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
         reservationsPerDay.get(day).putIfAbsent(name, new AttractionReservations());
-        reservationsPerDay.get(day).get(name).cancelReservation(reservation);
+        reservationsPerDay.get(day).get(name).cancelReservation(reservation, notificationService);
     }
 
-    public void confirmReservationIfCapacityIsNotExceeded(Reservation reservation) throws IllegalArgumentException {
+    public void confirmReservationIfCapacityIsNotExceeded(Reservation reservation, NotificationService notificationService) throws IllegalArgumentException {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
@@ -70,7 +70,7 @@ public class ReservationsRepository {
         if (!reservationsPerDay.get(day).containsKey(name)) {
             throw new IllegalArgumentException("Invalid reservation for that attraction");
         }
-        reservationsPerDay.get(day).get(name).confirmReservationIfCapacityIsNotExceeded(reservation);
+        reservationsPerDay.get(day).get(name).confirmReservationIfCapacityIsNotExceeded(reservation, notificationService);
     }
 
     public synchronized List<Reservation> getReservations(Integer day, String attractionName) throws IllegalArgumentException {

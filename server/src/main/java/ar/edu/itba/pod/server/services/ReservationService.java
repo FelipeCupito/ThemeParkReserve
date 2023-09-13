@@ -191,7 +191,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
 
             Integer duration = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
             Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_CONFIRMED, duration);
-            this.reservationsRepository.confirmReservationIfCapacityIsNotExceeded(reservation);
+            this.reservationsRepository.confirmReservationIfCapacityIsNotExceeded(reservation, notificationService);
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
@@ -216,7 +216,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
 
             Integer duration = this.attractionRepository.getAttraction(attractionName).minutesPerSlot();
             Reservation reservation = new Reservation(attractionName, day, openTime, userId, Park.ReservationType.RESERVATION_UNKNOWN, duration);
-            this.reservationsRepository.cancelReservation(reservation);
+            this.reservationsRepository.cancelReservation(reservation, notificationService);
             responseObserver.onNext(com.google.protobuf.Empty.newBuilder().build());
             responseObserver.onCompleted();
         } catch (IllegalArgumentException e) {
