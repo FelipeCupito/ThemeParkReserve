@@ -24,11 +24,10 @@ public class AvailabilityAction implements ClientAction {
     Integer slotTo;
 
     public AvailabilityAction(PropertyManager properties) throws PropertyException {
-        // TODO: Check argument naming
         day = properties.getDayOfYearProperty("day");
         slot = properties.getTimeProperty("slot");
         try {
-            attraction = properties.getProperty("attraction");
+            attraction = properties.getProperty("ride");
         } catch (PropertyNotFoundException e) {
             // Optional property
             attraction = null;
@@ -40,7 +39,7 @@ public class AvailabilityAction implements ClientAction {
             slotTo = null;
         }
         if (slotTo == null && attraction == null) {
-            throw new PropertyException("slotTo, attraction", "Invalid combination");
+            throw new PropertyException("slotTo, ride", "Invalid combination");
         }
     }
 
@@ -82,7 +81,7 @@ public class AvailabilityAction implements ClientAction {
         var tableWriter = new AvailabilityTableWriter(new OutputStreamWriter(System.out));
 
         Comparator<Park.SlotAvailabilityInfo> comparator = Comparator.comparing(Park.SlotAvailabilityInfo::getAttractionName)
-                .thenComparing(Comparator.comparing(Park.SlotAvailabilityInfo::getSlot));
+                .thenComparing(Park.SlotAvailabilityInfo::getSlot);
 
         // TODO: Check ordering
         rows.sorted(comparator)
@@ -99,7 +98,7 @@ public class AvailabilityAction implements ClientAction {
 
     @Override
     public String toString() {
-        return String.format("AvailabilityAction { day: %d, attraction: \"%s\", slot: %d, slotTo: %d }", day,
+        return String.format("AvailabilityAction { day: %d, ride: \"%s\", slot: %d, slotTo: %d }", day,
                 attraction, slot, slotTo);
     }
 }

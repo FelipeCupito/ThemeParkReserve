@@ -27,7 +27,6 @@ public class ConfirmAction extends ReservationAction {
                         .build()
         );
 
-        // TODO: Output format not specified in spec?
         System.out.printf(
                 "The reservation for %s at %s on the day %s was %s\n",
                 attraction,

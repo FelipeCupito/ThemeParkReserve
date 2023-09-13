@@ -42,9 +42,9 @@ public class TicketsAction implements ClientAction {
         });
 
         if (notAddedCount.get() > 0)
-            logger.info("Cannot add {} passes", notAddedCount.get());
+            System.out.printf("Cannot add %d passes\n", notAddedCount.get());
 
-        logger.info("{} passes added", addedCount.get());
+        System.out.printf("%d passes added\n", addedCount.get());
     }
 
     public Stream<PassRequest> getPasses() {

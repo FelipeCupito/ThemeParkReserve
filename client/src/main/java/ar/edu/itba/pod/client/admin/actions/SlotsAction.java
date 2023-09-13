@@ -23,10 +23,9 @@ public class SlotsAction implements ClientAction {
     }
 
     public SlotsAction(PropertyManager properties) throws PropertyException {
-        // TODO: check if parameter names are correct according to spec (spec is inconsistent)
-        rideName = properties.getProperty("rideName");
-        dayOfYear = properties.getDayOfYearProperty("dayOfYear");
-        amount = properties.getPositiveIntProperty("amount");
+        rideName = properties.getProperty("ride");
+        dayOfYear = properties.getDayOfYearProperty("day");
+        amount = properties.getPositiveIntProperty("capacity");
     }
 
     @Override
@@ -38,10 +37,10 @@ public class SlotsAction implements ClientAction {
                         .setCapacity(amount)
                         .build()
         );
-        logger.info("Loaded capacity of {} for SpaceMountain on day {}", amount, new DayOfYearSerializer().serialize(dayOfYear));
-        logger.info("{} bookings confirmed without changes", response.getConfirmed());
-        logger.info("{} bookings relocated", response.getMoved());
-        logger.info("{} bookings cancelled", response.getCancelled());
+        System.out.printf("Loaded capacity of %d for SpaceMountain on day %s\n", amount, new DayOfYearSerializer().serialize(dayOfYear));
+        System.out.printf("%d bookings confirmed without changes\n", response.getConfirmed());
+        System.out.printf("%d bookings relocated\n", response.getMoved());
+        System.out.printf("%d bookings cancelled\n", response.getCancelled());
     }
 
     public String getRideName() {
@@ -58,7 +57,7 @@ public class SlotsAction implements ClientAction {
 
     @Override
     public String toString() {
-        return String.format("SlotsAction { rideName: \"%s\", dayOfYear: %d, amount: %d }", rideName, dayOfYear,
+        return String.format("SlotsAction { ride: \"%s\", day: %d, capacity: %d }", rideName, dayOfYear,
                 amount);
     }
 }

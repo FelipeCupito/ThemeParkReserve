@@ -11,7 +11,6 @@ abstract class QueryClientAction implements ClientAction {
     private Path outPath;
 
     public QueryClientAction(PropertyManager properties) throws PropertyException {
-        // TODO: Check argument naming
         day = properties.getDayOfYearProperty("day");
         outPath = Path.of(properties.getProperty("outPath"));
     }
