@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class AttractionReservations {
     private final ConcurrentLinkedQueue<Reservation> reservations = new ConcurrentLinkedQueue<>();
     private Integer capacity = 0;
-    private ReadWriteLock setUpCapacityLock = new ReentrantReadWriteLock(true);
+    private final ReadWriteLock setUpCapacityLock = new ReentrantReadWriteLock(true);
 
     public void addReservation(Reservation reservation) throws IllegalArgumentException {
         setUpCapacityLock.writeLock().lock();
@@ -95,6 +95,11 @@ public class AttractionReservations {
                         throw new IllegalArgumentException("Capacity exceeded");
                     }
                     r.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
+                    notificationService.sendNotification(r.getAttractionName(), r.getDay(), r.getUserId(), String.format("The reservation for %s at %s on the day %d has been CONFIRMED.",
+                            r.getAttractionName(),
+                            Utils.minutesToTime(r.getOpenTime()),
+                            r.getDay()
+                            ));
                     if (this.reservations.stream().noneMatch(res -> res.getStatus() == Park.ReservationType.RESERVATION_PENDING)) {
                         notificationService.disconnectUser(r.getUserId(), r.getAttractionName(), r.getDay());
                     }
@@ -117,6 +122,14 @@ public class AttractionReservations {
                 throw new IllegalArgumentException("Reservation does not exist");
             }
             reservations.remove(reservation);
+            notificationService.sendNotification(reservation.getAttractionName(), reservation.getDay(), reservation.getUserId(), String.format("The reservation for %s at %s on the day %d is CANCELLED.",
+                    reservation.getAttractionName(),
+                    Utils.minutesToTime(reservation.getOpenTime()),
+                    reservation.getDay()));
+            // Check if there are other pending reservations
+            if (this.reservations.stream().noneMatch(res -> res.getStatus() == Park.ReservationType.RESERVATION_PENDING)) {
+                notificationService.disconnectUser(reservation.getUserId(), reservation.getAttractionName(), reservation.getDay());
+            }
             notificationService.disconnectUser(reservation.getUserId(), reservation.getAttractionName(), reservation.getDay());
         } finally {
             setUpCapacityLock.readLock().unlock();
@@ -180,11 +193,10 @@ public class AttractionReservations {
                         break;
                     }
                     reservation.setStatus(Park.ReservationType.RESERVATION_CONFIRMED);
-                    notificationService.sendNotification(reservation.getAttractionName(), reservation.getDay(), reservation.getUserId(), String.format("The reservation for %s at %s on the day %d has been %s.",
+                    notificationService.sendNotification(reservation.getAttractionName(), reservation.getDay(), reservation.getUserId(), String.format("The reservation for %s at %s on the day %d is CONFIRMED.",
                             reservation.getAttractionName(),
                             Utils.minutesToTime(reservation.getOpenTime()),
-                            reservation.getDay(),
-                            "CONFIRMED"));
+                            reservation.getDay()));
                     confirmed++;
                     capacity--;
                 }
