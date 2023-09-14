@@ -31,4 +31,5 @@ Inside `./client-builds`, run:
 ### Run
 
 To run, use the following command from the project root:
+
 `mvn exec:java -pl server -Dexec.mainClass="ar.edu.itba.pod.server.Server"`
