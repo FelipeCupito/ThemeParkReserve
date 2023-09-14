@@ -144,7 +144,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
         if (!userStreamObservers.get(key).containsKey(userId)) {
             return;
         }
-        StreamObserver<Park.NotificationResponse> responseObserver = userStreamObservers.get(key).get(userId);
+        StreamObserver<Park.NotificationResponse> responseObserver = userStreamObservers.get(key).remove(userId);
         responseObserver.onCompleted();
     }
 }
