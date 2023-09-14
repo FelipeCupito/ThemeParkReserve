@@ -260,7 +260,7 @@ public class ServerTest {
                 .build();
 
         // Shouldn't be able to subscribe without pending reservations
-        assertThrows(Exception.class, () -> notification.registerUser(notificationRequest));
+        assertThrows(Exception.class, () -> notification.registerUser(notificationRequest).forEachRemaining(e -> {}));
 
         reservation.addReservation(reservationInfo);
 
