@@ -25,7 +25,7 @@ public class QueryService extends QueryServiceGrpc.QueryServiceImplBase {
     @Override
     public void getSuggestedCapacity(services.Park.Day request, io.grpc.stub.StreamObserver<services.Park.SuggestedCapacitySlotList> responseObserver) {
         int day = request.getDay();
-        if (day <= 1 || day > 365) {
+        if (day < 1 || day > 365) {
             responseObserver.onError(new IllegalArgumentException("Day must be a number between 1 and 365"));
             return;
         }
@@ -74,7 +74,7 @@ public class QueryService extends QueryServiceGrpc.QueryServiceImplBase {
     @Override
     public void getConfirmedReservations(services.Park.Day request, io.grpc.stub.StreamObserver<services.Park.ReservationInfoList> responseObserver) {
         int day = request.getDay();
-        if (day <= 1 || day > 365) {
+        if (day < 1 || day > 365) {
             responseObserver.onError(new IllegalArgumentException("Day must be a number between 1 and 365"));
             return;
         }

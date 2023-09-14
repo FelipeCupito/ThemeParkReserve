@@ -16,7 +16,7 @@ public class PassRepository {
         if (passType == null) {
             throw new IllegalArgumentException("Pass type cannot be null");
         }
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between a and 365");
         }
 
@@ -36,7 +36,7 @@ public class PassRepository {
         if (userId == null) {
             return false;
         }
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             return false;
         }
         return passes.containsKey(userId) && passes.get(userId).containsKey(day);
@@ -46,7 +46,7 @@ public class PassRepository {
         if (userId == null) {
             throw new IllegalArgumentException("Park id cannot be null");
         }
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between a and 365");
         }
         if (!passes.containsKey(userId)) {

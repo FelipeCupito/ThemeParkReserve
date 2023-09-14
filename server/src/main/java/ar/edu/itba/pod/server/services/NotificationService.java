@@ -106,7 +106,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
     }
 
     private static boolean checkValidRequest(StreamObserver responseObserver, String attractionName, int day, Park.UUID userId, AttractionRepository attractionRepository, PassRepository passRepository) {
-        if (day <= 1 || day > 365) {
+        if (day < 1 || day > 365) {
             responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT.withDescription("Day must be a number between 1 and 365").asRuntimeException());
             return true;
         }

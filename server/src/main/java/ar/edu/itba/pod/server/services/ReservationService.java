@@ -234,7 +234,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
         if (!this.attractionRepository.attractionExists(attractionName)) {
             throw new IllegalArgumentException("Attraction does not exist");
         }
-        if (day <= 1 || day > 365) {
+        if (day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (openTime < 0 || openTime > 1439) {
@@ -251,7 +251,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
     }
 
     private void checkSlotRequestValues(int day, int openTime1, int openTime2) {
-        if (day <= 1 || day > 365) {
+        if (day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (openTime1 < 0 || openTime1 > 1439) {

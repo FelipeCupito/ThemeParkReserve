@@ -23,7 +23,7 @@ public class ReservationsRepository {
         }
 
         Integer day = reservation.getDay();
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
@@ -41,7 +41,7 @@ public class ReservationsRepository {
         }
 
         Integer day = reservation.getDay();
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         reservationsPerDay.putIfAbsent(day, new ConcurrentHashMap<>());
@@ -59,7 +59,7 @@ public class ReservationsRepository {
         }
 
         Integer day = reservation.getDay();
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
 
@@ -74,7 +74,7 @@ public class ReservationsRepository {
     }
 
     public synchronized List<Reservation> getReservations(Integer day, String attractionName) throws IllegalArgumentException {
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (attractionName == null) {
@@ -86,7 +86,7 @@ public class ReservationsRepository {
     }
 
     public synchronized List<Reservation> getConfirmedReservations(Integer day, String attractionName) throws IllegalArgumentException {
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (attractionName == null) {
@@ -98,7 +98,7 @@ public class ReservationsRepository {
     }
 
     public int getTotalReservations(Integer day, String attractionName) throws IllegalArgumentException {
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (attractionName == null) {
@@ -110,7 +110,7 @@ public class ReservationsRepository {
     }
 
     public int getTotalConfirmedReservationsBySlot(Integer day, String attractionName, Integer openTime) throws IllegalArgumentException {
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (attractionName == null) {
@@ -123,7 +123,7 @@ public class ReservationsRepository {
 
     public synchronized CapacitySetStats setCapacity(Integer day, String attractionName, Integer capacity, Integer endTime, NotificationService notificationService) {
         // Assumes that the attractionName is valid
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (attractionName == null) {
@@ -144,7 +144,7 @@ public class ReservationsRepository {
     }
 
     public int getCapacity(Integer day, String attractionName) {
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (attractionName == null) {
@@ -163,7 +163,7 @@ public class ReservationsRepository {
         if (userId == null) {
             throw new IllegalArgumentException("User id cannot be null");
         }
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             return 0;
         }
 

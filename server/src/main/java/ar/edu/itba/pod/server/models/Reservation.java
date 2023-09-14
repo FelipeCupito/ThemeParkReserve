@@ -20,7 +20,7 @@ public class Reservation {
         if (attractionName == null) {
             throw new IllegalArgumentException("Attraction name cannot be null");
         }
-        if (day == null || day <= 1 || day > 365) {
+        if (day == null || day < 1 || day > 365) {
             throw new IllegalArgumentException("Day must be a number between 1 and 365");
         }
         if (openTime == null || openTime < 0 || openTime > 1439) {
