@@ -194,7 +194,6 @@ public class ServerTest {
     public void queryTest() {
         Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
 
-
         visitors.forEach(v -> admin.addPass(v));
 
         var spread = new int[]{10, 20, 40, 30};
@@ -224,5 +223,35 @@ public class ServerTest {
         assertEquals(attractions[1].getName(), second.getAttractionName());
         assertEquals(attractions[1].getOpenTime(), second.getSlot());
         assertEquals(0, second.getSuggestedCapacity());
+    }
+
+    @Test
+    public void testNotifications() {
+        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
+
+        visitors.forEach(v -> admin.addPass(v));
+
+        final var reservationInfo = Park.ReservationInfo.newBuilder()
+                .setUserId(visitors.get(0).getUserId())
+                .setDay(100)
+                .setSlot(timeToMinutes(12, 0))
+                .setAttractionName(attractions[0].getName())
+                .build();
+
+        reservation.addReservation(reservationInfo);
+
+        final var notificationRequest = Park.NotificationRequest.newBuilder()
+                .setUserId(visitors.get(0).getUserId())
+                .setDay(100)
+                .setName(attractions[0].getName())
+                .build();
+
+
+//        notification.unregisterUser(notificationRequest);
+
+
+        var notifications = notification.registerUser(notificationRequest);
+        reservation.cancelReservation(reservationInfo);
+        notifications.forEachRemaining(n -> System.out.println(n.getMessage()));
     }
 }
