@@ -15,10 +15,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import services.*;
+import services.AdminServiceGrpc.AdminServiceBlockingStub;
+import services.NotificationServiceGrpc.NotificationServiceBlockingStub;
+import services.QueryServiceGrpc.QueryServiceBlockingStub;
+import services.ReservationServiceGrpc.ReservationServiceBlockingStub;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -84,11 +92,32 @@ public class ServerTest {
                     .build(),
     };
 
+    private void addAttractions() {
+        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
+    }
+
+    Park.UUID generateUUID() {
+        return Park.UUID.newBuilder().setValue(UUID.randomUUID().toString()).build();
+    }
+
+    List<Park.PassRequest> visitors = IntStream.range(0, 100).mapToObj(
+                    i -> Park.PassRequest.newBuilder()
+                            .setUserId(generateUUID())
+                            .setDay(100)
+                            .setType(Park.PassType.PASS_UNLIMITED)
+                            .build()
+            )
+            .collect(Collectors.toList());
+
+    private void addPasses() {
+        visitors.forEach(v -> admin.addPass(v));
+    }
+
     @Test
     public void simpleTest() {
         var attractionName = attractions[0].getName();
 
-        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
+        addAttractions();
 
         // Cannot have two attractions with the same name
         assertThrows(Exception.class, () ->
@@ -177,24 +206,11 @@ public class ServerTest {
         );
     }
 
-    Park.UUID generateUUID() {
-        return Park.UUID.newBuilder().setValue(UUID.randomUUID().toString()).build();
-    }
-
-    List<Park.PassRequest> visitors = IntStream.range(0, 100).mapToObj(
-                    i -> Park.PassRequest.newBuilder()
-                            .setUserId(generateUUID())
-                            .setDay(100)
-                            .setType(Park.PassType.PASS_UNLIMITED)
-                            .build()
-            )
-            .collect(Collectors.toList());
 
     @Test
     public void queryTest() {
-        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
-
-        visitors.forEach(v -> admin.addPass(v));
+        addAttractions();
+        addPasses();
 
         var spread = new int[]{10, 20, 40, 30};
         final var maxIndex = 2;
@@ -227,9 +243,8 @@ public class ServerTest {
 
     @Test
     public void testNotifications() {
-        Arrays.stream(attractions).forEachOrdered(a -> admin.addAttraction(a));
-
-        visitors.forEach(v -> admin.addPass(v));
+        addAttractions();
+        addPasses();
 
         final var reservationInfo = Park.ReservationInfo.newBuilder()
                 .setUserId(visitors.get(0).getUserId())
@@ -238,20 +253,130 @@ public class ServerTest {
                 .setAttractionName(attractions[0].getName())
                 .build();
 
-        reservation.addReservation(reservationInfo);
-
         final var notificationRequest = Park.NotificationRequest.newBuilder()
                 .setUserId(visitors.get(0).getUserId())
                 .setDay(100)
                 .setName(attractions[0].getName())
                 .build();
 
+        // Shouldn't be able to subscribe without pending reservations
+        assertThrows(Exception.class, () -> notification.registerUser(notificationRequest));
 
-//        notification.unregisterUser(notificationRequest);
-
+        reservation.addReservation(reservationInfo);
 
         var notifications = notification.registerUser(notificationRequest);
         reservation.cancelReservation(reservationInfo);
         notifications.forEachRemaining(n -> System.out.println(n.getMessage()));
+    }
+
+    @Test
+    public void concurrencyTest() throws InterruptedException, ExecutionException {
+        final var count = 1000;
+
+        addAttractions();
+
+        List<UserWorker> workers = IntStream.range(0, count).mapToObj(
+                i -> new UserWorker(new int[]{1}, generateUUID(), admin, notification, reservation, query)
+        ).toList();
+
+        var executorService = Executors.newFixedThreadPool(40);
+        var results = executorService.invokeAll(workers);
+        executorService.shutdown();
+        executorService.awaitTermination(10, TimeUnit.SECONDS);
+
+        for (var result : results) {
+            result.get();
+        }
+
+        final var slotCapacity = 20;
+
+        var result = Arrays.stream(attractions).map(
+                a -> admin.addSlotCapacity(Park.SlotCapacityRequest.newBuilder()
+                        .setAttractionName(a.getName())
+                        .setDay(1)
+                        .setCapacity(slotCapacity)
+                        .build()
+                )).reduce(
+                (a, b) -> Park.ReservationsResponse.newBuilder()
+                        .setConfirmed(a.getConfirmed() + b.getConfirmed())
+                        .setCancelled(a.getCancelled() + b.getCancelled())
+                        .setMoved(a.getMoved() + b.getMoved())
+                        .build()
+        ).get();
+
+        assertTrue(result.getConfirmed() <= slotCapacity * attractions.length);
+        System.out.printf("CANCELLED: %d\n", result.getCancelled());
+        assertEquals(count, result.getConfirmed() + result.getCancelled() + result.getMoved());
+    }
+}
+
+class UserWorker implements Callable<Void> {
+    private int[] daysToBuy;
+    private Park.UUID userId;
+    private AdminServiceBlockingStub admin;
+    private NotificationServiceBlockingStub notification;
+    private ReservationServiceBlockingStub reservation;
+    private QueryServiceBlockingStub query;
+
+    public UserWorker(int[] daysToBuy, Park.UUID userId, AdminServiceBlockingStub admin, NotificationServiceBlockingStub notification, ReservationServiceBlockingStub reservation, QueryServiceBlockingStub query) {
+        this.daysToBuy = daysToBuy;
+        this.userId = userId;
+        this.admin = admin;
+        this.notification = notification;
+        this.reservation = reservation;
+        this.query = query;
+    }
+
+    private int randInt(int start, int end) {
+        return (int) (Math.random() * (end - start)) + start;
+    }
+
+    private boolean tryToReserve(int day, String attraction, int slot) {
+        reservation.addReservation(Park.ReservationInfo.newBuilder()
+                .setUserId(userId)
+                .setDay(day)
+                .setSlot(slot)
+                .setAttractionName(attraction)
+                .build());
+
+        return true;
+    }
+
+    public void run() {
+        var countByDay = Arrays.stream(daysToBuy).boxed().collect(Collectors.groupingBy(d -> d, Collectors.counting()));
+
+        for (var day : countByDay.keySet()) {
+            admin.addPass(Park.PassRequest.newBuilder()
+                    .setDay(day)
+                    .setUserId(userId)
+                    .setType(Park.PassType.PASS_UNLIMITED)
+                    .build());
+        }
+
+        for (var day : countByDay.keySet()) {
+            for (var i = 0; i < countByDay.get(day); i++) {
+                var attractions = reservation.getAttractions(Empty.newBuilder().build()).getAttractionsList();
+                var randomAttraction = attractions.get(randInt(0, attractions.size())).getName();
+                var availability = reservation.getSlotRangeAvailability(Park.SlotRangeRequest.newBuilder()
+                        .setAttractionName(randomAttraction)
+                        .setDay(day)
+                        .setSlot1(0)
+                        .setSlot2(23 * 60 + 59)
+                        .build()).getSlotsList();
+
+                var successfulSlot = availability.stream()
+                        .filter(s -> tryToReserve(day, s.getAttractionName(), s.getSlot()))
+                        .findFirst()
+                        .orElseThrow();
+
+//                System.out.println(successfulSlot);
+            }
+        }
+    }
+
+    @Override
+    public Void call() throws Exception {
+        run();
+        return null;
     }
 }
