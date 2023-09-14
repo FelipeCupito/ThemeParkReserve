@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.server;
 
+import ar.edu.itba.pod.server.models.Reservation;
 import ar.edu.itba.pod.server.persistance.AttractionRepository;
 import ar.edu.itba.pod.server.persistance.PassRepository;
 import ar.edu.itba.pod.server.persistance.ReservationsRepository;
@@ -353,18 +354,46 @@ class UserWorker implements Callable<Void> {
         return (int) (Math.random() * (end - start)) + start;
     }
 
-    private boolean tryToReserve(int day, String attraction, int slot) {
+    private Park.ReservationInfoType tryToReserve(int day, String attraction, int slot) {
         try {
-            reservation.addReservation(Park.ReservationInfo.newBuilder()
+            return reservation.addReservation(Park.ReservationInfo.newBuilder()
                     .setUserId(userId)
                     .setDay(day)
                     .setSlot(slot)
                     .setAttractionName(attraction)
                     .build());
-            return true;
         } catch (StatusRuntimeException e) {
-            return false;
+            return null;
         }
+    }
+
+    private Park.SlotAvailabilityInfo makeRandomReservation(int day) {
+        var attractions = reservation.getAttractions(Empty.newBuilder().build()).getAttractionsList();
+        var randomAttraction = attractions.get(randInt(0, attractions.size())).getName();
+        var availability = new ArrayList<>(reservation.getSlotRangeAvailability(Park.SlotRangeRequest.newBuilder()
+                .setAttractionName(randomAttraction)
+                .setDay(day)
+                .setSlot1(0)
+                .setSlot2(23 * 60 + 59)
+                .build()).getSlotsList());
+
+        Collections.shuffle(availability);
+
+        return availability.stream()
+                .filter(s -> tryToReserve(day, s.getAttractionName(), s.getSlot()) != null)
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private record ReservationInfo(Park.UUID userId, String attraction, int slot, int day) {}
+
+    private void cancelReservation(ReservationInfo reservationInfo) {
+        reservation.cancelReservation(Park.ReservationInfo.newBuilder()
+                        .setAttractionName(reservationInfo.attraction)
+                .setUserId(reservationInfo.userId)
+                .setSlot(reservationInfo.slot)
+                .setDay(reservationInfo.day)
+                .build());
     }
 
     public void run() {
@@ -378,26 +407,20 @@ class UserWorker implements Callable<Void> {
                     .build());
         }
 
+        var reservationsToCancel = new ArrayList<ReservationInfo>();
+
         for (var day : countByDay.keySet()) {
             for (var i = 0; i < countByDay.get(day); i++) {
-                var attractions = reservation.getAttractions(Empty.newBuilder().build()).getAttractionsList();
-                var randomAttraction = attractions.get(randInt(0, attractions.size())).getName();
-                var availability = new ArrayList<>(reservation.getSlotRangeAvailability(Park.SlotRangeRequest.newBuilder()
-                        .setAttractionName(randomAttraction)
-                        .setDay(day)
-                        .setSlot1(0)
-                        .setSlot2(23 * 60 + 59)
-                        .build()).getSlotsList());
-
-                Collections.shuffle(availability);
-
-                var successfulSlot = availability.stream()
-                        .filter(s -> tryToReserve(day, s.getAttractionName(), s.getSlot()))
-                        .findFirst()
-                        .orElseThrow();
-
-//                System.out.println(successfulSlot);
+                if (randInt(0, 10) < 3) {
+                    var slot = makeRandomReservation(day);
+                    reservationsToCancel.add(new ReservationInfo(userId, slot.getAttractionName(), slot.getSlot(), day));
+                }
+                makeRandomReservation(day);
             }
+        }
+
+        for (var reservation : reservationsToCancel) {
+            cancelReservation(reservation);
         }
     }
 
