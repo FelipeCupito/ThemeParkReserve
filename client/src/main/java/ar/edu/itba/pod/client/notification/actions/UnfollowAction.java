@@ -24,7 +24,7 @@ public class UnfollowAction extends NotificationClientAction {
                         .build()
         );
 
-        System.out.printf("Unregister events from user \"%s\", attraction \"%s\" on day %d\n", visitor, attraction, day);
+        System.out.printf("Unregister events from user \"%s\", attraction \"%s\" on day %d\n", visitor.getValue(), attraction, day);
     }
 
     @Override
