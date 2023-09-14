@@ -240,7 +240,7 @@ public class AttractionReservations {
 
             // Finally cancel the ones that couldn't be moved and remove them from the AttractionReservation
             for (Reservation res : pendingReservations.stream().filter(reservation -> reservation.getStatus() == Park.ReservationType.RESERVATION_UNKNOWN).toList()) {
-                if (res.getStatus() == Park.ReservationType.RESERVATION_PENDING) {
+                if (res.getStatus() == Park.ReservationType.RESERVATION_UNKNOWN) {
                     cancelled++;
                     notificationService.sendNotification(res.getAttractionName(), res.getDay(), res.getUserId(), String.format("The reservation for %s at %s on the day %d has been CANCELLED.",
                             res.getAttractionName(),
