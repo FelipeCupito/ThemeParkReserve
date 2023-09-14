@@ -2,6 +2,10 @@
 
 HOST=localhost:50051
 
+if [ -z "$buildPath" ]; then
+    mvn compile
+fi
+
 function runClient() {
     client="$1"
     action="$2"
@@ -10,7 +14,7 @@ function runClient() {
     echo
     echo "###### Running action \"$action\" on client \"$client\" ($clientShort-cli) ######"
     if [ -z "$buildPath" ]; then
-        bin="mvn -q compile exec:java -pl client -Dexec.mainClass=ar.edu.itba.pod.client.$client.Client"
+        bin="mvn -q exec:java -pl client -Dexec.mainClass=ar.edu.itba.pod.client.$client.Client"
     else
         bin="$buildPath/$clientShort-cli"
     fi
@@ -40,14 +44,24 @@ runClient book attractions
 runClient book book -Dday=101 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
 runClient book cancel -Dday=101 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
 runClient book book -Dday=100 -Dvisitor="$visitor" -Dride="SpaceMountain" -Dslot=15:30
+runClient book book -Dday=100 -Dvisitor="$visitor" -Dride="TronLightcycle" -Dslot=16:00
 
-runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dride="SpaceMountain" &
+runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dride="TronLightcycle" &
 subscription=$!
 
-sleep 5
-runClient notification unfollow -Dvisitor="$visitor" -Dday=100 -Dride="SpaceMountain"
+sleep 1
+runClient notification unfollow -Dvisitor="$visitor" -Dday=100 -Dride="TronLightcycle"
 
 wait $subscription
+
+runClient notification follow -Dvisitor="$visitor" -Dday=100 -Dride="TronLightcycle" &
+subscription=$!
+
+sleep 1
+runClient admin slots -Dride="TronLightcycle" -Dday=100 -Dcapacity=30
+
+wait $subscription
+
 
 runClient query capacity -Dday=100 -DoutPath="/dev/stdout"
 runClient query confirmed -Dday=100 -DoutPath="/dev/stdout"
