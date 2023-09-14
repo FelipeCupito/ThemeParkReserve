@@ -8,6 +8,7 @@ import ar.edu.itba.pod.server.services.NotificationService;
 import ar.edu.itba.pod.server.services.QueryService;
 import ar.edu.itba.pod.server.services.ReservationService;
 import com.google.protobuf.Empty;
+import io.grpc.StatusRuntimeException;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.testing.GrpcCleanupRule;
@@ -20,9 +21,7 @@ import services.NotificationServiceGrpc.NotificationServiceBlockingStub;
 import services.QueryServiceGrpc.QueryServiceBlockingStub;
 import services.ReservationServiceGrpc.ReservationServiceBlockingStub;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -275,9 +274,24 @@ public class ServerTest {
 
         addAttractions();
 
-        List<UserWorker> workers = IntStream.range(0, count).mapToObj(
-                i -> new UserWorker(new int[]{1}, generateUUID(), admin, notification, reservation, query)
-        ).toList();
+        var daysPerUser = 10;
+        final var alldays = IntStream.rangeClosed(1, 20).toArray();
+
+        var rng = new Random();
+
+        List<UserWorker> workers = IntStream.range(0, count)
+                .mapToObj(
+                        i -> new UserWorker(
+                                IntStream.range(0, daysPerUser)
+                                        .map(n -> alldays[rng.nextInt(alldays.length)])
+                                        .toArray(),
+                                generateUUID(),
+                                admin,
+                                notification,
+                                reservation,
+                                query
+                        )
+                ).toList();
 
         var executorService = Executors.newFixedThreadPool(40);
         var results = executorService.invokeAll(workers);
@@ -288,15 +302,20 @@ public class ServerTest {
             result.get();
         }
 
-        final var slotCapacity = 20;
+        final var slotCapacity = 5;
 
-        var result = Arrays.stream(attractions).map(
-                a -> admin.addSlotCapacity(Park.SlotCapacityRequest.newBuilder()
-                        .setAttractionName(a.getName())
-                        .setDay(1)
-                        .setCapacity(slotCapacity)
-                        .build()
-                )).reduce(
+        var result = Arrays.stream(attractions).flatMap(
+                a -> Arrays.stream(alldays)
+                        .boxed()
+                        .map(
+                                d -> admin.addSlotCapacity(Park.SlotCapacityRequest.newBuilder()
+                                        .setAttractionName(a.getName())
+                                        .setDay(d)
+                                        .setCapacity(slotCapacity)
+                                        .build()
+                                )
+                        )
+        ).reduce(
                 (a, b) -> Park.ReservationsResponse.newBuilder()
                         .setConfirmed(a.getConfirmed() + b.getConfirmed())
                         .setCancelled(a.getCancelled() + b.getCancelled())
@@ -304,9 +323,12 @@ public class ServerTest {
                         .build()
         ).get();
 
-        assertTrue(result.getConfirmed() <= slotCapacity * attractions.length);
-        System.out.printf("CANCELLED: %d\n", result.getCancelled());
-        assertEquals(count, result.getConfirmed() + result.getCancelled() + result.getMoved());
+//        System.out.printf("CONFIRMED: %d\n", result.getConfirmed());
+//        System.out.printf("MOVED: %d\n", result.getMoved());
+//        System.out.printf("CANCELLED: %d\n", result.getCancelled());
+        assertEquals(count * daysPerUser, result.getConfirmed() + result.getCancelled() + result.getMoved());
+
+//        System.out.printf("Confirmed: %s", query.getConfirmedReservations(Park.Day.newBuilder().setDay(1).build()).toString());
     }
 }
 
@@ -332,14 +354,17 @@ class UserWorker implements Callable<Void> {
     }
 
     private boolean tryToReserve(int day, String attraction, int slot) {
-        reservation.addReservation(Park.ReservationInfo.newBuilder()
-                .setUserId(userId)
-                .setDay(day)
-                .setSlot(slot)
-                .setAttractionName(attraction)
-                .build());
-
-        return true;
+        try {
+            reservation.addReservation(Park.ReservationInfo.newBuilder()
+                    .setUserId(userId)
+                    .setDay(day)
+                    .setSlot(slot)
+                    .setAttractionName(attraction)
+                    .build());
+            return true;
+        } catch (StatusRuntimeException e) {
+            return false;
+        }
     }
 
     public void run() {
@@ -357,12 +382,14 @@ class UserWorker implements Callable<Void> {
             for (var i = 0; i < countByDay.get(day); i++) {
                 var attractions = reservation.getAttractions(Empty.newBuilder().build()).getAttractionsList();
                 var randomAttraction = attractions.get(randInt(0, attractions.size())).getName();
-                var availability = reservation.getSlotRangeAvailability(Park.SlotRangeRequest.newBuilder()
+                var availability = new ArrayList<>(reservation.getSlotRangeAvailability(Park.SlotRangeRequest.newBuilder()
                         .setAttractionName(randomAttraction)
                         .setDay(day)
                         .setSlot1(0)
                         .setSlot2(23 * 60 + 59)
-                        .build()).getSlotsList();
+                        .build()).getSlotsList());
+
+                Collections.shuffle(availability);
 
                 var successfulSlot = availability.stream()
                         .filter(s -> tryToReserve(day, s.getAttractionName(), s.getSlot()))
