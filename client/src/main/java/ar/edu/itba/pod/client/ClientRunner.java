@@ -1,7 +1,9 @@
 package ar.edu.itba.pod.client;
 
+import ar.edu.itba.pod.client.properties.exceptions.PropertyException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,8 @@ public class ClientRunner<P extends BaseClientProperties> {
 
         try {
             properties.runAction(Clients.fromChannel(channel));
+        } catch (StatusRuntimeException e) {
+            System.out.println(e.getMessage());
         } catch (IOException e) {
             logger.error("Exception", e);
         } finally {

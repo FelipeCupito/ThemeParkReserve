@@ -12,7 +12,13 @@ public class Client {
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     public static void main(String[] args) throws InterruptedException, IOException, PropertyException {
-        var properties = new ClientProperties(new PropertyManager(System.getProperties()));
+        ClientProperties properties;
+        try {
+            properties = new ClientProperties(new PropertyManager(System.getProperties()));
+        } catch (PropertyException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         var manager = new ClientRunner<>(properties);
         manager.run();
     }
