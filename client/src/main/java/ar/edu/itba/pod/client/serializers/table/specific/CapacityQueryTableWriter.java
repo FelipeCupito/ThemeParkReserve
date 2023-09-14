@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class CapacityQueryTableWriter extends TableWriter {
-    static final String[] header = {"Slot", "Capacity", "Attraction"};
+    static final String[] header = {"Slot ", "Capacity", "Attraction"};
 
     public CapacityQueryTableWriter(OutputStreamWriter outputWriter) throws IOException {
         super(outputWriter, new ColumnProperties[]{
-                new ColumnProperties(5, ColumnAlignment.Right),
+                new ColumnProperties(header[0].length(), ColumnAlignment.Right),
                 new ColumnProperties(header[1].length(), ColumnAlignment.Right),
                 new ColumnProperties(1, ColumnAlignment.Left),
         });
