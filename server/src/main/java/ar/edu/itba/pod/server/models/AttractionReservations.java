@@ -130,7 +130,6 @@ public class AttractionReservations {
             if (this.reservations.stream().noneMatch(res -> res.getStatus() == Park.ReservationType.RESERVATION_PENDING)) {
                 notificationService.disconnectUser(reservation.getUserId(), reservation.getAttractionName(), reservation.getDay());
             }
-            notificationService.disconnectUser(reservation.getUserId(), reservation.getAttractionName(), reservation.getDay());
         } finally {
             setUpCapacityLock.readLock().unlock();
         }
