@@ -31,10 +31,10 @@ public class AvailabilityTableWriter extends TableWriter {
      * @param attraction
      * @throws IOException
      */
-    public void addRow(int slot, Integer capacity, int pending, int confirmed, String attraction) throws IOException {
+    public void addRow(int slot, int capacity, int pending, int confirmed, String attraction) throws IOException {
         super.addRow(new String[]{
                 new TimeSerializer().serialize(slot),
-                capacity != null ? capacity.toString() : "X",
+                capacity != 0 ? Integer.toString(capacity) : "X",
                 Integer.toString(pending),
                 Integer.toString(confirmed),
                 attraction
