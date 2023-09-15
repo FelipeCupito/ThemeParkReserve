@@ -154,6 +154,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 throw new IllegalArgumentException("User id cannot be empty");
             }
             checkSlotRequestValues(attractionName, day, openTime);
+            checkValidOpenTime(attractionName, openTime);
             checkIfPassIsValid(userId, day, openTime);
 
             Park.ReservationType reservationType = Park.ReservationType.RESERVATION_PENDING;
@@ -188,6 +189,7 @@ public class ReservationService extends ReservationServiceGrpc.ReservationServic
                 throw new IllegalArgumentException("User id cannot be empty");
             }
             checkSlotRequestValues(attractionName, day, openTime);
+            checkValidOpenTime(attractionName, openTime);
             this.passRepository.getPassType(userId, day);
             if (this.reservationsRepository.getCapacity(day, attractionName) == 0) {
                 throw new IllegalArgumentException("Capacity not set");
