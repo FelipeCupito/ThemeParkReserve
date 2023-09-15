@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class AvailabilityTableWriter extends TableWriter {
-    static final String[] header = {"Slot ", "Capacity ", "Pending  ", "Confirmed", "Attraction"};
+    static final String[] header = {"Slot ", "Capacity", "Pending ", "Confirmed", "Attraction"};
 
     public AvailabilityTableWriter(OutputStreamWriter outputWriter) throws IOException {
         super(outputWriter, new ColumnProperties[]{

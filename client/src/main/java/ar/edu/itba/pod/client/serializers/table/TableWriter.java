@@ -5,30 +5,51 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 public class TableWriter implements Closeable {
-    ColumnProperties[] columnProperties;
-    OutputStreamWriter outputWriter;
+    private ColumnProperties[] columnProperties;
+    private OutputStreamWriter outputWriter;
+    private ColumnAlignment headerAlignment;
+    private int currentRow = 0;
 
-    public TableWriter(OutputStreamWriter outputWriter, ColumnProperties[] columnProperties) {
+    public TableWriter(OutputStreamWriter outputWriter, ColumnAlignment headerAlignment, ColumnProperties[] columnProperties) {
         this.columnProperties = columnProperties;
         this.outputWriter = outputWriter;
+        this.headerAlignment = headerAlignment;
+    }
+
+    public TableWriter(OutputStreamWriter outputWriter, ColumnProperties[] columnProperties) {
+        this(outputWriter, ColumnAlignment.Left, columnProperties);
     }
 
     public void addRow(String[] values) throws IOException {
         if (values.length != columnProperties.length)
             throw new IllegalArgumentException("All rows should have the same amount of columns");
 
+        var firstRow = currentRow == 0;
         for (int column = 0; column < values.length; column++) {
-            var columnProperties = this.columnProperties[column];
+            var firstColumn = column == 0;
+            var lastColumn = column == values.length - 1;
+            var columnProperties = firstRow
+                    ? new ColumnProperties(this.columnProperties[column].width, headerAlignment)
+                    : this.columnProperties[column];
             var value = values[column];
             // Not first column
-            if (column > 0)
+            if (!firstColumn)
                 outputWriter.append('|');
-            var serializedValue = String.format(' ' + columnProperties.getFormatString() + ' ', value);
-            if (column == values.length - 1)
-                serializedValue = serializedValue.stripTrailing();
-            outputWriter.append(serializedValue);
+
+            var valueBuilder = new StringBuilder();
+            if (!firstColumn)
+                valueBuilder.append(' ');
+            valueBuilder.append(String.format(columnProperties.getFormatString(), value));
+            if (!lastColumn)
+                valueBuilder.append(' ');
+            var formattedValue = valueBuilder.toString();
+            if (lastColumn)
+                formattedValue = formattedValue.stripTrailing();
+            outputWriter.append(formattedValue);
         }
         outputWriter.append('\n');
+
+        currentRow++;
     }
 
     @Override
