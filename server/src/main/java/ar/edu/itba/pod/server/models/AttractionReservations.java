@@ -161,13 +161,10 @@ public class AttractionReservations {
             throw new IllegalArgumentException("Capacity already set");
         }
         this.capacity = capacity;
-        Set<Park.UUID> userIds = new HashSet<>();
-        CompletableFuture.runAsync(() -> { // Run another thread to avoid blocking the main thread for notifications
-            reservations.forEach(reservation -> {
-                    String attractionName = reservation.getAttractionName();
-                    int day = reservation.getDay();
-                    notificationService.sendNotification(attractionName, day, reservation.getUserId(), String.format("%s announced slot capacity for the day %d: %d places.", attractionName, day, capacity));
-            });
+        reservations.forEach(reservation -> {
+                String attractionName = reservation.getAttractionName();
+                int day = reservation.getDay();
+                notificationService.sendNotification(attractionName, day, reservation.getUserId(), String.format("%s announced slot capacity for the day %d: %d places.", attractionName, day, capacity));
         });
     }
 
