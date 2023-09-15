@@ -59,7 +59,7 @@ public class NotificationService extends NotificationServiceGrpc.NotificationSer
             } else {
                 messageBuilder.append("PENDING");
             }
-            messageBuilder.append(".\n");
+            messageBuilder.append(".");
 
             if (reservation.getStatus() == Park.ReservationType.RESERVATION_PENDING) {
                 anyPending = true;
