@@ -11,6 +11,8 @@ import services.Park;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ConfirmedAction extends QueryClientAction {
     private static final Logger logger = LoggerFactory.getLogger(ConfirmedAction.class);
@@ -30,14 +32,20 @@ public class ConfirmedAction extends QueryClientAction {
                 .getReservationsList();
 
         if (confirmedBookings.isEmpty()) {
-            System.out.printf("There are no confirmed reservations.\n");
+            System.out.println("There are no confirmed reservations.\n");
             return;
         }
 
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new ConfirmedQueryTableWriter(new OutputStreamWriter(writer));
 
-        for (var row : confirmedBookings) {
+        var rows = new ArrayList<>(confirmedBookings);
+
+        rows.sort(Comparator.comparing(Park.ReservationInfo::getAttractionName)
+                .thenComparing(Park.ReservationInfo::getSlot)
+                .thenComparing(r -> r.getUserId().getValue()));
+
+        for (var row : rows) {
             tableWriter.addRow(row.getSlot(), row.getUserId(), row.getAttractionName());
         }
 

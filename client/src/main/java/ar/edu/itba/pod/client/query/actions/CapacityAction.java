@@ -11,6 +11,9 @@ import services.Park;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class CapacityAction extends QueryClientAction {
     private static final Logger logger = LoggerFactory.getLogger(CapacityAction.class);
@@ -28,14 +31,19 @@ public class CapacityAction extends QueryClientAction {
         ).getSlotsList();
 
         if (suggestedCapacity.isEmpty()) {
-            System.out.printf("There are no attractions.\n");
+            System.out.println("There are no attractions.");
             return;
         }
 
         var writer = Files.newOutputStream(getOutPath());
         var tableWriter = new CapacityQueryTableWriter(new OutputStreamWriter(writer));
 
-        for (var row : suggestedCapacity) {
+        List<Park.SuggestedCapacitySlot> rows = new ArrayList<>(suggestedCapacity);
+        rows.sort(Comparator.comparing(Park.SuggestedCapacitySlot::getSuggestedCapacity)
+                .reversed()
+                .thenComparing(Park.SuggestedCapacitySlot::getAttractionName));
+
+        for (Park.SuggestedCapacitySlot row : rows) {
             tableWriter.addRow(row.getSlot(), row.getSuggestedCapacity(), row.getAttractionName());
         }
 
